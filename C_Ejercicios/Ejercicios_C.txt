@@ -1,0 +1,600 @@
+========================================================================================
+EJERCICIOS EN C — Estructuras de Datos (Búsqueda y ordenación)
+========================================================================================
+
+Cómo usar esta sección. Cada ejercicio tiene un objetivo, el enunciado, lo que debe
+cumplir, un ejemplo de ejecución y una pista por si te atascas. Haz los 3
+primeros para coger soltura con C y después sigue el orden: cada ejercicio usa lo del
+anterior.
+
+Del pseudocódigo a C: en los apuntes los vectores empiezan en la posición 1 y en C
+empiezan en la 0. Un vector de N elementos va de `v[0]` a `v[n-1]`. Además,
+`RESERVAR_MEMORIA(tamaño(T))` se escribe `malloc(sizeof(T))`, `NULO` es `NULL`,
+`LIBERAR(P)` es `free(p)` y la división entera `\` es `/` entre enteros.
+
+########################################################################################
+# CALENTAMIENTO: C BÁSICO
+########################################################################################
+
+EJERCICIO 1. Calculadora con funciones
+--------------------------------------
+  Nivel: Básico   ·   Temas: funciones, printf / scanf
+
+  Objetivo: separar el programa en funciones con parámetros y valor de retorno.
+
+  Escribe un programa que lea dos números enteros y muestre su suma, resta, producto y
+  división. Cada operación debe estar en su propia función. Añade también:
+
+  - `int maximo(int a, int b)`: devuelve el mayor de los dos.
+  - `int es_par(int n)`: devuelve 1 si n es par y 0 si no.
+  - `float dividir(int a, int b)`: devuelve el resultado con decimales. Si `b` es 0,
+    `main` debe mostrar un mensaje de error en lugar de llamar a la función.
+
+  > Debe cumplir: los prototipos van antes de `main`, `main` solo lee los datos, llama a
+  > las funciones y muestra los resultados, y ninguna función usa variables globales.
+
+  Ejemplo de ejecución:
+    | Introduce dos enteros: 7 2
+    | Suma: 9
+    | Resta: 5
+    | Producto: 14
+    | Division: 3.50
+    | Maximo: 7
+    | 7 es impar
+
+  [Pista] Para que la división dé decimales, convierte uno de los operandos antes de
+      dividir: `return (float)a / b;`. Para mostrar 2 decimales usa `printf("%.2f",
+      r);`.
+
+EJERCICIO 2. Menú de opciones
+-----------------------------
+  Nivel: Básico   ·   Temas: do-while, switch
+
+  Objetivo: crear la estructura de menú que usarás en casi todas las prácticas.
+
+  Partiendo del ejercicio 1, crea un programa con un menú que se repita hasta que el
+  usuario elija salir:
+
+  Ejemplo de ejecución:
+    | ===== MENU =====
+    | 1. Sumar
+    | 2. Restar
+    | 3. Multiplicar
+    | 4. Dividir
+    | 5. Comprobar si un numero es par
+    | 0. Salir
+    | Elige una opcion:
+
+  - Escribe una función `int mostrar_menu(void)` que muestre el menú, lea la opción y la
+    devuelva.
+  - Usa un bucle `do { … } while (opcion != 0);` y un `switch` para cada opción.
+  - Si la opción no existe, muestra "Opcion no valida" y vuelve a enseñar el menú.
+  - Cada opción pide sus datos y llama a la función correspondiente del ejercicio 1.
+
+  [Pista] No olvides el `break;` al final de cada `case` y un `default:` para las
+      opciones no válidas.
+
+EJERCICIO 3. Struct de alumnos
+------------------------------
+  Nivel: Básico   ·   Temas: struct, vector de structs
+
+  Objetivo: definir un tipo de dato propio y trabajar con un vector de ese tipo.
+
+  Define el tipo:
+
+    | typedef struct {
+    |     char nombre[30];
+    |     char dni[10];
+    |     float nota;
+    | } Alumno;
+
+  Escribe un programa que trabaje con un vector `Alumno clase[20]` y estas funciones:
+
+  - `Alumno leer_alumno(void)`: pide los datos de un alumno y lo devuelve.
+  - `void mostrar_alumno(Alumno a)`: muestra un alumno en una línea.
+  - `float nota_media(Alumno v[], int n)`: devuelve la media de las notas.
+  - `int mejor_alumno(Alumno v[], int n)`: devuelve la posición del alumno con mejor
+    nota.
+
+  En `main`, pregunta cuántos alumnos hay (como máximo 20), léelos, muéstralos todos y
+  después muestra la media y el mejor alumno.
+
+  Ejemplo de ejecución:
+    | Numero de alumnos: 3
+    | ...
+    | Ana Ruiz        12345678A   8.50
+    | Luis Gil        87654321B   6.00
+    | Marta Sanz      11223344C   9.25
+    | Nota media: 7.92
+    | Mejor alumno: Marta Sanz (9.25)
+
+  [Pista] Para leer un nombre con espacios usa `scanf(" %29[^\n]", a.nombre);` (el
+      espacio inicial se salta el salto de línea pendiente). Se accede a los campos con
+      el punto: `v[i].nota`.
+
+########################################################################################
+# PUNTEROS Y MEMORIA DINÁMICA
+########################################################################################
+
+EJERCICIO 4. Primeros pasos con punteros
+----------------------------------------
+  Nivel: Básico   ·   Temas: & y *, paso por referencia
+
+  Objetivo: entender que un puntero guarda una dirección de memoria (apartado "El
+  puntero" de los apuntes).
+
+  1. Declara `int x = 10;` y `int *p = &x;`. Muestra el valor de `x`, la dirección de
+     `x` (`&x`), el valor de `p` y el valor apuntado (`*p`). Usa `%p` para las
+     direcciones.
+  2. Cambia el valor de `x` usando solo `p` (`*p = 25;`) y comprueba que `x` ha
+     cambiado.
+  3. Escribe `void intercambiar(int *a, int *b)`, que intercambia dos variables.
+     Pruébala desde `main`.
+  4. Escribe `void min_max(int a, int b, int c, int *min, int *max)`, que "devuelve" dos
+     resultados a través de punteros.
+  5. Declara un puntero, asígnale `NULL` y comprueba con un `if` que no apunta a nada
+     antes de usarlo.
+
+  Ejemplo de ejecución:
+    | x = 10, &x = 0x7ffd5e8c, p = 0x7ffd5e8c, *p = 10
+    | Tras *p = 25 -> x = 25
+    | Antes: a=3 b=8 | Despues: a=8 b=3
+    | min = 2, max = 9
+    | El puntero q es NULL, no se puede usar
+
+  [Pista] Las direcciones cambiarán en cada ejecución. Lo importante es que `&x` y `p`
+      muestren la misma dirección. Si escribes `void intercambiar(int a, int b)` sin
+      punteros, verás que no funciona: las funciones reciben copias.
+
+EJERCICIO 5. Vector dinámico
+----------------------------
+  Nivel: Medio   ·   Temas: malloc / free, NULL
+
+  Objetivo: aplicar el esquema de los apuntes: reservar → comprobar NULO → usar →
+  liberar.
+
+  Pide al usuario cuántos números quiere guardar (N) y:
+
+  - Reserva memoria para N enteros con `malloc(n * sizeof(int))`.
+  - Comprueba si la reserva ha fallado (`== NULL`). Si falla, muestra "error en la
+    reserva de memoria" y termina, como en el pseudocódigo de los apuntes.
+  - Rellena el vector con números aleatorios entre 1 y 100 (`rand() % 100 + 1`) y
+    muéstralo.
+  - Libera la memoria con `free` y pon el puntero a `NULL`.
+
+  Ampliación: pon todo esto en funciones, por ejemplo `int *crear_vector(int n)`, que
+  devuelva `NULL` si falla, `void rellenar(int *v, int n)` y `void mostrar(int *v, int
+  n)`.
+
+  Ejemplo de ejecución:
+    | Cuantos numeros? 6
+    | Vector: 42 7 88 15 63 2
+    | Memoria liberada
+
+  [Pista] Necesitas `#include <stdlib.h>` para `malloc`, `free` y `rand`. Llama una vez
+      a `srand(time(NULL));` (con `<time.h>`) para que los números cambien en cada
+      ejecución.
+
+EJERCICIO 6. Punteros a struct
+------------------------------
+  Nivel: Medio   ·   Temas: operador ->, malloc de structs
+
+  Objetivo: crear una variable dinámica de tipo struct, que "no tiene nombre" y solo se
+  maneja con un puntero.
+
+  Con el tipo `Alumno` del ejercicio 3:
+
+  - Escribe `Alumno *nuevo_alumno(const char *nombre, const char *dni, float nota)`.
+    Debe reservar memoria para un alumno, comprobar `NULL`, rellenar los campos (con
+    `strcpy`) y devolver el puntero.
+  - Escribe `void subir_nota(Alumno *a, float puntos)`, que modifica la nota a través
+    del puntero sin pasar de 10.
+  - Escribe `void mostrar(const Alumno *a)` usando el operador `->`.
+  - En `main`, crea dos alumnos, sube la nota a uno, muéstralos y libera la memoria de
+    ambos.
+
+  [Pista] `a->nota` es lo mismo que `(*a).nota`. Con un `Alumno *` se usa la flecha; con
+      un `Alumno` normal, el punto.
+
+########################################################################################
+# BÚSQUEDA EN VECTORES
+########################################################################################
+
+EJERCICIO 7. Búsqueda lineal
+----------------------------
+  Nivel: Medio   ·   Temas: búsqueda lineal
+
+  Objetivo: traducir a C el pseudocódigo `busqueda_lineal` de los apuntes.
+
+  Implementa `int busqueda_lineal(int *v, int n, int x)`, que devuelva la posición de
+  `x` o −1 si no está. Debe seguir el pseudocódigo: avanzar mientras `v[i] != x` y no se
+  haya llegado al último elemento, y comprobar al final si se ha encontrado.
+
+  Pruébala con `{15, 18, 7, 75, 14, 13, 43, 40}` buscando 14 (está), 99 (no está) y 40
+  (último elemento). Después prueba con `{5, 3, 5, 8, 5}` buscando 5: ¿qué posición
+  devuelve y por qué?
+
+  Ampliación (vector ordenado): escribe `int busqueda_lineal_ordenado(int *v, int n, int
+  x)` siguiendo el otro pseudocódigo de los apuntes: avanza mientras `v[i] < x`.
+  Pruébala con `{7, 13, 14, 15, 18, 26, 40, 43, 51}` buscando 20 y cuenta cuántos
+  elementos mira cada versión. La general mira los 9; la de vector ordenado para al
+  llegar al 26 y solo mira 6.
+
+  Ejemplo de ejecución:
+    | Buscar 14 -> encontrado en la posicion 4
+    | Buscar 99 -> no encontrado
+    | Buscar 40 -> encontrado en la posicion 7
+    | Buscar 5 en {5,3,5,8,5} -> posicion 0
+
+  > Para pensar: según los apuntes, si el valor está repetido se encuentra el más
+  > próximo al extremo donde empieza el recorrido. Escribe otra versión que recorra de
+  > derecha a izquierda y comprueba que entonces encuentra el 5 de la posición 4.
+
+  [Pista] En C con índices desde 0, el pseudocódigo queda así: `i = 0; while (v[i] != x
+      && i < n-1) i++;` y después `if (v[i] == x) return i; else return -1;`.
+
+EJERCICIO 8. Búsqueda binaria con traza
+---------------------------------------
+  Nivel: Medio   ·   Temas: búsqueda binaria
+
+  Objetivo: traducir a C el pseudocódigo `busqueda_binaria` de los apuntes y ver cómo se
+  va reduciendo el intervalo.
+
+  Implementa `int busqueda_binaria(int *v, int n, int x)` de forma iterativa, con las
+  variables `izq`, `der` y `cen` de los apuntes. En cada vuelta del bucle, muestra los
+  valores de `izq`, `der`, `cen` y `v[cen]`. Pruébala con `{7, 13, 14, 15, 18, 26, 40,
+  43, 51}` buscando 40 y 20, igual que en los ejemplos de los apuntes.
+
+  Ejemplo de ejecución:
+    | Buscar 40:
+    |   izq=0 der=8 cen=4 v[cen]=18 -> 18 < 40, sigo por la derecha
+    |   izq=5 der=8 cen=6 v[cen]=40 -> encontrado en la posicion 6
+    | Buscar 20:
+    |   izq=0 der=8 cen=4 v[cen]=18 -> 18 < 20, sigo por la derecha
+    |   izq=5 der=8 cen=6 v[cen]=40 -> 40 > 20, sigo por la izquierda
+    |   izq=5 der=5 cen=5 v[cen]=26 -> no existe
+
+  > Comprueba: antes de buscar, el programa debe verificar que el vector está ordenado
+  > con `int esta_ordenado(int *v, int n)`. Si no lo está, debe avisar en lugar de
+  > buscar.
+
+  [Pista] Con índices desde 0: `izq = 0; der = n-1; cen = (izq+der)/2;`, el bucle es
+      `while (v[cen] != x && izq < der)` y dentro `if (v[cen] > x) der = cen-1; else izq
+      = cen+1; cen = (izq+der)/2;`.
+
+EJERCICIO 9. Buscar en un vector de structs
+-------------------------------------------
+  Nivel: Avanzado   ·   Temas: struct, strcmp, ambas búsquedas
+
+  Objetivo: buscar por un campo concreto y saber cuándo se puede usar la búsqueda
+  binaria.
+
+  Con un vector de `Alumno` (ejercicio 3) ordenado por DNI:
+
+  - `int buscar_por_dni(Alumno *v, int n, const char *dni)`: búsqueda binaria comparando
+    con `strcmp`.
+  - `int buscar_por_nombre(Alumno *v, int n, const char *nombre)`: búsqueda lineal.
+  - `int buscar_por_nota(Alumno *v, int n, float nota)`: ¿lineal o binaria? Elige y
+    explícalo en un comentario.
+
+  > Para pensar: esta es la idea de la pregunta del examen de 2017 del vector de alumnos
+  > ordenado por DNI. La búsqueda binaria solo sirve si el vector está ordenado por el
+  > campo que buscas.
+
+  [Pista] `strcmp(a, b)` devuelve 0 si las cadenas son iguales, un valor negativo si `a`
+      va antes y uno positivo si va después. Sustituye a `<`, `>` y `==` en la búsqueda
+      binaria.
+
+########################################################################################
+# ORDENACIÓN DE VECTORES
+########################################################################################
+
+  Para todo este bloque: usa el vector de los apuntes, `int v[8] = {15, 18, 7, 75, 14,
+  13, 43, 40};`, y escribe una vez la función `void mostrar_vector(int *v, int n)` para
+  enseñar el vector después de cada paso. Así puedes comparar tu salida con los ejemplos
+  de ejecución y con las trazas de los apuntes. Recuerda que en C las posiciones van de
+  0 a n−1. Antes de ordenar, haz una copia del vector original (`memcpy` o un bucle)
+  para poder probar varios métodos con los mismos datos. Los contadores de comparaciones
+  pueden variar un poco según dónde pongas el `++`; lo importante es la diferencia entre
+  métodos.
+
+EJERCICIO 10. Inserción directa
+-------------------------------
+  Nivel: Medio   ·   Temas: inserción directa, contar pasos
+
+  Objetivo: traducir a C el pseudocódigo `ordenacion_insercion_directa` (el "método de
+  la baraja").
+
+  - Implementa `void insercion_directa(int *v, int n)`. Para cada elemento desde el
+    segundo, guárdalo en `aux`, desplaza a la derecha los mayores que él y colócalo en
+    el hueco.
+  - Muestra el vector al final de cada iteración del bucle externo.
+  - Añade dos contadores, que la función devuelva a través de punteros: comparaciones
+    entre elementos y desplazamientos.
+  - Prueba también con un vector ya ordenado y con uno ordenado al revés. ¿Cuál es el
+    mejor caso y cuál el peor?
+
+  Ejemplo de ejecución:
+    | inicio:   15  18   7  75  14  13  43  40
+    | i=1:      15  18   7  75  14  13  43  40
+    | i=2:       7  15  18  75  14  13  43  40
+    | i=3:       7  15  18  75  14  13  43  40
+    | i=4:       7  14  15  18  75  13  43  40
+    | i=5:       7  13  14  15  18  75  43  40
+    | i=6:       7  13  14  15  18  43  75  40
+    | i=7:       7  13  14  15  18  40  43  75
+    | Comparaciones: 18  Desplazamientos: 12
+
+  > Para pensar: fíjate en la fila `i=2`. El 15 y el 18 estaban "ordenados", pero el 7
+  > los empuja. Por eso los apuntes dicen que en la inserción la parte izquierda está
+  > ordenada pero no es definitiva.
+
+  [Pista] Con índices desde 0: `for (i = 1; i < n; i++) { aux = v[i]; j = i; while (j >
+      0 && v[j-1] > aux) { v[j] = v[j-1]; j--; } v[j] = aux; }`. Pon `j > 0` antes en la
+      condición: así nunca se lee `v[-1]`. Con el vector ordenado deberían salir 7
+      comparaciones y 0 desplazamientos, y con el inverso, 28 y 28.
+
+EJERCICIO 11. Inserción binaria
+-------------------------------
+  Nivel: Medio   ·   Temas: inserción binaria, búsqueda binaria
+
+  Objetivo: combinar la búsqueda binaria (ejercicio 8) con la inserción directa
+  (ejercicio 10).
+
+  - Implementa `void insercion_binaria(int *v, int n)`. Para el elemento `i`, haz una
+    búsqueda binaria en las posiciones [0, i−1] para encontrar su posición, desplaza los
+    elementos y colócalo.
+  - Muestra en cada iteración la posición encontrada y el vector.
+  - Cuenta las comparaciones y los desplazamientos, y compáralos con los del ejercicio
+    10 usando el mismo vector.
+
+  Ejemplo de ejecución:
+    | i=1 pos=1:  15  18   7  75  14  13  43  40
+    | i=2 pos=0:   7  15  18  75  14  13  43  40
+    | i=3 pos=3:   7  15  18  75  14  13  43  40
+    | i=4 pos=1:   7  14  15  18  75  13  43  40
+    | i=5 pos=1:   7  13  14  15  18  75  43  40
+    | i=6 pos=5:   7  13  14  15  18  43  75  40
+    | i=7 pos=5:   7  13  14  15  18  40  43  75
+    | Comparaciones: 15  Desplazamientos: 12
+
+  > Comprueba: el vector queda igual que en la inserción directa después de cada
+  > iteración. Los desplazamientos son los mismos; lo único que baja es el número de
+  > comparaciones.
+
+  [Pista] Es la búsqueda del pseudocódigo de los apuntes: `izq = 0; der = i-1; while
+      (izq <= der) { cen = (izq+der)/2; if (v[cen] <= aux) izq = cen+1; else der =
+      cen-1; }`. Al salir, `izq` es la posición donde va `aux`.
+
+EJERCICIO 12. Selección directa
+-------------------------------
+  Nivel: Medio   ·   Temas: selección directa
+
+  Objetivo: traducir a C el pseudocódigo `ordenacion_seleccion_directa`.
+
+  - Implementa `void seleccion_directa(int *v, int n)`. En cada iteración `i`, busca el
+    menor entre `v[i]` y `v[n-1]` y lo intercambia con `v[i]`.
+  - Muestra el vector después de cada iteración.
+  - Cuenta las comparaciones y los intercambios. ¿Por qué el número de intercambios es
+    siempre n−1, esté como esté el vector?
+  - Ampliación: escribe una versión que busque el mayor y lo lleve al final, y otra que
+    ordene de forma descendente.
+
+  Ejemplo de ejecución:
+    | i=0:   7  18  15  75  14  13  43  40
+    | i=1:   7  13  15  75  14  18  43  40
+    | i=2:   7  13  14  75  15  18  43  40
+    | i=3:   7  13  14  15  75  18  43  40
+    | i=4:   7  13  14  15  18  75  43  40
+    | i=5:   7  13  14  15  18  40  43  75
+    | i=6:   7  13  14  15  18  40  43  75
+    | Comparaciones: 28  Intercambios: 7
+
+  > Para pensar: a diferencia de la inserción, aquí cada iteración deja un elemento en
+  > su posición definitiva. Fíjate en que el 7 de la fila `i=0` ya no se mueve nunca
+  > más.
+
+  [Pista] Guarda en `k` la posición del menor encontrado hasta el momento y en `aux` su
+      valor. Al terminar el bucle interno: `v[k] = v[i]; v[i] = aux;`, igual que en el
+      pseudocódigo.
+
+EJERCICIO 13. Intercambio directo (burbuja)
+-------------------------------------------
+  Nivel: Medio   ·   Temas: burbuja, con test
+
+  Objetivo: implementar las tres versiones de la burbuja de los apuntes y ver qué aporta
+  la mejora "con test".
+
+  - `void burbuja_izq_der(int *v, int n)`: en cada pasada compara elementos consecutivos
+    y los intercambia si están mal. El mayor acaba al final.
+  - `void burbuja_der_izq(int *v, int n)`: recorre al revés, y el menor acaba al
+    principio.
+  - `int burbuja_test(int *v, int n)`: versión izquierda→derecha que para si una pasada
+    completa no hace ningún intercambio. Debe devolver el número de pasadas realizadas.
+  - Ejecuta la versión con test sobre el vector de los apuntes, sobre un vector ya
+    ordenado y sobre uno ordenado al revés, y muestra cuántas pasadas hace en cada caso.
+
+  Ejemplo de ejecución:
+    | pasada 1:  15   7  18  14  13  43  40  75
+    | pasada 2:   7  15  14  13  18  40  43  75
+    | pasada 3:   7  14  13  15  18  40  43  75
+    | pasada 4:   7  13  14  15  18  40  43  75
+    | pasada 5:   7  13  14  15  18  40  43  75
+    | pasada 6:   7  13  14  15  18  40  43  75
+    | pasada 7:   7  13  14  15  18  40  43  75
+    | Con test -> vector apuntes: 5 pasadas | ya ordenado: 1 | inverso: 7
+
+  > Para pensar: sin test hace siempre n−1 = 7 pasadas, aunque desde la 4ª ya está
+  > ordenado. Con test hace 5: la 5ª es la pasada completa sin intercambios que necesita
+  > para saber que puede parar.
+
+  [Pista] Para la versión con test, usa una variable `seguir` (0/1 o `bool`) igual que
+      `SEGUIR` en el pseudocódigo. Ponla a falso al empezar cada pasada y a verdadero
+      cada vez que intercambies. El bucle externo es `while (seguir && j < n)`.
+
+EJERCICIO 14. Sacudida (vibración)
+----------------------------------
+  Nivel: Avanzado   ·   Temas: sacudida, con test, con salto
+
+  Objetivo: implementar la mejora de la burbuja que alterna los dos sentidos y recorta
+  por ambos extremos.
+
+  - `int sacudida(int *v, int n)`: alterna una pasada izquierda→derecha (y `der--`) con
+    otra derecha→izquierda (y `izq++`) mientras `izq != der`. Debe devolver el número de
+    pasadas.
+  - `int sacudida_test(int *v, int n)`: igual, pero para si en una pasada no hay
+    intercambios.
+  - `int sacudida_salto(int *v, int n)`: guarda en `k` la posición del último
+    intercambio y recorta hasta ahí (`der = k-1` o `izq = k+1`).
+  - Muestra el vector tras cada pasada, indicando el sentido, y compara cuántas pasadas
+    hace cada versión.
+
+  Ejemplo de ejecución:
+    | -> izq-der:  15   7  18  14  13  43  40  75
+    | <- der-izq:   7  15  13  18  14  40  43  75
+    | -> izq-der:   7  13  15  14  18  40  43  75
+    | <- der-izq:   7  13  14  15  18  40  43  75
+    | -> izq-der:   7  13  14  15  18  40  43  75
+    | <- der-izq:   7  13  14  15  18  40  43  75
+    | -> izq-der:   7  13  14  15  18  40  43  75
+    | Sacudida: 7 pasadas | Con salto: 4 pasadas
+
+  [Pista] En la versión con salto, la pasada izquierda→derecha hace `k = i+1` al
+      intercambiar `v[i]` y `v[i+1]`, y la derecha→izquierda hace `k = i-1` al
+      intercambiar `v[i-1]` y `v[i]`. Inicializa `k` antes del bucle. Mira el
+      pseudocódigo `ordenacion_sacudida_salto`: está escrito justo así.
+
+EJERCICIO 15. Shell
+-------------------
+  Nivel: Avanzado   ·   Temas: shell, incrementos decrecientes
+
+  Objetivo: ver que Shell es una inserción directa aplicada a elementos separados por
+  una distancia que se va reduciendo.
+
+  - Implementa `void shell(int *v, int n)`: la distancia empieza en `n/2` y se divide
+    entre 2 hasta llegar a 1. Para cada distancia, ordena por inserción los elementos
+    que están a esa distancia.
+  - Muestra la distancia y el vector después de cada una.
+  - Cuenta los desplazamientos y compáralos con los de la inserción directa (ejercicio
+    10) con el mismo vector.
+
+  Ejemplo de ejecución:
+    | distancia 4:  14  13   7  40  15  18  43  75
+    | distancia 2:   7  13  14  18  15  40  43  75
+    | distancia 1:   7  13  14  15  18  40  43  75
+    | Desplazamientos: 6  (insercion directa: 12)
+
+  > Para pensar: con distancia 1 el bucle es exactamente una inserción directa. Si te
+  > sale bien el ejercicio 10, aquí solo cambia el `1` por `distancia` en tres sitios.
+
+  [Pista] `d = n; while (d != 1) { d = d / 2; for (i = d; i < n; i++) { aux = v[i]; j =
+      i; while (j - d >= 0 && v[j-d] > aux) { v[j] = v[j-d]; j -= d; } v[j] = aux; } }`
+
+EJERCICIO 16. QuickSort
+-----------------------
+  Nivel: Avanzado   ·   Temas: quicksort, recursividad, pivote
+
+  Objetivo: implementar el "divide y vencerás" con pivote central de los apuntes.
+
+  - Implementa `void quicksort(int *v, int izq, int der)` siguiendo el pseudocódigo
+    `ordenacion_rapida`: el pivote es `v[(izq+der)/2]`, `i` avanza mientras `v[i] <
+    pivote`, `j` retrocede mientras `v[j] > pivote`, se intercambia si `i <= j`, y
+    después se llama recursivamente a cada parte.
+  - Al final de cada llamada, muestra `(izq, der)`, el pivote y el vector. La primera
+    llamada desde `main` es `quicksort(v, 0, n-1)`.
+  - Ampliación: cuenta las comparaciones con el pivote. Prueba con un vector ya ordenado
+    usando como pivote el central y después el primer elemento (`v[izq]`). ¿Qué pasa con
+    la eficiencia?
+
+  Ejemplo de ejecución:
+    | (0,7) piv=75   15  18   7  40  14  13  43  75
+    | (0,6) piv=40   15  18   7  13  14  40  43  75
+    | (0,4) piv=7     7  18  15  13  14  40  43  75
+    | (1,4) piv=15    7  14  13  15  18  40  43  75
+    | (1,2) piv=14    7  13  14  15  18  40  43  75
+    | (3,4) piv=15    7  13  14  15  18  40  43  75
+    | (5,6) piv=40    7  13  14  15  18  40  43  75
+
+  > Para pensar: en la primera llamada el pivote es 75, el mayor, y las partes quedan de
+  > 7 elementos y de 1. Las partes no tienen por qué ser iguales. Esa es la trampa de la
+  > pregunta de examen de 2015.
+
+  [Pista] Al acabar el `while (i <= j)`, las llamadas recursivas son `if (izq < j)
+      quicksort(v, izq, j);` y `if (der > i) quicksort(v, i, der);`. Guarda el valor del
+      pivote en una variable al principio: aunque se intercambien elementos, el pivote
+      es ese valor, no la posición.
+
+EJERCICIO 17. MergeSort
+-----------------------
+  Nivel: Avanzado   ·   Temas: mergesort, recursividad, malloc
+
+  Objetivo: implementar la ordenación por mezcla, usando memoria dinámica para el vector
+  auxiliar `TEMP`.
+
+  - `void mergesort(int *v, int izq, int der)`: si `izq < der`, calcula `cen`, ordena
+    las dos mitades recursivamente y llama a `mezclar`.
+  - `void mezclar(int *v, int izq, int cen, int der)`: reserva con `malloc` un vector
+    `temp` de `der-izq+1` enteros y comprueba `NULL`. Copia en él el menor de cada
+    pareja comparada, y cuando un tramo se agote, copia lo que quede del otro. Después
+    copia `temp` en `v[izq..der]` y libera `temp`.
+  - Muestra cada llamada a `mezclar` con sus parámetros y el vector resultante.
+
+  Ejemplo de ejecución:
+    | mezclar(0,0,1)   15  18   7  75  14  13  43  40
+    | mezclar(2,2,3)   15  18   7  75  14  13  43  40
+    | mezclar(0,1,3)    7  15  18  75  14  13  43  40
+    | mezclar(4,4,5)    7  15  18  75  13  14  43  40
+    | mezclar(6,6,7)    7  15  18  75  13  14  40  43
+    | mezclar(4,5,7)    7  15  18  75  13  14  40  43
+    | mezclar(0,3,7)    7  13  14  15  18  40  43  75
+
+  > Para pensar: la primera mezcla une las posiciones 0 y 1, dos elementos consecutivos,
+  > porque la recursión baja primero por la mitad izquierda. Es la afirmación del examen
+  > de Verdadero/Falso sobre MergeSort.
+
+  [Pista] Usa tres índices: `i1` (empieza en `izq`), `i2` (empieza en `cen+1`) y `k`
+      (empieza en 0, dentro de `temp`). Al copiar de vuelta, `v[izq + k] = temp[k]`. Si
+      no liberas `temp` en cada mezcla, el programa pierde memoria en cada llamada.
+
+########################################################################################
+# PROYECTO FINAL
+########################################################################################
+
+EJERCICIO 18. Gestor de alumnos
+-------------------------------
+  Nivel: Avanzado   ·   Temas: menú, memoria dinámica, búsqueda, inserción ordenada, ordenación
+
+  Objetivo: juntar todo lo anterior en un programa completo.
+
+  Programa con menú (ejercicio 2) que gestiona una lista de alumnos guardada en un
+  vector dinámico. Pide al principio la capacidad máxima, reserva la memoria y comprueba
+  `NULL`.
+
+  Ejemplo de ejecución:
+    | 1. Alta de alumno
+    | 2. Listar alumnos
+    | 3. Buscar por DNI (binaria)
+    | 4. Buscar por nombre (lineal)
+    | 5. Modificar nota
+    | 6. Mostrar estadisticas
+    | 7. Listar por nota
+    | 0. Salir
+
+  - Alta: no puede haber dos alumnos con el mismo DNI. Compruébalo con la búsqueda. El
+    alumno se inserta en su sitio para que el vector siga ordenado por DNI: desplaza a
+    la derecha los que sean mayores, igual que en el paso 2 de la inserción directa. Si
+    el vector está lleno, avisa.
+  - Buscar por DNI: búsqueda binaria (ejercicio 9), que es posible porque el vector
+    siempre está ordenado.
+  - Modificar nota: busca al alumno y modifícalo con una función que reciba un `Alumno
+    *` (ejercicio 6).
+  - Estadísticas: media, mejor y peor nota, y número de aprobados.
+  - Listar por nota: copia el vector en otro vector dinámico y ordena la copia por nota,
+    de mayor a menor, con el método que prefieras de los ejercicios 10–17. No ordenes el
+    original: dejaría de estar ordenado por DNI y la búsqueda binaria ya no funcionaría.
+  - Al salir, libera toda la memoria.
+
+  [Pista] Guarda en `main` tres variables: `Alumno *v`, `int capacidad` y `int n`
+      (alumnos guardados). Las funciones que añaden alumnos deben recibir `&n` para
+      poder modificarlo. Para insertar ordenado, aplica a un `Alumno` la misma idea que
+      el bucle de la inserción directa con `AUX`.
