@@ -220,6 +220,9 @@ details.hint summary{cursor:pointer;font-weight:800;color:var(--amber)}
 details.hint[open] summary{margin-bottom:6px}
 .exc code,.exintro code,.exnote code{white-space:normal;overflow-wrap:anywhere}
 @media (max-width:600px){.exc{padding:18px 16px}.exc header{flex-wrap:wrap}.exc .done{width:100%;padding-left:54px}}
+details.sol summary{color:var(--green)}
+.solnote{font-size:13.5px;color:var(--muted);margin:2px 0 8px}
+pre.csol{background:#16171b;color:#e6e4de;padding:14px 16px;border-radius:12px;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:6px 0 2px;tab-size:4;font-variant-ligatures:none}
 /* quiz */
 .qwrap{max-width:820px;margin:0 auto}
 .qhead h1{font:900 34px/1.1 "Nunito Variable",sans-serif;margin:6px 0 6px}
@@ -282,7 +285,7 @@ select,.btn{font:inherit;font-size:14px;font-weight:600;padding:9px 14px;border-
         <button data-go="teoria"><b>Test de teoría →</b><span>Preguntas sobre cada apartado, con corrección inmediata</span></button>
         <button data-go="examen"><b>Preguntas de examen →</b><span>Preguntas reales de examen que entran en estos apuntes</span></button>
         <button data-go="tipo"><b>Tipo examen →</b><span>Preguntas nuevas con el formato de los exámenes</span></button>
-        <button data-go="ejercicios"><b>Ejercicios en C →</b><span>Enunciados para practicar: C básico, punteros, búsqueda y ordenación</span></button>
+        <button data-go="ejercicios"><b>Ejercicios en C →</b><span>Prácticas en C: punteros, búsqueda, ordenación, ficheros y simulacro de examen</span></button>
       </div>
     </div>
     <!-- ===================== 1. INTRODUCCIÓN ===================== -->
@@ -1749,9 +1752,9 @@ Módulo Concatenar
 </div></section>
 
 <section class="view hidden" id="v-ejercicios"><div class="qwrap">
-  <div class="qhead"><div class="kicker">Programa</div><h1>Ejercicios en C</h1><p>Enunciados para practicar, de menos a más: primero C básico (funciones, menú y struct), después punteros y memoria dinámica, las búsquedas y los métodos de ordenación de los apuntes, y un proyecto final.</p></div>
+  <div class="qhead"><div class="kicker">Programa</div><h1>Ejercicios en C</h1><p>Enunciados para practicar, de menos a más: primero C básico (funciones, menú y struct), después punteros y memoria dinámica, búsqueda, los métodos de ordenación, ficheros y un simulacro del examen práctico. Basados en tus prácticas.</p></div>
   <div class="exintro">
-  <div class="def"><b>Cómo usar esta sección.</b> Cada ejercicio tiene un objetivo, el enunciado, lo que debe cumplir, un ejemplo de ejecución y una pista que puedes abrir si te atascas. Haz los 3 primeros para coger soltura con C y después sigue el orden: cada ejercicio usa lo del anterior. Marca <b>Hecho</b> cuando lo termines.</div>
+  <div class="def"><b>Cómo usar esta sección.</b> Cada ejercicio tiene un objetivo, el enunciado, lo que debe cumplir, un ejemplo de ejecución y una pista que puedes abrir si te atascas. Están basados en tus prácticas (punteros, búsqueda binaria, ordenación y ficheros). Haz los 3 primeros para coger soltura con C y después sigue el orden, porque cada ejercicio usa lo del anterior. El último bloque es un <b>simulacro del examen práctico</b>. Cada ejercicio tiene, además de la pista, un desplegable con la <b>solución</b> completa en C. Marca <b>Hecho</b> cuando termines cada uno.</div>
   <div class="warn"><b>Del pseudocódigo a C:</b> en los apuntes los vectores empiezan en la posición <b>1</b> y en C empiezan en la <b>0</b>. Un vector de N elementos va de <code>v[0]</code> a <code>v[n-1]</code>. Además, <code>RESERVAR_MEMORIA(tamaño(T))</code> se escribe <code>malloc(sizeof(T))</code>, <code>NULO</code> es <code>NULL</code>, <code>LIBERAR(P)</code> es <code>free(p)</code> y la división entera <code>\</code> es <code>/</code> entre enteros.</div>
   <div class="exprog"><span id="exdone">0</span> de <span id="extotal">0</span> ejercicios hechos<div class="pbar"><i id="exbar"></i></div></div>
 </div>
@@ -1777,6 +1780,58 @@ Division: 3.50
 Maximo: 7
 7 es impar</pre>
   <details class="hint"><summary>Pista</summary>Para que la división dé decimales, convierte uno de los operandos antes de dividir: <code>return (float)a / b;</code>. Para mostrar 2 decimales usa <code>printf("%.2f", r);</code>.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+/* prototipos */
+int suma(int a, int b);
+int resta(int a, int b);
+int producto(int a, int b);
+float dividir(int a, int b);
+int maximo(int a, int b);
+int es_par(int n);
+
+int main(void)
+{
+    int x, y;
+
+    printf(&quot;Introduce dos enteros: &quot;);
+    scanf(&quot;%d %d&quot;, &amp;x, &amp;y);
+
+    printf(&quot;Suma: %d\n&quot;, suma(x, y));
+    printf(&quot;Resta: %d\n&quot;, resta(x, y));
+    printf(&quot;Producto: %d\n&quot;, producto(x, y));
+    if (y == 0) {
+        printf(&quot;Division: error, no se puede dividir entre 0\n&quot;);
+    } else {
+        printf(&quot;Division: %.2f\n&quot;, dividir(x, y));
+    }
+    printf(&quot;Maximo: %d\n&quot;, maximo(x, y));
+    if (es_par(x)) {
+        printf(&quot;%d es par\n&quot;, x);
+    } else {
+        printf(&quot;%d es impar\n&quot;, x);
+    }
+    return 0;
+}
+
+int suma(int a, int b) { return a + b; }
+int resta(int a, int b) { return a - b; }
+int producto(int a, int b) { return a * b; }
+float dividir(int a, int b) { return (float)a / b; }
+
+int maximo(int a, int b)
+{
+    if (a &gt; b) {
+        return a;
+    }
+    return b;
+}
+
+int es_par(int n)
+{
+    return n % 2 == 0;
+}</pre></details>
 </article>
 
 <article class="exc" data-ex="2">
@@ -1798,148 +1853,636 @@ Elige una opcion: </pre>
     <li>Cada opción pide sus datos y llama a la función correspondiente del ejercicio 1.</li>
   </ul>
   <details class="hint"><summary>Pista</summary>No olvides el <code>break;</code> al final de cada <code>case</code> y un <code>default:</code> para las opciones no válidas.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+int suma(int a, int b) { return a + b; }
+int resta(int a, int b) { return a - b; }
+int producto(int a, int b) { return a * b; }
+float dividir(int a, int b) { return (float)a / b; }
+int es_par(int n) { return n % 2 == 0; }
+
+void leer_dos(int *a, int *b)
+{
+    printf(&quot;Introduce dos enteros: &quot;);
+    scanf(&quot;%d %d&quot;, a, b);
+}
+
+int mostrar_menu(void)
+{
+    int opcion;
+    printf(&quot;\n===== MENU =====\n&quot;);
+    printf(&quot;1. Sumar\n&quot;);
+    printf(&quot;2. Restar\n&quot;);
+    printf(&quot;3. Multiplicar\n&quot;);
+    printf(&quot;4. Dividir\n&quot;);
+    printf(&quot;5. Comprobar si un numero es par\n&quot;);
+    printf(&quot;0. Salir\n&quot;);
+    printf(&quot;Elige una opcion: &quot;);
+    scanf(&quot;%d&quot;, &amp;opcion);
+    return opcion;
+}
+
+int main(void)
+{
+    int opcion, x, y;
+
+    do {
+        opcion = mostrar_menu();
+        switch (opcion) {
+        case 1:
+            leer_dos(&amp;x, &amp;y);
+            printf(&quot;Resultado: %d\n&quot;, suma(x, y));
+            break;
+        case 2:
+            leer_dos(&amp;x, &amp;y);
+            printf(&quot;Resultado: %d\n&quot;, resta(x, y));
+            break;
+        case 3:
+            leer_dos(&amp;x, &amp;y);
+            printf(&quot;Resultado: %d\n&quot;, producto(x, y));
+            break;
+        case 4:
+            leer_dos(&amp;x, &amp;y);
+            if (y == 0) {
+                printf(&quot;Error: no se puede dividir entre 0\n&quot;);
+            } else {
+                printf(&quot;Resultado: %.2f\n&quot;, dividir(x, y));
+            }
+            break;
+        case 5:
+            printf(&quot;Introduce un numero: &quot;);
+            scanf(&quot;%d&quot;, &amp;x);
+            printf(&quot;%d es %s\n&quot;, x, es_par(x) ? &quot;par&quot; : &quot;impar&quot;);
+            break;
+        case 0:
+            printf(&quot;Adios\n&quot;);
+            break;
+        default:
+            printf(&quot;Opcion no valida\n&quot;);
+        }
+    } while (opcion != 0);
+
+    return 0;
+}</pre></details>
 </article>
 
 <article class="exc" data-ex="3">
   <header><span class="num">3</span><div><h3>Struct de alumnos</h3><div class="tags"><span class="lvl l1">Básico</span><span class="tg">struct</span><span class="tg">vector de structs</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> definir un tipo de dato propio y trabajar con un vector de ese tipo.</p>
-  <p>Define el tipo:</p>
+  <p class="obj"><b>Objetivo:</b> definir un tipo de dato propio y trabajar con un vector de ese tipo. Es el mismo <code>Alumno</code> que usan las prácticas de búsqueda y ordenación.</p>
 <pre class="code">typedef struct {
+    int id;
     char nombre[30];
-    char dni[10];
     float nota;
 } Alumno;</pre>
-  <p>Escribe un programa que trabaje con un vector <code>Alumno clase[20]</code> y estas funciones:</p>
+  <p>Escribe un programa que trabaje con un vector <code>Alumno lista[10]</code> y estas funciones:</p>
   <ul>
-    <li><code>Alumno leer_alumno(void)</code>: pide los datos de un alumno y lo devuelve.</li>
-    <li><code>void mostrar_alumno(Alumno a)</code>: muestra un alumno en una línea.</li>
-    <li><code>float nota_media(Alumno v[], int n)</code>: devuelve la media de las notas.</li>
-    <li><code>int mejor_alumno(Alumno v[], int n)</code>: devuelve la <b>posición</b> del alumno con mejor nota.</li>
+    <li><code>Alumno leer_alumno(void)</code>: pide id, nombre y nota y devuelve el alumno.</li>
+    <li><code>void mostrar_alumnos(const Alumno lista[], int n)</code>: muestra una tabla con un alumno por línea.</li>
+    <li><code>float nota_media(const Alumno lista[], int n)</code>: devuelve la media de las notas.</li>
+    <li><code>int mejor_alumno(const Alumno lista[], int n)</code>: devuelve la <b>posición</b> del alumno con mejor nota.</li>
   </ul>
-  <p>En <code>main</code>, pregunta cuántos alumnos hay (como máximo 20), léelos, muéstralos todos y después muestra la media y el mejor alumno.</p>
+  <p>En <code>main</code>, pregunta cuántos alumnos hay (como máximo 10), léelos, muéstralos y después muestra la media y el mejor alumno.</p>
 <pre class="out">Numero de alumnos: 3
 ...
-Ana Ruiz        12345678A   8.50
-Luis Gil        87654321B   6.00
-Marta Sanz      11223344C   9.25
-Nota media: 7.92
-Mejor alumno: Marta Sanz (9.25)</pre>
-  <details class="hint"><summary>Pista</summary>Para leer un nombre con espacios usa <code>scanf(" %29[^\n]", a.nombre);</code> (el espacio inicial se salta el salto de línea pendiente). Se accede a los campos con el punto: <code>v[i].nota</code>.</details>
+ID      Nombre          Nota
+14      Luis            6.0
+10      Ana             7.5
+27      Lucia           9.1
+Nota media: 7.53
+Mejor alumno: Lucia (9.1)</pre>
+  <details class="hint"><summary>Pista</summary>Para la tabla: <code>printf("%d\t%-12s\t%.1f\n", lista[i].id, lista[i].nombre, lista[i].nota);</code>. Se accede a los campos con el punto, por ejemplo <code>lista[i].nota</code>. <code>const</code> en el parámetro indica que la función solo lee el vector.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+#define MAX 10
+
+typedef struct {
+    int id;
+    char nombre[30];
+    float nota;
+} Alumno;
+
+Alumno leer_alumno(void)
+{
+    Alumno a;
+    printf(&quot;ID: &quot;);
+    scanf(&quot;%d&quot;, &amp;a.id);
+    printf(&quot;Nombre: &quot;);
+    scanf(&quot; %29[^\n]&quot;, a.nombre);
+    printf(&quot;Nota: &quot;);
+    scanf(&quot;%f&quot;, &amp;a.nota);
+    return a;
+}
+
+void mostrar_alumnos(const Alumno lista[], int n)
+{
+    printf(&quot;ID\tNombre\t\tNota\n&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d\t%-12s\t%.1f\n&quot;, lista[i].id, lista[i].nombre, lista[i].nota);
+    }
+}
+
+float nota_media(const Alumno lista[], int n)
+{
+    float total = 0;
+    for (int i = 0; i &lt; n; i++) {
+        total += lista[i].nota;
+    }
+    return total / n;
+}
+
+int mejor_alumno(const Alumno lista[], int n)
+{
+    int mejor = 0;
+    for (int i = 1; i &lt; n; i++) {
+        if (lista[i].nota &gt; lista[mejor].nota) {
+            mejor = i;
+        }
+    }
+    return mejor;
+}
+
+int main(void)
+{
+    Alumno lista[MAX];
+    int n;
+
+    printf(&quot;Numero de alumnos: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 1 || n &gt; MAX) {
+        printf(&quot;Numero no valido\n&quot;);
+        return 1;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        lista[i] = leer_alumno();
+    }
+
+    mostrar_alumnos(lista, n);
+    printf(&quot;Nota media: %.2f\n&quot;, nota_media(lista, n));
+    int m = mejor_alumno(lista, n);
+    printf(&quot;Mejor alumno: %s (%.1f)\n&quot;, lista[m].nombre, lista[m].nota);
+    return 0;
+}</pre></details>
 </article>
 
 <!-- ================= BLOQUE 1 ================= -->
 <h2 class="exblock">Punteros y memoria dinámica</h2>
 
 <article class="exc" data-ex="4">
-  <header><span class="num">4</span><div><h3>Primeros pasos con punteros</h3><div class="tags"><span class="lvl l1">Básico</span><span class="tg">&amp; y *</span><span class="tg">paso por referencia</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> entender que un puntero guarda una <b>dirección de memoria</b> (apartado "El puntero" de los apuntes).</p>
+  <header><span class="num">4</span><div><h3>Punteros: dirección, valor y funciones</h3><div class="tags"><span class="lvl l1">Básico</span><span class="tg">&amp; y *</span><span class="tg">funciones con punteros</span><span class="tg">NULL</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> saber en cada momento si trabajas con una <b>dirección</b> (<code>p</code>, <code>&amp;x</code>) o con un <b>dato</b> (<code>x</code>, <code>*p</code>). Ejercicios de la práctica "Repaso de punteros".</p>
   <ol>
-    <li>Declara <code>int x = 10;</code> y <code>int *p = &amp;x;</code>. Muestra el valor de <code>x</code>, la dirección de <code>x</code> (<code>&amp;x</code>), el valor de <code>p</code> y el valor apuntado (<code>*p</code>). Usa <code>%p</code> para las direcciones.</li>
-    <li>Cambia el valor de <code>x</code> usando solo <code>p</code> (<code>*p = 25;</code>) y comprueba que <code>x</code> ha cambiado.</li>
-    <li>Escribe <code>void intercambiar(int *a, int *b)</code>, que intercambia dos variables. Pruébala desde <code>main</code>.</li>
-    <li>Escribe <code>void min_max(int a, int b, int c, int *min, int *max)</code>, que "devuelve" dos resultados a través de punteros.</li>
-    <li>Declara un puntero, asígnale <code>NULL</code> y comprueba con un <code>if</code> que no apunta a nada antes de usarlo.</li>
-  </ol>
-<pre class="out">x = 10, &amp;x = 0x7ffd5e8c, p = 0x7ffd5e8c, *p = 10
-Tras *p = 25 -&gt; x = 25
-Antes: a=3 b=8 | Despues: a=8 b=3
-min = 2, max = 9
-El puntero q es NULL, no se puede usar</pre>
-  <details class="hint"><summary>Pista</summary>Las direcciones cambiarán en cada ejecución. Lo importante es que <code>&amp;x</code> y <code>p</code> muestren la misma dirección. Si escribes <code>void intercambiar(int a, int b)</code> sin punteros, verás que no funciona: las funciones reciben copias.</details>
-</article>
+    <li><b>Valor y dirección:</b> con <code>int edad = 20;</code> y <code>int *p = &amp;edad;</code>, muestra <code>edad</code>, <code>&amp;edad</code>, <code>p</code> y <code>*p</code>. ¿Qué parejas coinciden?</li>
+    <li><b>Modificación indirecta:</b> con <code>int x = 8;</code> consigue que <code>x</code> valga 100 <b>sin escribir</b> <code>x = 100;</code>.</li>
+    <li><b>Cambio de destino:</b> con <code>a = 4</code>, <code>b = 9</code> y <code>p</code> apuntando a <code>a</code>, haz que <code>p</code> apunte a <code>b</code> y cambia <code>b</code> a través de <code>p</code>.</li>
+    <li><b>Funciones:</b> escribe <code>void incrementar(int *p)</code>, <code>void ordenar2(int *a, int *b)</code> (deja el menor en <code>*a</code> y el mayor en <code>*b</code>) y <code>void mostrar(const int *p)</code> (imprime el valor o <code>"sin dato"</code> si <code>p == NULL</code>).</li>
+    <li><b>Predice la salida sin ordenador</b> y luego compruébalo compilando:
+<pre class="code">int x = 2;  int *p = &amp;x;
+*p = 5;  x++;  *p = *p * 2;
+printf("%d\n", x);                       /* A */
 
+int a = 1, b = 2, c = 3;
+int *p = &amp;a, *q = &amp;b;
+*p = *q + c;  q = p;  *q = 8;  p = &amp;c;  *p = *q + 1;
+printf("%d %d %d\n", a, b, c);           /* B */
+
+int x = 4, y = 7;  int *p = &amp;x;  int *q = p;
+*q = 10;  p = &amp;y;  *p = *q + 5;
+printf("%d %d\n", x, y);                 /* C */</pre>
+    </li>
+  </ol>
+<pre class="out">edad = 20, &amp;edad = 0x7ffc5e8c, p = 0x7ffc5e8c, *p = 20
+x = 100
+b = 50
+Tras incrementar: 6
+ordenar2(9, 3) -&gt; a = 3, b = 9
+mostrar(&amp;x): 100
+mostrar(NULL): sin dato</pre>
+  <div class="req"><b>No confundas:</b> <code>p = &amp;b</code> cambia <b>a dónde apunta</b> p. <code>*p = b</code> cambia <b>el dato</b> al que apunta p. Si te atascas, dibuja cada variable como una caja y cada puntero como una flecha.</div>
+  <details class="hint"><summary>Soluciones de "predice la salida"</summary><b>A:</b> 12 (x pasa a 5, luego a 6, y se duplica). <b>B:</b> <code>8 2 9</code>. <b>C:</b> <code>10 15</code> (q sigue apuntando a x aunque p cambie a y). Para imprimir direcciones usa <code>printf("%p", (void *)&amp;edad);</code>.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+void incrementar(int *p)
+{
+    *p = *p + 1;
+}
+
+void ordenar2(int *a, int *b)
+{
+    if (*a &gt; *b) {
+        int aux = *a;
+        *a = *b;
+        *b = aux;
+    }
+}
+
+void mostrar(const int *p)
+{
+    if (p != NULL) {
+        printf(&quot;%d\n&quot;, *p);
+    } else {
+        printf(&quot;sin dato\n&quot;);
+    }
+}
+
+int main(void)
+{
+    /* 1. Valor y direccion */
+    int edad = 20;
+    int *p = &amp;edad;
+    printf(&quot;edad = %d, &amp;edad = %p, p = %p, *p = %d\n&quot;,
+           edad, (void *)&amp;edad, (void *)p, *p);
+    /* coinciden: &amp;edad con p (direccion) y edad con *p (dato) */
+
+    /* 2. Modificacion indirecta */
+    int x = 8;
+    int *px = &amp;x;
+    *px = 100;
+    printf(&quot;x = %d\n&quot;, x);
+
+    /* 3. Cambio de destino */
+    int a = 4, b = 9;
+    int *q = &amp;a;
+    q = &amp;b;            /* ahora q apunta a b */
+    *q = 50;           /* cambia b, no a */
+    printf(&quot;b = %d\n&quot;, b);
+
+    /* 4. Funciones */
+    int n = 5;
+    incrementar(&amp;n);
+    printf(&quot;Tras incrementar: %d\n&quot;, n);
+
+    int m1 = 9, m2 = 3;
+    ordenar2(&amp;m1, &amp;m2);
+    printf(&quot;ordenar2(9, 3) -&gt; a = %d, b = %d\n&quot;, m1, m2);
+
+    printf(&quot;mostrar(&amp;x): &quot;);
+    mostrar(&amp;x);
+    printf(&quot;mostrar(NULL): &quot;);
+    mostrar(NULL);
+    return 0;
+}</pre></details>
+</article>
 
 <article class="exc" data-ex="5">
-  <header><span class="num">5</span><div><h3>Vector dinámico</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">malloc / free</span><span class="tg">NULL</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> aplicar el esquema de los apuntes: <b>reservar → comprobar NULO → usar → liberar</b>.</p>
-  <p>Pide al usuario cuántos números quiere guardar (N) y:</p>
+  <header><span class="num">5</span><div><h3>Arrays, punteros y memoria dinámica</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">aritmética de punteros</span><span class="tg">const</span><span class="tg">malloc / free</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> pasar vectores a funciones, recorrerlos con punteros y aplicar el esquema de los apuntes: <b>reservar → comprobar NULO → usar → liberar</b>.</p>
   <ul>
-    <li>Reserva memoria para N enteros con <code>malloc(n * sizeof(int))</code>.</li>
-    <li>Comprueba si la reserva ha fallado (<code>== NULL</code>). Si falla, muestra "error en la reserva de memoria" y termina, como en el pseudocódigo de los apuntes.</li>
-    <li>Rellena el vector con números aleatorios entre 1 y 100 (<code>rand() % 100 + 1</code>) y muéstralo.</li>
-    <li>Libera la memoria con <code>free</code> y pon el puntero a <code>NULL</code>.</li>
+    <li><code>int suma(const int *v, int n)</code>: <b>sin usar</b> <code>v[i]</code>, avanzando el puntero con <code>v++</code>.</li>
+    <li><code>void doblar(int *v, int n)</code>: multiplica por 2 todos los elementos. Pruébalo con <code>{1, 2, 3, 4, 5}</code>.</li>
+    <li><code>int maximo(const int *v, int n)</code>: usando <code>*(v + i)</code>. Pruébalo con el vector de los apuntes <code>{15, 18, 7, 75, 14, 13, 43, 40}</code>.</li>
+    <li><b>Memoria dinámica:</b> pide <code>n</code>, reserva con <code>malloc</code> un vector de <code>n</code> enteros, comprueba <code>NULL</code>, rellénalo con 1, 2, …, n, muestra la suma con tu función <code>suma</code> y libera con <code>free</code>.</li>
   </ul>
-  <p><b>Ampliación:</b> pon todo esto en funciones, por ejemplo <code>int *crear_vector(int n)</code>, que devuelva <code>NULL</code> si falla, <code>void rellenar(int *v, int n)</code> y <code>void mostrar(int *v, int n)</code>.</p>
-<pre class="out">Cuantos numeros? 6
-Vector: 42 7 88 15 63 2
+<pre class="out">Suma de {1,2,3,4,5} = 15
+Doblado: 2 4 6 8 10
+Maximo = 75
+n? 10
+Suma de 1..10 = 55
 Memoria liberada</pre>
-  <details class="hint"><summary>Pista</summary>Necesitas <code>#include &lt;stdlib.h&gt;</code> para <code>malloc</code>, <code>free</code> y <code>rand</code>. Llama una vez a <code>srand(time(NULL));</code> (con <code>&lt;time.h&gt;</code>) para que los números cambien en cada ejecución.</details>
-</article>
+  <details class="hint"><summary>Pista</summary><code>int *v = malloc(n * sizeof(int)); if (v == NULL) { printf("error en la reserva de memoria\n"); return 1; }</code> … y al final <code>free(v); v = NULL;</code>. Dentro de <code>suma</code>, hacer <code>v++</code> solo mueve la copia local del puntero, no el de <code>main</code>.</details>
 
-<article class="exc" data-ex="6">
-  <header><span class="num">6</span><div><h3>Punteros a struct</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">operador -&gt;</span><span class="tg">malloc de structs</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> crear una variable dinámica de tipo struct, que "no tiene nombre" y solo se maneja con un puntero.</p>
-  <p>Con el tipo <code>Alumno</code> del ejercicio 3:</p>
-  <ul>
-    <li>Escribe <code>Alumno *nuevo_alumno(const char *nombre, const char *dni, float nota)</code>. Debe reservar memoria para un alumno, comprobar <code>NULL</code>, rellenar los campos (con <code>strcpy</code>) y devolver el puntero.</li>
-    <li>Escribe <code>void subir_nota(Alumno *a, float puntos)</code>, que modifica la nota a través del puntero sin pasar de 10.</li>
-    <li>Escribe <code>void mostrar(const Alumno *a)</code> usando el operador <code>-&gt;</code>.</li>
-    <li>En <code>main</code>, crea dos alumnos, sube la nota a uno, muéstralos y libera la memoria de ambos.</li>
-  </ul>
-  <details class="hint"><summary>Pista</summary><code>a-&gt;nota</code> es lo mismo que <code>(*a).nota</code>. Con un <code>Alumno *</code> se usa la flecha; con un <code>Alumno</code> normal, el punto.</details>
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int suma(const int *v, int n)
+{
+    int total = 0;
+    for (int i = 0; i &lt; n; i++) {
+        total += *v;
+        v++;               /* avanza la copia local del puntero */
+    }
+    return total;
+}
+
+void doblar(int *v, int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        v[i] = v[i] * 2;
+    }
+}
+
+int maximo(const int *v, int n)
+{
+    int max = *v;
+    for (int i = 1; i &lt; n; i++) {
+        if (*(v + i) &gt; max) {
+            max = *(v + i);
+        }
+    }
+    return max;
+}
+
+int main(void)
+{
+    int a[5] = {1, 2, 3, 4, 5};
+    printf(&quot;Suma de {1,2,3,4,5} = %d\n&quot;, suma(a, 5));
+
+    doblar(a, 5);
+    printf(&quot;Doblado:&quot;);
+    for (int i = 0; i &lt; 5; i++) {
+        printf(&quot; %d&quot;, a[i]);
+    }
+    printf(&quot;\n&quot;);
+
+    int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};
+    printf(&quot;Maximo = %d\n&quot;, maximo(v, 8));
+
+    /* memoria dinamica: reservar -&gt; comprobar -&gt; usar -&gt; liberar */
+    int n;
+    printf(&quot;n? &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int *d = malloc(n * sizeof(int));
+    if (d == NULL) {
+        printf(&quot;error en la reserva de memoria\n&quot;);
+        return 1;
+    }
+    for (int i = 0; i &lt; n; i++) {
+        d[i] = i + 1;
+    }
+    printf(&quot;Suma de 1..%d = %d\n&quot;, n, suma(d, n));
+    free(d);
+    d = NULL;
+    printf(&quot;Memoria liberada\n&quot;);
+    return 0;
+}</pre></details>
 </article>
 
 <!-- ================= BLOQUE 2 ================= -->
 <h2 class="exblock">Búsqueda en vectores</h2>
 
-<article class="exc" data-ex="7">
-  <header><span class="num">7</span><div><h3>Búsqueda lineal</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">búsqueda lineal</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+<article class="exc" data-ex="6">
+  <header><span class="num">6</span><div><h3>Búsqueda lineal</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">búsqueda lineal</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
   <p class="obj"><b>Objetivo:</b> traducir a C el pseudocódigo <code>busqueda_lineal</code> de los apuntes.</p>
-  <p>Implementa <code>int busqueda_lineal(int *v, int n, int x)</code>, que devuelva la <b>posición</b> de <code>x</code> o <b>−1</b> si no está. Debe seguir el pseudocódigo: avanzar mientras <code>v[i] != x</code> y no se haya llegado al último elemento, y comprobar al final si se ha encontrado.</p>
+  <p>Implementa <code>int busqueda_lineal(const int v[], int n, int x)</code>, que devuelva la <b>posición</b> de <code>x</code> o <b>−1</b> si no está. Debe seguir el pseudocódigo: avanzar mientras <code>v[i] != x</code> y no se haya llegado al último elemento, y comprobar al final si se ha encontrado.</p>
   <p>Pruébala con <code>{15, 18, 7, 75, 14, 13, 43, 40}</code> buscando 14 (está), 99 (no está) y 40 (último elemento). Después prueba con <code>{5, 3, 5, 8, 5}</code> buscando 5: ¿qué posición devuelve y por qué?</p>
-<p><b>Ampliación (vector ordenado):</b> escribe <code>int busqueda_lineal_ordenado(int *v, int n, int x)</code> siguiendo el otro pseudocódigo de los apuntes: avanza mientras <code>v[i] &lt; x</code>. Pruébala con <code>{7, 13, 14, 15, 18, 26, 40, 43, 51}</code> buscando 20 y cuenta cuántos elementos mira cada versión. La general mira los 9; la de vector ordenado para al llegar al 26 y solo mira 6.</p>
+<p><b>Ampliación (vector ordenado):</b> escribe <code>int busqueda_lineal_ordenado(const int v[], int n, int x, int *examinados)</code> siguiendo el otro pseudocódigo de los apuntes: avanza mientras <code>v[i] &lt; x</code>. En <code>*examinados</code> deja cuántos elementos ha mirado. Para comparar, haz también <code>int busqueda_lineal_cont(const int v[], int n, int x, int *examinados)</code>: la búsqueda general, pero contando igual. Pruébala con <code>{7, 13, 14, 15, 18, 26, 40, 43, 51}</code> buscando 20 y cuenta cuántos elementos mira cada versión. La general mira los 9; la de vector ordenado para al llegar al 26 y solo mira 6.</p>
 <pre class="out">Buscar 14 -&gt; encontrado en la posicion 4
 Buscar 99 -&gt; no encontrado
 Buscar 40 -&gt; encontrado en la posicion 7
 Buscar 5 en {5,3,5,8,5} -&gt; posicion 0</pre>
   <div class="req"><b>Para pensar:</b> según los apuntes, si el valor está repetido se encuentra el más próximo al extremo donde empieza el recorrido. Escribe otra versión que recorra de derecha a izquierda y comprueba que entonces encuentra el 5 de la posición 4.</div>
   <details class="hint"><summary>Pista</summary>En C con índices desde 0, el pseudocódigo queda así: <code>i = 0; while (v[i] != x &amp;&amp; i &lt; n-1) i++;</code> y después <code>if (v[i] == x) return i; else return -1;</code>.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+/* pseudocodigo busqueda_lineal: avanza mientras V(I) != X y no sea el ultimo */
+int busqueda_lineal(const int v[], int n, int x)
+{
+    int i = 0;
+    while (v[i] != x &amp;&amp; i &lt; n - 1) {
+        i++;
+    }
+    if (v[i] == x) {
+        return i;
+    }
+    return -1;
+}
+
+/* recorrido de derecha a izquierda */
+int busqueda_lineal_der_izq(const int v[], int n, int x)
+{
+    int i = n - 1;
+    while (v[i] != x &amp;&amp; i &gt; 0) {
+        i--;
+    }
+    if (v[i] == x) {
+        return i;
+    }
+    return -1;
+}
+
+/* ampliacion: misma busqueda general, contando elementos mirados */
+int busqueda_lineal_cont(const int v[], int n, int x, int *examinados)
+{
+    int i = 0;
+    *examinados = 1;
+    while (v[i] != x &amp;&amp; i &lt; n - 1) {
+        i++;
+        (*examinados)++;
+    }
+    if (v[i] == x) {
+        return i;
+    }
+    return -1;
+}
+
+/* pseudocodigo busqueda_lineal_ordenado: avanza mientras V(I) &lt; X */
+int busqueda_lineal_ordenado(const int v[], int n, int x, int *examinados)
+{
+    int i = 0;
+    *examinados = 1;
+    while (v[i] &lt; x &amp;&amp; i &lt; n - 1) {
+        i++;
+        (*examinados)++;
+    }
+    if (v[i] == x) {
+        return i;
+    }
+    return -1;
+}
+
+void mostrar_resultado(int x, int pos)
+{
+    if (pos != -1) {
+        printf(&quot;Buscar %d -&gt; encontrado en la posicion %d\n&quot;, x, pos);
+    } else {
+        printf(&quot;Buscar %d -&gt; no encontrado\n&quot;, x);
+    }
+}
+
+int main(void)
+{
+    int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};
+    int rep[5] = {5, 3, 5, 8, 5};
+    int ord[9] = {7, 13, 14, 15, 18, 26, 40, 43, 51};
+
+    mostrar_resultado(14, busqueda_lineal(v, 8, 14));
+    mostrar_resultado(99, busqueda_lineal(v, 8, 99));
+    mostrar_resultado(40, busqueda_lineal(v, 8, 40));
+    printf(&quot;Buscar 5 en {5,3,5,8,5} -&gt; posicion %d\n&quot;, busqueda_lineal(rep, 5, 5));
+    printf(&quot;De derecha a izquierda -&gt; posicion %d\n&quot;, busqueda_lineal_der_izq(rep, 5, 5));
+
+    int e1, e2;
+    int r1 = busqueda_lineal_cont(ord, 9, 20, &amp;e1);
+    int r2 = busqueda_lineal_ordenado(ord, 9, 20, &amp;e2);
+    printf(&quot;Buscar 20 en el vector ordenado:\n&quot;);
+    printf(&quot;  general:  %d (mira %d elementos)\n&quot;, r1, e1);
+    printf(&quot;  ordenado: %d (mira %d elementos)\n&quot;, r2, e2);
+    return 0;
+}</pre></details>
 </article>
 
+<article class="exc" data-ex="7">
+  <header><span class="num">7</span><div><h3>Búsqueda binaria</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">búsqueda binaria</span><span class="tg">izq / der / cen</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> traducir a C el pseudocódigo <code>busqueda_binaria</code> de los apuntes, conservando <code>izq</code>, <code>der</code> y <code>cen</code>. Es la parte A de la práctica de búsqueda binaria.</p>
+  <p>Con <code>#define TAM 10</code> y el vector ordenado <code>int v[TAM] = {3, 7, 12, 18, 21, 25, 30, 34, 42, 50};</code>:</p>
+  <ul>
+    <li>Escribe <code>int busqueda_binaria(const int v[], int n, int x)</code>, que devuelva el <b>índice</b> de <code>x</code> o <b>−1</b> si no está.</li>
+    <li>En <code>main</code>, pide el valor con <code>scanf</code> y muestra si se ha encontrado y en qué índice.</li>
+    <li>Mientras pruebas, muestra en cada vuelta <code>izq</code>, <code>der</code>, <code>cen</code> y <code>v[cen]</code>. Antes de ejecutar cada prueba, <b>predice</b> el resultado a mano.</li>
+  </ul>
+<pre class="out">Buscar 18:
+  izq=0 der=9 cen=4 v[cen]=21 -&gt; der = cen-1
+  izq=0 der=3 cen=1 v[cen]=7 -&gt; izq = cen+1
+  izq=2 der=3 cen=2 v[cen]=12 -&gt; izq = cen+1
+  izq=3 der=3 cen=3 v[cen]=18 -&gt; encontrado
+18 encontrado en el indice 3</pre>
+  <table class="tbl small"><tr><th>Buscar</th><th>Caso</th><th>Resultado esperado</th></tr>
+    <tr><td>18</td><td>valor interior</td><td>3</td></tr><tr><td>3</td><td>primer elemento</td><td>0</td></tr><tr><td>50</td><td>último elemento</td><td>9</td></tr>
+    <tr><td>19</td><td>no está, cae entre dos valores</td><td>−1</td></tr><tr><td>−5</td><td>menor que todos</td><td>−1</td></tr><tr><td>99</td><td>mayor que todos</td><td>−1</td></tr></table>
+  <div class="req"><b>Errores típicos:</b> poner <code>der = n</code> (el último índice es <code>n−1</code>), no recalcular <code>cen</code> dentro del bucle o equivocarse al recortar: si <code>v[cen] &gt; x</code>, se recorta por la derecha (<code>der = cen − 1</code>).</div>
+  <details class="hint"><summary>Pista</summary><code>int izq = 0, der = n - 1, cen = (izq + der) / 2;</code> · <code>while ((v[cen] != x) &amp;&amp; (izq &lt; der)) { if (v[cen] &gt; x) der = cen - 1; else izq = cen + 1; cen = (izq + der) / 2; }</code> · al salir, <code>if (v[cen] == x) return cen; return -1;</code>. Buscando 42 debe pasar por cen = 4, 7 y 8.</details>
 
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+#define TAM 10
+
+/* traduccion del pseudocodigo busqueda_binaria (indices 0..n-1) */
+int busqueda_binaria(const int v[], int n, int x)
+{
+    int izq = 0;
+    int der = n - 1;
+    int cen = (izq + der) / 2;
+
+    while ((v[cen] != x) &amp;&amp; (izq &lt; der)) {
+        printf(&quot;  izq=%d der=%d cen=%d v[cen]=%d -&gt; &quot;, izq, der, cen, v[cen]);
+        if (v[cen] &gt; x) {
+            der = cen - 1;
+            printf(&quot;der = cen-1\n&quot;);
+        } else {
+            izq = cen + 1;
+            printf(&quot;izq = cen+1\n&quot;);
+        }
+        cen = (izq + der) / 2;
+    }
+    printf(&quot;  izq=%d der=%d cen=%d v[cen]=%d -&gt; %s\n&quot;, izq, der, cen, v[cen],
+           v[cen] == x ? &quot;encontrado&quot; : &quot;no esta&quot;);
+
+    if (v[cen] == x) {
+        return cen;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    int v[TAM] = {3, 7, 12, 18, 21, 25, 30, 34, 42, 50};
+    int x;
+
+    printf(&quot;Valor a buscar: &quot;);
+    scanf(&quot;%d&quot;, &amp;x);
+    printf(&quot;Buscar %d:\n&quot;, x);
+
+    int pos = busqueda_binaria(v, TAM, x);
+    if (pos != -1) {
+        printf(&quot;%d encontrado en el indice %d\n&quot;, x, pos);
+    } else {
+        printf(&quot;%d no esta en el vector\n&quot;, x);
+    }
+    return 0;
+}</pre></details>
+</article>
 
 <article class="exc" data-ex="8">
-  <header><span class="num">8</span><div><h3>Búsqueda binaria con traza</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">búsqueda binaria</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> traducir a C el pseudocódigo <code>busqueda_binaria</code> de los apuntes y ver cómo se va reduciendo el intervalo.</p>
-  <p>Implementa <code>int busqueda_binaria(int *v, int n, int x)</code> de forma <b>iterativa</b>, con las variables <code>izq</code>, <code>der</code> y <code>cen</code> de los apuntes. En cada vuelta del bucle, muestra los valores de <code>izq</code>, <code>der</code>, <code>cen</code> y <code>v[cen]</code>. Pruébala con <code>{7, 13, 14, 15, 18, 26, 40, 43, 51}</code> buscando 40 y 20, igual que en los ejemplos de los apuntes.</p>
-<pre class="out">Buscar 40:
-  izq=0 der=8 cen=4 v[cen]=18 -&gt; 18 &lt; 40, sigo por la derecha
-  izq=5 der=8 cen=6 v[cen]=40 -&gt; encontrado en la posicion 6
-Buscar 20:
-  izq=0 der=8 cen=4 v[cen]=18 -&gt; 18 &lt; 20, sigo por la derecha
-  izq=5 der=8 cen=6 v[cen]=40 -&gt; 40 &gt; 20, sigo por la izquierda
-  izq=5 der=5 cen=5 v[cen]=26 -&gt; no existe</pre>
-  <div class="req"><b>Comprueba:</b> antes de buscar, el programa debe verificar que el vector está ordenado con <code>int esta_ordenado(int *v, int n)</code>. Si no lo está, debe avisar en lugar de buscar.</div>
-  <details class="hint"><summary>Pista</summary>Con índices desde 0: <code>izq = 0; der = n-1; cen = (izq+der)/2;</code>, el bucle es <code>while (v[cen] != x &amp;&amp; izq &lt; der)</code> y dentro <code>if (v[cen] &gt; x) der = cen-1; else izq = cen+1; cen = (izq+der)/2;</code>.</details>
-</article>
-
-
-
-<article class="exc" data-ex="9">
-  <header><span class="num">9</span><div><h3>Buscar en un vector de structs</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">struct</span><span class="tg">strcmp</span><span class="tg">ambas búsquedas</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> buscar por un campo concreto y saber cuándo se puede usar la búsqueda binaria.</p>
-  <p>Con un vector de <code>Alumno</code> (ejercicio 3) <b>ordenado por DNI</b>:</p>
+  <header><span class="num">8</span><div><h3>Búsqueda binaria en un array de struct</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">struct</span><span class="tg">campo clave</span><span class="tg">búsqueda binaria</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> aplicar la misma búsqueda a registros, comparando solo el <b>campo clave</b> (<code>id</code>). Es la parte B de la práctica de búsqueda binaria.</p>
+  <p>Crea este array, que ya está <b>ordenado por id</b>:</p>
+<pre class="code">Alumno lista[10] = {
+    {10, "Ana", 7.5f},   {14, "Luis", 6.0f},   {20, "Maria", 8.2f},
+    {23, "Jorge", 5.9f}, {27, "Lucia", 9.1f},  {31, "Carlos", 6.7f},
+    {35, "Elena", 7.0f}, {44, "Rosa", 8.8f},   {47, "Pablo", 5.5f},
+    {60, "Sofia", 9.5f}
+};</pre>
   <ul>
-    <li><code>int buscar_por_dni(Alumno *v, int n, const char *dni)</code>: búsqueda <b>binaria</b> comparando con <code>strcmp</code>.</li>
-    <li><code>int buscar_por_nombre(Alumno *v, int n, const char *nombre)</code>: búsqueda <b>lineal</b>.</li>
-    <li><code>int buscar_por_nota(Alumno *v, int n, float nota)</code>: ¿lineal o binaria? Elige y explícalo en un comentario.</li>
+    <li>Escribe <code>int buscar_alumno(const Alumno lista[], int n, int idBuscado)</code>. Es tu búsqueda binaria cambiando <code>v[cen]</code> por <code>lista[cen].id</code>.</li>
+    <li>Pide un id. Si existe, muestra id, nombre y nota usando la posición devuelta; si no, un mensaje claro.</li>
+    <li>Prueba con 10, 35 y 60 (deben aparecer) y con 22, 5 y 80 (no deben aparecer).</li>
   </ul>
-  <div class="req"><b>Para pensar:</b> esta es la idea de la pregunta del examen de 2017 del vector de alumnos ordenado por DNI. La búsqueda binaria solo sirve si el vector está ordenado <b>por el campo que buscas</b>.</div>
-  <details class="hint"><summary>Pista</summary><code>strcmp(a, b)</code> devuelve 0 si las cadenas son iguales, un valor negativo si <code>a</code> va antes y uno positivo si va después. Sustituye a <code>&lt;</code>, <code>&gt;</code> y <code>==</code> en la búsqueda binaria.</details>
+<pre class="out">ID a buscar: 35
+  izq=0 der=9 cen=4 id=27
+  izq=5 der=9 cen=7 id=44
+  izq=5 der=6 cen=5 id=31
+  izq=6 der=6 cen=6 id=35
+Alumno encontrado:
+ID: 35
+Nombre: Elena
+Nota: 7.0</pre>
+  <div class="req"><b>Para pensar:</b> ¿podrías usar esta función para buscar por <b>nota</b>? No: el array está ordenado por id, y la búsqueda binaria solo sirve con la misma clave por la que está ordenado. Es la idea de la pregunta de examen del vector de alumnos ordenado por DNI.</div>
+  <details class="hint"><summary>Ampliación</summary>Añade un contador de comparaciones y compáralo con una búsqueda lineal sobre los mismos datos. Mete dos alumnos con el mismo id y comprueba qué posición devuelve: no tiene por qué ser la primera. <code>buscar_alumno(lista, 10, 44)</code> debe devolver 7 y <code>buscar_alumno(lista, 10, 40)</code>, −1.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+typedef struct {
+    int id;
+    char nombre[30];
+    float nota;
+} Alumno;
+
+/* la misma busqueda binaria, comparando el campo clave id */
+int buscar_alumno(const Alumno lista[], int n, int idBuscado)
+{
+    int izq = 0;
+    int der = n - 1;
+    int cen = (izq + der) / 2;
+
+    while ((lista[cen].id != idBuscado) &amp;&amp; (izq &lt; der)) {
+        printf(&quot;  izq=%d der=%d cen=%d id=%d\n&quot;, izq, der, cen, lista[cen].id);
+        if (lista[cen].id &gt; idBuscado) {
+            der = cen - 1;
+        } else {
+            izq = cen + 1;
+        }
+        cen = (izq + der) / 2;
+    }
+    printf(&quot;  izq=%d der=%d cen=%d id=%d\n&quot;, izq, der, cen, lista[cen].id);
+
+    if (lista[cen].id == idBuscado) {
+        return cen;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    Alumno lista[10] = {
+        {10, &quot;Ana&quot;, 7.5f},   {14, &quot;Luis&quot;, 6.0f},   {20, &quot;Maria&quot;, 8.2f},
+        {23, &quot;Jorge&quot;, 5.9f}, {27, &quot;Lucia&quot;, 9.1f},  {31, &quot;Carlos&quot;, 6.7f},
+        {35, &quot;Elena&quot;, 7.0f}, {44, &quot;Rosa&quot;, 8.8f},   {47, &quot;Pablo&quot;, 5.5f},
+        {60, &quot;Sofia&quot;, 9.5f}
+    };
+    int idBuscado;
+
+    printf(&quot;ID a buscar: &quot;);
+    scanf(&quot;%d&quot;, &amp;idBuscado);
+
+    int pos = buscar_alumno(lista, 10, idBuscado);
+    if (pos != -1) {
+        printf(&quot;Alumno encontrado:\n&quot;);
+        printf(&quot;ID: %d\n&quot;, lista[pos].id);
+        printf(&quot;Nombre: %s\n&quot;, lista[pos].nombre);
+        printf(&quot;Nota: %.1f\n&quot;, lista[pos].nota);
+    } else {
+        printf(&quot;No existe un alumno con ID %d\n&quot;, idBuscado);
+    }
+    return 0;
+}</pre></details>
 </article>
 
 <!-- ================= BLOQUE ORDENACIÓN ================= -->
 <h2 class="exblock">Ordenación de vectores</h2>
 
-<div class="note exnote"><b>Para todo este bloque:</b> usa el vector de los apuntes, <code>int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};</code>, y escribe una vez la función <code>void mostrar_vector(int *v, int n)</code> para enseñar el vector después de cada paso. Así puedes comparar tu salida con los ejemplos de ejecución y con las trazas de los apuntes. Recuerda que en C las posiciones van de <b>0</b> a <b>n−1</b>. Antes de ordenar, haz una copia del vector original (<code>memcpy</code> o un bucle) para poder probar varios métodos con los mismos datos. Los contadores de comparaciones pueden variar un poco según dónde pongas el <code>++</code>; lo importante es la diferencia entre métodos.</div>
+<div class="note exnote"><b>Solo inserción directa y selección directa:</b> son los dos métodos de ordenación que entran en el examen práctico. Los demás (burbuja, sacudida, Shell, QuickSort, MergeSort…) siguen en los apuntes para la parte teórica.<br><br><b>Para todo este bloque:</b> usa el vector de los apuntes, <code>int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};</code>, y escribe una vez la función <code>void mostrar_vector(int *v, int n)</code> para enseñar el vector después de cada paso. Así puedes comparar tu salida con los ejemplos de ejecución y con las trazas de los apuntes. Recuerda que en C las posiciones van de <b>0</b> a <b>n−1</b>. Antes de ordenar, haz una copia del vector original (<code>memcpy</code> o un bucle) para poder probar varios métodos con los mismos datos. Los contadores de comparaciones pueden variar un poco según dónde pongas el <code>++</code>; lo importante es la diferencia entre métodos.</div>
 
-<article class="exc" data-ex="10">
-  <header><span class="num">10</span><div><h3>Inserción directa</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">inserción directa</span><span class="tg">contar pasos</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+<article class="exc" data-ex="9">
+  <header><span class="num">9</span><div><h3>Inserción directa</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">inserción directa</span><span class="tg">contar pasos</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
   <p class="obj"><b>Objetivo:</b> traducir a C el pseudocódigo <code>ordenacion_insercion_directa</code> (el "método de la baraja").</p>
   <ul>
-    <li>Implementa <code>void insercion_directa(int *v, int n)</code>. Para cada elemento desde el segundo, guárdalo en <code>aux</code>, desplaza a la derecha los mayores que él y colócalo en el hueco.</li>
+    <li>Implementa <code>void insercion_directa(int v[], int n, int *comp, int *desp)</code>. Para cada elemento desde el segundo, guárdalo en <code>aux</code>, desplaza a la derecha los mayores que él y colócalo en el hueco.</li>
     <li>Muestra el vector al final de cada iteración del bucle externo.</li>
-    <li>Añade dos contadores, que la función devuelva a través de punteros: <b>comparaciones</b> entre elementos y <b>desplazamientos</b>.</li>
+    <li><code>comp</code> y <code>desp</code> son dos contadores que la función devuelve a través de punteros: el número de <b>comparaciones</b> entre elementos y el de <b>desplazamientos</b>. Desde <code>main</code> se llama así: <code>insercion_directa(v, 8, &amp;comp, &amp;desp);</code></li>
     <li>Prueba también con un vector ya ordenado y con uno ordenado al revés. ¿Cuál es el mejor caso y cuál el peor?</li>
   </ul>
 <pre class="out">inicio:   15  18   7  75  14  13  43  40
@@ -1951,37 +2494,109 @@ i=5:       7  13  14  15  18  75  43  40
 i=6:       7  13  14  15  18  43  75  40
 i=7:       7  13  14  15  18  40  43  75
 Comparaciones: 18  Desplazamientos: 12</pre>
+  <p><b>Versión de la práctica (reales):</b> repítelo con <code>float v[10]</code> generado con <code>v[i] = (rand() % 101) / 10.0f;</code> y separa el programa en <code>generar_vector</code>, <code>mostrar_vector(const float v[], int n)</code> e <code>insercion_directa(float v[], int n)</code>. Pruébalo también con un vector ya ordenado, uno al revés, uno con todos los valores iguales y uno con repetidos (7.5, 2.0, 2.0, 9.1…).</p>
   <div class="req"><b>Para pensar:</b> fíjate en la fila <code>i=2</code>. El 15 y el 18 estaban "ordenados", pero el 7 los empuja. Por eso los apuntes dicen que en la inserción la parte izquierda está ordenada pero <b>no es definitiva</b>.</div>
   <details class="hint"><summary>Pista</summary>Con índices desde 0: <code>for (i = 1; i &lt; n; i++) { aux = v[i]; j = i; while (j &gt; 0 &amp;&amp; v[j-1] &gt; aux) { v[j] = v[j-1]; j--; } v[j] = aux; }</code>. Pon <code>j &gt; 0</code> <b>antes</b> en la condición: así nunca se lee <code>v[-1]</code>. Con el vector ordenado deberían salir 7 comparaciones y 0 desplazamientos, y con el inverso, 28 y 28.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+#define TAM 10
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%4d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+/* inserción directa con contadores de comparaciones y desplazamientos */
+void insercion_directa(int v[], int n, int *comp, int *desp)
+{
+    *comp = 0;
+    *desp = 0;
+    for (int i = 1; i &lt; n; i++) {
+        int aux = v[i];
+        int j = i;
+        int seguir = 1;
+        /* j &gt; 0 primero: así nunca se lee v[-1] */
+        while (j &gt; 0 &amp;&amp; seguir) {
+            (*comp)++;                    /* comparamos v[j-1] con aux */
+            if (v[j - 1] &gt; aux) {
+                v[j] = v[j - 1];          /* desplazar a la derecha */
+                j--;
+                (*desp)++;
+            } else {
+                seguir = 0;
+            }
+        }
+        v[j] = aux;
+        printf(&quot;i=%d:   &quot;, i);
+        mostrar_vector(v, n);
+    }
+}
+
+/* versión de la práctica con reales */
+void generar_vector_f(float v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        v[i] = (rand() % 101) / 10.0f;
+    }
+}
+
+void mostrar_vector_f(const float v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%.1f &quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+void insercion_directa_f(float v[], int n)
+{
+    for (int i = 1; i &lt; n; i++) {
+        float aux = v[i];
+        int j = i;
+        while (j &gt; 0 &amp;&amp; v[j - 1] &gt; aux) {
+            v[j] = v[j - 1];
+            j--;
+        }
+        v[j] = aux;
+    }
+}
+
+int main(void)
+{
+    int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};
+    int comp, desp;
+
+    printf(&quot;inicio: &quot;);
+    mostrar_vector(v, 8);
+    insercion_directa(v, 8, &amp;comp, &amp;desp);
+    printf(&quot;Comparaciones: %d  Desplazamientos: %d\n&quot;, comp, desp);
+
+    /* parte de la práctica: 10 reales aleatorios */
+    float r[TAM];
+    srand((unsigned)time(NULL));
+    generar_vector_f(r, TAM);
+    printf(&quot;\nReales originales: &quot;);
+    mostrar_vector_f(r, TAM);
+    insercion_directa_f(r, TAM);
+    printf(&quot;Reales ordenados:  &quot;);
+    mostrar_vector_f(r, TAM);
+    return 0;
+}</pre></details>
 </article>
 
-<article class="exc" data-ex="11">
-  <header><span class="num">11</span><div><h3>Inserción binaria</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">inserción binaria</span><span class="tg">búsqueda binaria</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> combinar la búsqueda binaria (ejercicio 8) con la inserción directa (ejercicio 10).</p>
-  <ul>
-    <li>Implementa <code>void insercion_binaria(int *v, int n)</code>. Para el elemento <code>i</code>, haz una búsqueda binaria en las posiciones <b>[0, i−1]</b> para encontrar su posición, desplaza los elementos y colócalo.</li>
-    <li>Muestra en cada iteración la posición encontrada y el vector.</li>
-    <li>Cuenta las comparaciones y los desplazamientos, y compáralos con los del ejercicio 10 usando el mismo vector.</li>
-  </ul>
-<pre class="out">i=1 pos=1:  15  18   7  75  14  13  43  40
-i=2 pos=0:   7  15  18  75  14  13  43  40
-i=3 pos=3:   7  15  18  75  14  13  43  40
-i=4 pos=1:   7  14  15  18  75  13  43  40
-i=5 pos=1:   7  13  14  15  18  75  43  40
-i=6 pos=5:   7  13  14  15  18  43  75  40
-i=7 pos=5:   7  13  14  15  18  40  43  75
-Comparaciones: 15  Desplazamientos: 12</pre>
-  <div class="req"><b>Comprueba:</b> el vector queda <b>igual</b> que en la inserción directa después de cada iteración. Los <b>desplazamientos son los mismos</b>; lo único que baja es el número de comparaciones.</div>
-  <details class="hint"><summary>Pista</summary>Es la búsqueda del pseudocódigo de los apuntes: <code>izq = 0; der = i-1; while (izq &lt;= der) { cen = (izq+der)/2; if (v[cen] &lt;= aux) izq = cen+1; else der = cen-1; }</code>. Al salir, <code>izq</code> es la posición donde va <code>aux</code>.</details>
-</article>
-
-<article class="exc" data-ex="12">
-  <header><span class="num">12</span><div><h3>Selección directa</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">selección directa</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+<article class="exc" data-ex="10">
+  <header><span class="num">10</span><div><h3>Selección directa</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">selección directa</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
   <p class="obj"><b>Objetivo:</b> traducir a C el pseudocódigo <code>ordenacion_seleccion_directa</code>.</p>
   <ul>
-    <li>Implementa <code>void seleccion_directa(int *v, int n)</code>. En cada iteración <code>i</code>, busca el <b>menor</b> entre <code>v[i]</code> y <code>v[n-1]</code> y lo intercambia con <code>v[i]</code>.</li>
+    <li>Implementa <code>void seleccion_directa(int v[], int n, int *comp, int *inter)</code>. En cada iteración <code>i</code>, busca el <b>menor</b> entre <code>v[i]</code> y <code>v[n-1]</code> y lo intercambia con <code>v[i]</code>.</li>
     <li>Muestra el vector después de cada iteración.</li>
-    <li>Cuenta las comparaciones y los intercambios. ¿Por qué el número de intercambios es siempre <b>n−1</b>, esté como esté el vector?</li>
+    <li><code>comp</code> e <code>inter</code> devuelven, a través de punteros, el número de comparaciones y de intercambios. ¿Por qué el número de intercambios es siempre <b>n−1</b>, esté como esté el vector?</li>
     <li><b>Ampliación:</b> escribe una versión que busque el <b>mayor</b> y lo lleve al <b>final</b>, y otra que ordene de forma <b>descendente</b>.</li>
   </ul>
 <pre class="out">i=0:   7  18  15  75  14  13  43  40
@@ -1992,130 +2607,815 @@ i=4:   7  13  14  15  18  75  43  40
 i=5:   7  13  14  15  18  40  43  75
 i=6:   7  13  14  15  18  40  43  75
 Comparaciones: 28  Intercambios: 7</pre>
+  <p><b>Versión de la práctica (struct):</b> ordena un array de 10 <code>Alumno</code> por <code>id</code> con <code>void seleccion_directa_alumnos(Alumno lista[], int n)</code>. Lleva otro nombre porque en C no puede haber dos funciones que se llamen igual en el mismo programa. Genera ids con <code>10 + rand() % 90</code> y notas con <code>(rand() % 101) / 10.0f</code>. Ahora <code>aux</code> es de tipo <code>Alumno</code>, se compara <code>lista[j].id &lt; aux.id</code> y se mueve el <b>registro completo</b>: id, nombre y nota van juntos. ¿Por qué hace falta guardar <code>k</code> y no basta con <code>aux</code>?</p>
   <div class="req"><b>Para pensar:</b> a diferencia de la inserción, aquí cada iteración deja un elemento en su <b>posición definitiva</b>. Fíjate en que el 7 de la fila <code>i=0</code> ya no se mueve nunca más.</div>
   <details class="hint"><summary>Pista</summary>Guarda en <code>k</code> la posición del menor encontrado hasta el momento y en <code>aux</code> su valor. Al terminar el bucle interno: <code>v[k] = v[i]; v[i] = aux;</code>, igual que en el pseudocódigo.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+#define TAM 10
+
+typedef struct {
+    int id;
+    char nombre[30];
+    float nota;
+} Alumno;
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%4d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+void seleccion_directa(int v[], int n, int *comp, int *inter)
+{
+    *comp = 0;
+    *inter = 0;
+    for (int i = 0; i &lt; n - 1; i++) {
+        int k = i;            /* posición del menor encontrado */
+        int aux = v[i];       /* valor del menor encontrado */
+        for (int j = i + 1; j &lt; n; j++) {
+            (*comp)++;
+            if (v[j] &lt; aux) {
+                k = j;
+                aux = v[j];
+            }
+        }
+        v[k] = v[i];          /* intercambio, como en el pseudocódigo */
+        v[i] = aux;
+        (*inter)++;
+        printf(&quot;i=%d: &quot;, i);
+        mostrar_vector(v, n);
+    }
+}
+
+/* versión de la práctica: ordenar alumnos por id */
+void seleccion_directa_alumnos(Alumno lista[], int n)
+{
+    for (int i = 0; i &lt; n - 1; i++) {
+        int k = i;
+        Alumno aux = lista[i];          /* AUX de tipo T = Alumno */
+        for (int j = i + 1; j &lt; n; j++) {
+            if (lista[j].id &lt; aux.id) {
+                k = j;
+                aux = lista[j];
+            }
+        }
+        lista[k] = lista[i];            /* se mueve el struct completo */
+        lista[i] = aux;
+    }
+}
+
+void generar_alumnos(Alumno lista[], int n)
+{
+    const char nombres[TAM][30] = {&quot;Ana&quot;, &quot;Luis&quot;, &quot;Maria&quot;, &quot;Jorge&quot;, &quot;Lucia&quot;,
+                                   &quot;Carlos&quot;, &quot;Elena&quot;, &quot;Rosa&quot;, &quot;Pablo&quot;, &quot;Sofia&quot;};
+    for (int i = 0; i &lt; n; i++) {
+        lista[i].id = 10 + rand() % 90;
+        lista[i].nota = (rand() % 101) / 10.0f;
+        snprintf(lista[i].nombre, sizeof(lista[i].nombre), &quot;%s&quot;, nombres[i]);
+    }
+}
+
+void mostrar_alumnos(const Alumno lista[], int n)
+{
+    printf(&quot;ID\tNombre\t\tNota\n&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d\t%-12s\t%.1f\n&quot;, lista[i].id, lista[i].nombre, lista[i].nota);
+    }
+}
+
+int main(void)
+{
+    int v[8] = {15, 18, 7, 75, 14, 13, 43, 40};
+    int comp, inter;
+
+    seleccion_directa(v, 8, &amp;comp, &amp;inter);
+    printf(&quot;Comparaciones: %d  Intercambios: %d\n&quot;, comp, inter);
+
+    Alumno lista[TAM];
+    srand((unsigned)time(NULL));
+    generar_alumnos(lista, TAM);
+    printf(&quot;\nAlumnos sin ordenar:\n&quot;);
+    mostrar_alumnos(lista, TAM);
+    seleccion_directa_alumnos(lista, TAM);
+    printf(&quot;\nAlumnos ordenados por ID:\n&quot;);
+    mostrar_alumnos(lista, TAM);
+    return 0;
+}</pre></details>
+</article>
+
+<article class="exc" data-ex="11">
+  <header><span class="num">11</span><div><h3>Ordenar de menor a mayor o de mayor a menor</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">ascendente / descendente</span><span class="tg">parámetro de orden</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> que una misma función de ordenación sirva para los dos sentidos. Los apuntes lo explican así: para ordenar al revés <b>solo se invierte la comparación</b>.</p>
+  <ul>
+    <li>Modifica tu inserción directa: <code>void insercion_directa(int v[], int n, int ascendente)</code>. Si <code>ascendente</code> vale 1, ordena de menor a mayor; si vale 0, de mayor a menor.</li>
+    <li>Haz lo mismo con la selección directa: <code>void seleccion_directa(int v[], int n, int ascendente)</code>. En descendente busca el <b>mayor</b> de lo que queda en lugar del menor.</li>
+    <li>En <code>main</code>, copia el vector antes de cada ordenación para probar las cuatro combinaciones con los mismos datos.</li>
+  </ul>
+<pre class="out">original:    42 7 30 3 50 18 25 12 34 21
+ascendente:  3 7 12 18 21 25 30 34 42 50
+descendente: 50 42 34 30 25 21 18 12 7 3</pre>
+  <div class="req"><b>Comprueba:</b> las dos funciones dan el mismo resultado en cada sentido. Si te sale al revés, revisa el signo de la comparación: en la inserción ascendente se desplaza mientras <code>v[j-1] &gt; aux</code>, y en la descendente mientras <code>v[j-1] &lt; aux</code>.</div>
+  <details class="hint"><summary>Pista</summary>Puedes escribir la condición en una línea: <code>while (j &gt; 0 &amp;&amp; (ascendente ? v[j-1] &gt; aux : v[j-1] &lt; aux))</code>. Si el operador <code>? :</code> te lía, usa una función auxiliar <code>int va_antes(int a, int b, int ascendente)</code> que devuelva si <code>a</code> debe ir antes que <code>b</code>.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d &quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+/* ascendente = 1: de menor a mayor; ascendente = 0: de mayor a menor */
+void insercion_directa(int v[], int n, int ascendente)
+{
+    for (int i = 1; i &lt; n; i++) {
+        int aux = v[i];
+        int j = i;
+        while (j &gt; 0 &amp;&amp; (ascendente ? v[j - 1] &gt; aux : v[j - 1] &lt; aux)) {
+            v[j] = v[j - 1];
+            j--;
+        }
+        v[j] = aux;
+    }
+}
+
+void seleccion_directa(int v[], int n, int ascendente)
+{
+    for (int i = 0; i &lt; n - 1; i++) {
+        int k = i;
+        int aux = v[i];
+        for (int j = i + 1; j &lt; n; j++) {
+            /* en descendente se busca el mayor en vez del menor */
+            if (ascendente ? v[j] &lt; aux : v[j] &gt; aux) {
+                k = j;
+                aux = v[j];
+            }
+        }
+        v[k] = v[i];
+        v[i] = aux;
+    }
+}
+
+int main(void)
+{
+    int base[10] = {42, 7, 30, 3, 50, 18, 25, 12, 34, 21};
+    int v[10];
+
+    printf(&quot;original:    &quot;);
+    mostrar_vector(base, 10);
+
+    memcpy(v, base, sizeof(v));
+    insercion_directa(v, 10, 1);
+    printf(&quot;ascendente:  &quot;);
+    mostrar_vector(v, 10);
+
+    memcpy(v, base, sizeof(v));
+    insercion_directa(v, 10, 0);
+    printf(&quot;descendente: &quot;);
+    mostrar_vector(v, 10);
+
+    memcpy(v, base, sizeof(v));
+    seleccion_directa(v, 10, 1);
+    printf(&quot;seleccion asc:  &quot;);
+    mostrar_vector(v, 10);
+
+    memcpy(v, base, sizeof(v));
+    seleccion_directa(v, 10, 0);
+    printf(&quot;seleccion desc: &quot;);
+    mostrar_vector(v, 10);
+    return 0;
+}</pre></details>
+</article>
+
+<!-- ================= BLOQUE FICHEROS ================= -->
+<h2 class="exblock">Ficheros en C</h2>
+
+<div class="note exnote"><b>Del pseudocódigo a C:</b> <code>F ← Abrir NOMBRE para lectura / escritura / añadir</code> se escribe <code>fopen(nombre, "r" / "w" / "a")</code>, y en binario <code>"rb" / "wb" / "ab"</code>. <code>Cerrar F</code> es <code>fclose(f)</code>. En lugar de preguntar <code>FF(F)</code> antes de leer, en C se intenta leer y se mira si ha funcionado: <code>while (fscanf(...) == 1)</code> o <code>while (fread(...) == 1)</code>. Ciclo de siempre: <b>abrir → comprobar NULL → leer/escribir → cerrar</b>.</div>
+
+<article class="exc" data-ex="12">
+  <header><span class="num">12</span><div><h3>Ficheros de texto: escribir, leer y ordenar</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">fopen r / w / a</span><span class="tg">fprintf / fscanf</span><span class="tg">ordenar un fichero</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> manejar los modos de apertura y aplicar la regla de los apuntes: si el fichero <b>cabe en memoria</b>, se carga en un vector, se ordena con un método interno y se vuelve a guardar.</p>
+  <ol>
+    <li>Abre en modo <code>"r"</code> un fichero que no existe y comprueba que detectas el error (<code>fopen</code> devuelve <code>NULL</code>).</li>
+    <li>Crea <code>datos.txt</code> con <code>"w"</code> y escribe con <code>fprintf</code>, uno por línea: 42 7 30 3 50 18 25 12 34 21.</li>
+    <li>Ábrelo con <code>"a"</code> y añade el 15. Ábrelo con un editor y comprueba que no se ha borrado nada. Prueba también con <code>"w"</code> para ver la diferencia.</li>
+    <li>Escribe <code>int cargar(const char *nombre, int v[], int max)</code>: lee los números con <code>fscanf</code> hasta que falle y devuelve cuántos ha leído.</li>
+    <li>Ordena el vector con tu inserción directa y guárdalo en <code>ordenados.txt</code> con <code>void guardar(const char *nombre, const int v[], int n)</code>.</li>
+  </ol>
+<pre class="out">Abrir no_existe.txt: error detectado
+Leidos 11: 42 7 30 3 50 18 25 12 34 21 15
+Ordenados: 3 7 12 15 18 21 25 30 34 42 50
+Guardado en ordenados.txt</pre>
+  <div class="req"><b>Debe cumplir:</b> cada <code>fopen</code> se comprueba y cada fichero abierto se cierra. No uses <code>while (!feof(f))</code>: controla el valor que devuelve <code>fscanf</code>.</div>
+  <details class="hint"><summary>Pista</summary><code>int n = 0, x; while (n &lt; max &amp;&amp; fscanf(f, "%d", &amp;x) == 1) v[n++] = x;</code>. <code>fscanf</code> devuelve cuántos datos ha leído bien, así que con un <code>%d</code> debe devolver 1.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+#define MAX 100
+
+/* lee enteros del fichero hasta que fscanf falle; devuelve cuántos ha leído */
+int cargar(const char *nombre, int v[], int max)
+{
+    FILE *f = fopen(nombre, &quot;r&quot;);
+    if (f == NULL) {
+        return -1;
+    }
+    int n = 0, x;
+    while (n &lt; max &amp;&amp; fscanf(f, &quot;%d&quot;, &amp;x) == 1) {
+        v[n] = x;
+        n++;
+    }
+    fclose(f);
+    return n;
+}
+
+void guardar(const char *nombre, const int v[], int n)
+{
+    FILE *f = fopen(nombre, &quot;w&quot;);
+    if (f == NULL) {
+        printf(&quot;No se pudo crear %s\n&quot;, nombre);
+        return;
+    }
+    for (int i = 0; i &lt; n; i++) {
+        fprintf(f, &quot;%d\n&quot;, v[i]);
+    }
+    fclose(f);
+}
+
+void insercion_directa(int v[], int n)
+{
+    for (int i = 1; i &lt; n; i++) {
+        int aux = v[i];
+        int j = i;
+        while (j &gt; 0 &amp;&amp; v[j - 1] &gt; aux) {
+            v[j] = v[j - 1];
+            j--;
+        }
+        v[j] = aux;
+    }
+}
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot; %d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    /* 1. abrir en lectura un fichero que no existe */
+    FILE *f = fopen(&quot;no_existe.txt&quot;, &quot;r&quot;);
+    if (f == NULL) {
+        printf(&quot;Abrir no_existe.txt: error detectado\n&quot;);
+    } else {
+        fclose(f);
+    }
+
+    /* 2. crear datos.txt con &quot;w&quot; */
+    int datos[10] = {42, 7, 30, 3, 50, 18, 25, 12, 34, 21};
+    guardar(&quot;datos.txt&quot;, datos, 10);
+
+    /* 3. añadir el 15 con &quot;a&quot; (no borra lo anterior) */
+    f = fopen(&quot;datos.txt&quot;, &quot;a&quot;);
+    if (f == NULL) {
+        return 1;
+    }
+    fprintf(f, &quot;%d\n&quot;, 15);
+    fclose(f);
+
+    /* 4. cargar en un vector */
+    int v[MAX];
+    int n = cargar(&quot;datos.txt&quot;, v, MAX);
+    if (n &lt; 0) {
+        printf(&quot;No se pudo abrir datos.txt\n&quot;);
+        return 1;
+    }
+    printf(&quot;Leidos %d:&quot;, n);
+    mostrar_vector(v, n);
+
+    /* 5. ordenar en memoria y guardar */
+    insercion_directa(v, n);
+    printf(&quot;Ordenados:&quot;);
+    mostrar_vector(v, n);
+    guardar(&quot;ordenados.txt&quot;, v, n);
+    printf(&quot;Guardado en ordenados.txt\n&quot;);
+    return 0;
+}</pre></details>
 </article>
 
 <article class="exc" data-ex="13">
-  <header><span class="num">13</span><div><h3>Intercambio directo (burbuja)</h3><div class="tags"><span class="lvl l2">Medio</span><span class="tg">burbuja</span><span class="tg">con test</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> implementar las tres versiones de la burbuja de los apuntes y ver qué aporta la mejora "con test".</p>
-  <ul>
-    <li><code>void burbuja_izq_der(int *v, int n)</code>: en cada pasada compara elementos <b>consecutivos</b> y los intercambia si están mal. El mayor acaba al final.</li>
-    <li><code>void burbuja_der_izq(int *v, int n)</code>: recorre al revés, y el menor acaba al principio.</li>
-    <li><code>int burbuja_test(int *v, int n)</code>: versión izquierda→derecha que <b>para</b> si una pasada completa no hace ningún intercambio. Debe devolver el número de pasadas realizadas.</li>
-    <li>Ejecuta la versión con test sobre el vector de los apuntes, sobre un vector ya ordenado y sobre uno ordenado al revés, y muestra cuántas pasadas hace en cada caso.</li>
-  </ul>
-<pre class="out">pasada 1:  15   7  18  14  13  43  40  75
-pasada 2:   7  15  14  13  18  40  43  75
-pasada 3:   7  14  13  15  18  40  43  75
-pasada 4:   7  13  14  15  18  40  43  75
-pasada 5:   7  13  14  15  18  40  43  75
-pasada 6:   7  13  14  15  18  40  43  75
-pasada 7:   7  13  14  15  18  40  43  75
-Con test -&gt; vector apuntes: 5 pasadas | ya ordenado: 1 | inverso: 7</pre>
-  <div class="req"><b>Para pensar:</b> sin test hace siempre n−1 = 7 pasadas, aunque desde la 4ª ya está ordenado. Con test hace 5: la 5ª es la pasada completa sin intercambios que necesita para saber que puede parar.</div>
-  <details class="hint"><summary>Pista</summary>Para la versión con test, usa una variable <code>seguir</code> (0/1 o <code>bool</code>) igual que <code>SEGUIR</code> en el pseudocódigo. Ponla a falso al empezar cada pasada y a verdadero cada vez que intercambies. El bucle externo es <code>while (seguir &amp;&amp; j &lt; n)</code>.</details>
+  <header><span class="num">13</span><div><h3>Ficheros binarios de structs: biblioteca</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">fwrite / fread</span><span class="tg">búsqueda lineal en fichero</span><span class="tg">strcmp</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Objetivo:</b> guardar registros completos en un fichero binario y buscar en él de forma <b>secuencial</b>, como en la búsqueda en ficheros de los apuntes. Es la práctica de ficheros.</p>
+<pre class="code">typedef struct {
+    char titulo[80];
+    char autor[50];
+    int anioPublicacion;
+    char prestado[3];      /* "Si" o "No" */
+    double precio;
+} Libro;</pre>
+  <ol>
+    <li>Escribe en <code>libros.bin</code> (modo <code>"wb"</code>) estos 6 libros con <code>fwrite(&amp;L, sizeof(Libro), 1, f)</code>: Estructuras de Datos · Mark Allen Weiss · 2007 · No · 45.90; Introduccion a Algoritmos · Thomas H. Cormen · 2009 · Si · 89.00; Programacion en C Moderna · J. Doe · 2021 · No · 39.95; Sistemas Operativos · Andrew S. Tanenbaum · 2015 · No · 59.50; Fundamentos de Bases de Datos · Hector Garcia-Molina · 2014 · Si · 72.00; Inteligencia Artificial · Stuart Russell · 2016 · No · 70.80.</li>
+    <li>Vuelve a abrirlo con <code>"rb"</code> y lista todos los libros con <code>while (fread(&amp;L, sizeof(Libro), 1, f) == 1)</code>.</li>
+    <li><code>int buscar_titulo(const char *fichero, const char *titulo, Libro *resultado)</code>: búsqueda lineal que devuelve 1 y copia el libro en <code>*resultado</code> si lo encuentra, o 0 si llega al final.</li>
+    <li>Pide <code>"Si"</code> o <code>"No"</code> y muestra <b>todos</b> los libros con ese estado de préstamo. Aquí no se para en la primera coincidencia.</li>
+    <li><b>Ampliación:</b> añade un libro con <code>"ab"</code> y comprueba que aparece al final. Cuenta los registros del fichero.</li>
+  </ol>
+<pre class="out">1. Estructuras de Datos | Mark Allen Weiss | 2007 | No | 45.90
+2. Introduccion a Algoritmos | Thomas H. Cormen | 2009 | Si | 89.00
+...
+6. Inteligencia Artificial | Stuart Russell | 2016 | No | 70.80
+Titulo a buscar: Sistemas Operativos
+Encontrado: Sistemas Operativos - Andrew S. Tanenbaum - 59.50 euros
+Estado (Si/No): Si
+  Introduccion a Algoritmos | Thomas H. Cormen
+  Fundamentos de Bases de Datos | Hector Garcia-Molina</pre>
+  <div class="req"><b>Para pensar:</b> ¿podrías usar búsqueda binaria en <code>libros.bin</code>? Con el acceso secuencial de los apuntes, no: para llegar al registro central hay que leer todos los anteriores.</div>
+  <details class="hint"><summary>Pista</summary>Las cadenas se comparan con <code>strcmp(L.titulo, titulo) == 0</code> (<code>#include &lt;string.h&gt;</code>), nunca con <code>==</code>. Para leer un título con espacios: <code>scanf(" %79[^\n]", titulo);</code>. Puedes escribir el array entero de una vez con <code>fwrite(libros, sizeof(Libro), 6, f)</code>.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct {
+    char titulo[80];
+    char autor[50];
+    int anioPublicacion;
+    char prestado[3];      /* &quot;Si&quot; o &quot;No&quot; */
+    double precio;
+} Libro;
+
+void mostrar_libro(int i, Libro L)
+{
+    printf(&quot;%d. %s | %s | %d | %s | %.2f\n&quot;,
+           i, L.titulo, L.autor, L.anioPublicacion, L.prestado, L.precio);
+}
+
+/* búsqueda lineal en el fichero: 1 si lo encuentra (y lo copia), 0 si no */
+int buscar_titulo(const char *fichero, const char *titulo, Libro *resultado)
+{
+    FILE *f = fopen(fichero, &quot;rb&quot;);
+    if (f == NULL) {
+        return 0;
+    }
+    Libro L;
+    while (fread(&amp;L, sizeof(Libro), 1, f) == 1) {
+        if (strcmp(L.titulo, titulo) == 0) {
+            *resultado = L;
+            fclose(f);
+            return 1;
+        }
+    }
+    fclose(f);
+    return 0;
+}
+
+/* filtrado: recorre todo el fichero */
+void listar_por_estado(const char *fichero, const char *estado)
+{
+    FILE *f = fopen(fichero, &quot;rb&quot;);
+    if (f == NULL) {
+        return;
+    }
+    Libro L;
+    while (fread(&amp;L, sizeof(Libro), 1, f) == 1) {
+        if (strcmp(L.prestado, estado) == 0) {
+            printf(&quot;  %s | %s\n&quot;, L.titulo, L.autor);
+        }
+    }
+    fclose(f);
+}
+
+int contar(const char *fichero)
+{
+    FILE *f = fopen(fichero, &quot;rb&quot;);
+    if (f == NULL) {
+        return 0;
+    }
+    Libro L;
+    int c = 0;
+    while (fread(&amp;L, sizeof(Libro), 1, f) == 1) {
+        c++;
+    }
+    fclose(f);
+    return c;
+}
+
+int main(void)
+{
+    Libro libros[6] = {
+        {&quot;Estructuras de Datos&quot;, &quot;Mark Allen Weiss&quot;, 2007, &quot;No&quot;, 45.90},
+        {&quot;Introduccion a Algoritmos&quot;, &quot;Thomas H. Cormen&quot;, 2009, &quot;Si&quot;, 89.00},
+        {&quot;Programacion en C Moderna&quot;, &quot;J. Doe&quot;, 2021, &quot;No&quot;, 39.95},
+        {&quot;Sistemas Operativos&quot;, &quot;Andrew S. Tanenbaum&quot;, 2015, &quot;No&quot;, 59.50},
+        {&quot;Fundamentos de Bases de Datos&quot;, &quot;Hector Garcia-Molina&quot;, 2014, &quot;Si&quot;, 72.00},
+        {&quot;Inteligencia Artificial&quot;, &quot;Stuart Russell&quot;, 2016, &quot;No&quot;, 70.80}
+    };
+
+    /* 1. escribir en binario */
+    FILE *f = fopen(&quot;libros.bin&quot;, &quot;wb&quot;);
+    if (f == NULL) {
+        printf(&quot;No se pudo crear libros.bin\n&quot;);
+        return 1;
+    }
+    for (int i = 0; i &lt; 6; i++) {
+        fwrite(&amp;libros[i], sizeof(Libro), 1, f);
+    }
+    fclose(f);
+
+    /* 2. leer y listar */
+    f = fopen(&quot;libros.bin&quot;, &quot;rb&quot;);
+    if (f == NULL) {
+        return 1;
+    }
+    Libro L;
+    int i = 1;
+    while (fread(&amp;L, sizeof(Libro), 1, f) == 1) {
+        mostrar_libro(i, L);
+        i++;
+    }
+    fclose(f);
+
+    /* 3. buscar por título */
+    char titulo[80];
+    printf(&quot;Titulo a buscar: &quot;);
+    scanf(&quot; %79[^\n]&quot;, titulo);
+    Libro encontrado;
+    if (buscar_titulo(&quot;libros.bin&quot;, titulo, &amp;encontrado)) {
+        printf(&quot;Encontrado: %s - %s - %.2f euros\n&quot;,
+               encontrado.titulo, encontrado.autor, encontrado.precio);
+    } else {
+        printf(&quot;No encontrado\n&quot;);
+    }
+
+    /* 4. filtrar por préstamo */
+    char estado[3];
+    printf(&quot;Estado (Si/No): &quot;);
+    scanf(&quot;%2s&quot;, estado);
+    listar_por_estado(&quot;libros.bin&quot;, estado);
+
+    /* 5. ampliación: añadir con &quot;ab&quot; y contar */
+    Libro nuevo = {&quot;Algoritmos en C&quot;, &quot;Robert Sedgewick&quot;, 1998, &quot;No&quot;, 50.00};
+    f = fopen(&quot;libros.bin&quot;, &quot;ab&quot;);
+    if (f != NULL) {
+        fwrite(&amp;nuevo, sizeof(Libro), 1, f);
+        fclose(f);
+    }
+    printf(&quot;Registros en el fichero: %d\n&quot;, contar(&quot;libros.bin&quot;));
+    return 0;
+}</pre></details>
 </article>
 
+<!-- ================= BLOQUE SIMULACRO ================= -->
+<h2 class="exblock">Simulacro de examen</h2>
+
+<div class="note exnote"><b>Formato probable del examen práctico:</b> te dan un vector <b>desordenado</b>, lo ordenas con un método de los apuntes y después le aplicas una <b>búsqueda binaria</b>, todo repartido en 2 o 3 funciones. Puede que pidan ordenar de menor a mayor o al revés. Haz estos tres ejercicios <b>sin mirar las pistas y con tiempo</b>, como si fuera el examen: unos 40–50 minutos cada uno.</div>
+
 <article class="exc" data-ex="14">
-  <header><span class="num">14</span><div><h3>Sacudida (vibración)</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">sacudida</span><span class="tg">con test</span><span class="tg">con salto</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> implementar la mejora de la burbuja que alterna los dos sentidos y recorta por ambos extremos.</p>
+  <header><span class="num">14</span><div><h3>Ordenar y buscar</h3><div class="tags"><span class="lvl l2">Tipo examen</span><span class="tg">3 funciones</span><span class="tg">ordenación + búsqueda binaria</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Enunciado:</b> dado el vector desordenado <code>int v[10] = {42, 7, 30, 3, 50, 18, 25, 12, 34, 21};</code>, escribe un programa que lo ordene de menor a mayor y busque en él un valor introducido por el usuario.</p>
+  <p>El programa debe tener <b>exactamente estas tres funciones</b> además de <code>main</code>:</p>
   <ul>
-    <li><code>int sacudida(int *v, int n)</code>: alterna una pasada izquierda→derecha (y <code>der--</code>) con otra derecha→izquierda (y <code>izq++</code>) mientras <code>izq != der</code>. Debe devolver el número de pasadas.</li>
-    <li><code>int sacudida_test(int *v, int n)</code>: igual, pero para si en una pasada no hay intercambios.</li>
-    <li><code>int sacudida_salto(int *v, int n)</code>: guarda en <code>k</code> la posición del <b>último intercambio</b> y recorta hasta ahí (<code>der = k-1</code> o <code>izq = k+1</code>).</li>
-    <li>Muestra el vector tras cada pasada, indicando el sentido, y compara cuántas pasadas hace cada versión.</li>
+    <li><code>void mostrar_vector(const int v[], int n)</code></li>
+    <li><code>void ordenar(int v[], int n)</code>: selección directa o inserción directa, siguiendo el pseudocódigo de los apuntes.</li>
+    <li><code>int busqueda_binaria(const int v[], int n, int x)</code>: devuelve el índice o −1.</li>
   </ul>
-<pre class="out">-&gt; izq-der:  15   7  18  14  13  43  40  75
-&lt;- der-izq:   7  15  13  18  14  40  43  75
--&gt; izq-der:   7  13  15  14  18  40  43  75
-&lt;- der-izq:   7  13  14  15  18  40  43  75
--&gt; izq-der:   7  13  14  15  18  40  43  75
-&lt;- der-izq:   7  13  14  15  18  40  43  75
--&gt; izq-der:   7  13  14  15  18  40  43  75
-Sacudida: 7 pasadas | Con salto: 4 pasadas</pre>
-  <details class="hint"><summary>Pista</summary>En la versión con salto, la pasada izquierda→derecha hace <code>k = i+1</code> al intercambiar <code>v[i]</code> y <code>v[i+1]</code>, y la derecha→izquierda hace <code>k = i-1</code> al intercambiar <code>v[i-1]</code> y <code>v[i]</code>. Inicializa <code>k</code> antes del bucle. Mira el pseudocódigo <code>ordenacion_sacudida_salto</code>: está escrito justo así.</details>
+  <p><code>main</code> muestra el vector original, lo ordena, lo muestra ordenado, pide un valor y dice en qué posición del vector <b>ordenado</b> está.</p>
+<pre class="out">Vector original: 42 7 30 3 50 18 25 12 34 21
+Vector ordenado: 3 7 12 18 21 25 30 34 42 50
+Valor a buscar: 18
+18 esta en la posicion 3 del vector ordenado
+---
+Valor a buscar: 19
+19 no esta en el vector</pre>
+  <div class="req"><b>Prueba esto:</b> llama a <code>busqueda_binaria</code> sobre el vector <b>antes</b> de ordenarlo buscando 18. Devuelve −1 aunque el 18 está, porque la búsqueda binaria solo funciona con datos ordenados. Explícalo con un comentario en el código.</div>
+  <details class="hint"><summary>Comprobaciones</summary>Con el vector ordenado: 3 → 0, 18 → 3, 42 → 8, 50 → 9, 19 → −1. Si 3 o 50 no aparecen, revisa los extremos (<code>der = n − 1</code>). Si te piden mostrar la posición "como en los apuntes", suma 1 al índice.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d &quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+/* selección directa (pseudocódigo de los apuntes) */
+void ordenar(int v[], int n)
+{
+    for (int i = 0; i &lt; n - 1; i++) {
+        int k = i;
+        int aux = v[i];
+        for (int j = i + 1; j &lt; n; j++) {
+            if (v[j] &lt; aux) {
+                k = j;
+                aux = v[j];
+            }
+        }
+        v[k] = v[i];
+        v[i] = aux;
+    }
+}
+
+/* búsqueda binaria: devuelve el índice o -1 */
+int busqueda_binaria(const int v[], int n, int x)
+{
+    int izq = 0;
+    int der = n - 1;
+    int cen = (izq + der) / 2;
+
+    while (v[cen] != x &amp;&amp; izq &lt; der) {
+        if (v[cen] &gt; x) {
+            der = cen - 1;
+        } else {
+            izq = cen + 1;
+        }
+        cen = (izq + der) / 2;
+    }
+    if (v[cen] == x) {
+        return cen;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    int v[10] = {42, 7, 30, 3, 50, 18, 25, 12, 34, 21};
+    int x;
+
+    /* sin ordenar la búsqueda binaria NO funciona: aquí devolvería -1
+       buscando 18 aunque esté, porque descarta mitades sin sentido */
+
+    printf(&quot;Vector original: &quot;);
+    mostrar_vector(v, 10);
+
+    ordenar(v, 10);
+    printf(&quot;Vector ordenado: &quot;);
+    mostrar_vector(v, 10);
+
+    printf(&quot;Valor a buscar: &quot;);
+    scanf(&quot;%d&quot;, &amp;x);
+    int pos = busqueda_binaria(v, 10, x);
+    if (pos != -1) {
+        printf(&quot;%d esta en la posicion %d del vector ordenado\n&quot;, x, pos);
+    } else {
+        printf(&quot;%d no esta en el vector\n&quot;, x);
+    }
+    return 0;
+}</pre></details>
 </article>
 
 <article class="exc" data-ex="15">
-  <header><span class="num">15</span><div><h3>Shell</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">shell</span><span class="tg">incrementos decrecientes</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> ver que Shell es una inserción directa aplicada a elementos separados por una distancia que se va reduciendo.</p>
+  <header><span class="num">15</span><div><h3>Ordenar en el sentido que elija el usuario y buscar</h3><div class="tags"><span class="lvl l3">Tipo examen</span><span class="tg">ascendente / descendente</span><span class="tg">búsqueda binaria adaptada</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Enunciado:</b> genera un vector de 10 enteros aleatorios entre 1 y 100, pregunta al usuario si lo quiere ordenado de <b>menor a mayor</b> o de <b>mayor a menor</b>, ordénalo, muéstralo y busca un valor con <b>búsqueda binaria</b>.</p>
   <ul>
-    <li>Implementa <code>void shell(int *v, int n)</code>: la distancia empieza en <code>n/2</code> y se divide entre 2 hasta llegar a 1. Para cada distancia, ordena por inserción los elementos que están a esa distancia.</li>
-    <li>Muestra la distancia y el vector después de cada una.</li>
-    <li>Cuenta los desplazamientos y compáralos con los de la inserción directa (ejercicio 10) con el mismo vector.</li>
+    <li><code>void generar_vector(int v[], int n)</code>: números con <code>rand() % 100 + 1</code>. Llama a <code>srand(time(NULL))</code> una vez en <code>main</code>.</li>
+    <li><code>void ordenar(int v[], int n, int ascendente)</code>: la función del ejercicio de ordenar en los dos sentidos.</li>
+    <li><code>int busqueda_binaria(const int v[], int n, int x, int ascendente)</code>: si el vector está en orden <b>descendente</b>, el recorte se invierte. Cuando el central es <b>menor</b> que x, x está a la <b>izquierda</b>.</li>
+    <li>Para comprobarlo sin aleatorios, prueba antes con el vector fijo <code>{42, 7, 30, 3, 50, 18, 25, 12, 34, 21}</code>.</li>
   </ul>
-<pre class="out">distancia 4:  14  13   7  40  15  18  43  75
-distancia 2:   7  13  14  18  15  40  43  75
-distancia 1:   7  13  14  15  18  40  43  75
-Desplazamientos: 6  (insercion directa: 12)</pre>
-  <div class="req"><b>Para pensar:</b> con distancia 1 el bucle es exactamente una inserción directa. Si te sale bien el ejercicio 10, aquí solo cambia el <code>1</code> por <code>distancia</code> en tres sitios.</div>
-  <details class="hint"><summary>Pista</summary><code>d = n; while (d != 1) { d = d / 2; for (i = d; i &lt; n; i++) { aux = v[i]; j = i; while (j - d &gt;= 0 &amp;&amp; v[j-d] &gt; aux) { v[j] = v[j-d]; j -= d; } v[j] = aux; } }</code></details>
+<pre class="out">Orden (1 = menor a mayor, 0 = mayor a menor): 0
+Vector ordenado: 50 42 34 30 25 21 18 12 7 3
+Valor a buscar: 18
+18 esta en la posicion 6
+Valor a buscar: 42
+42 esta en la posicion 1</pre>
+  <div class="req"><b>Para pensar:</b> si usas la búsqueda binaria normal (la ascendente) sobre el vector descendente, buscando 18 devuelve −1. ¿Por qué? Porque al ver que el central es mayor que 18 descarta la mitad derecha, que es justo donde está.</div>
+  <details class="hint"><summary>Pista</summary>Solo cambia una línea: <code>if (ascendente ? v[cen] &gt; x : v[cen] &lt; x) der = cen - 1; else izq = cen + 1;</code>. Con el vector fijo en descendente: 50 → 0, 42 → 1, 18 → 6, 3 → 9, 19 → −1.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+#define TAM 10
+
+void generar_vector(int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        v[i] = rand() % 100 + 1;
+    }
+}
+
+void mostrar_vector(const int v[], int n)
+{
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d &quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+/* inserción directa en el sentido indicado */
+void ordenar(int v[], int n, int ascendente)
+{
+    for (int i = 1; i &lt; n; i++) {
+        int aux = v[i];
+        int j = i;
+        while (j &gt; 0 &amp;&amp; (ascendente ? v[j - 1] &gt; aux : v[j - 1] &lt; aux)) {
+            v[j] = v[j - 1];
+            j--;
+        }
+        v[j] = aux;
+    }
+}
+
+/* binaria para los dos sentidos: en descendente se invierte el recorte */
+int busqueda_binaria(const int v[], int n, int x, int ascendente)
+{
+    int izq = 0;
+    int der = n - 1;
+    int cen = (izq + der) / 2;
+
+    while (v[cen] != x &amp;&amp; izq &lt; der) {
+        if (ascendente ? v[cen] &gt; x : v[cen] &lt; x) {
+            der = cen - 1;
+        } else {
+            izq = cen + 1;
+        }
+        cen = (izq + der) / 2;
+    }
+    if (v[cen] == x) {
+        return cen;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    int v[TAM];
+    int asc, x;
+
+    srand((unsigned)time(NULL));
+    generar_vector(v, TAM);
+    /* para probar sin aleatorios, usa en su lugar:
+       int v[TAM] = {42, 7, 30, 3, 50, 18, 25, 12, 34, 21}; */
+
+    printf(&quot;Vector generado: &quot;);
+    mostrar_vector(v, TAM);
+
+    printf(&quot;Orden (1 = menor a mayor, 0 = mayor a menor): &quot;);
+    scanf(&quot;%d&quot;, &amp;asc);
+    ordenar(v, TAM, asc);
+    printf(&quot;Vector ordenado: &quot;);
+    mostrar_vector(v, TAM);
+
+    printf(&quot;Valor a buscar: &quot;);
+    scanf(&quot;%d&quot;, &amp;x);
+    int pos = busqueda_binaria(v, TAM, x, asc);
+    if (pos != -1) {
+        printf(&quot;%d esta en la posicion %d\n&quot;, x, pos);
+    } else {
+        printf(&quot;%d no esta en el vector\n&quot;, x);
+    }
+    return 0;
+}</pre></details>
 </article>
 
 <article class="exc" data-ex="16">
-  <header><span class="num">16</span><div><h3>QuickSort</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">quicksort</span><span class="tg">recursividad</span><span class="tg">pivote</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> implementar el "divide y vencerás" con pivote central de los apuntes.</p>
-  <ul>
-    <li>Implementa <code>void quicksort(int *v, int izq, int der)</code> siguiendo el pseudocódigo <code>ordenacion_rapida</code>: el pivote es <code>v[(izq+der)/2]</code>, <code>i</code> avanza mientras <code>v[i] &lt; pivote</code>, <code>j</code> retrocede mientras <code>v[j] &gt; pivote</code>, se intercambia si <code>i &lt;= j</code>, y después se llama recursivamente a cada parte.</li>
-    <li>Al final de cada llamada, muestra <code>(izq, der)</code>, el pivote y el vector. La primera llamada desde <code>main</code> es <code>quicksort(v, 0, n-1)</code>.</li>
-    <li><b>Ampliación:</b> cuenta las comparaciones con el pivote. Prueba con un vector ya ordenado usando como pivote el <b>central</b> y después el <b>primer elemento</b> (<code>v[izq]</code>). ¿Qué pasa con la eficiencia?</li>
-  </ul>
-<pre class="out">(0,7) piv=75   15  18   7  40  14  13  43  75
-(0,6) piv=40   15  18   7  13  14  40  43  75
-(0,4) piv=7     7  18  15  13  14  40  43  75
-(1,4) piv=15    7  14  13  15  18  40  43  75
-(1,2) piv=14    7  13  14  15  18  40  43  75
-(3,4) piv=15    7  13  14  15  18  40  43  75
-(5,6) piv=40    7  13  14  15  18  40  43  75</pre>
-  <div class="req"><b>Para pensar:</b> en la primera llamada el pivote es 75, el mayor, y las partes quedan de 7 elementos y de 1. Las partes <b>no</b> tienen por qué ser iguales. Esa es la trampa de la pregunta de examen de 2015.</div>
-  <details class="hint"><summary>Pista</summary>Al acabar el <code>while (i &lt;= j)</code>, las llamadas recursivas son <code>if (izq &lt; j) quicksort(v, izq, j);</code> y <code>if (der &gt; i) quicksort(v, i, der);</code>. Guarda el valor del pivote en una variable al principio: aunque se intercambien elementos, el pivote es ese <b>valor</b>, no la posición.</details>
-</article>
-
-<article class="exc" data-ex="17">
-  <header><span class="num">17</span><div><h3>MergeSort</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">mergesort</span><span class="tg">recursividad</span><span class="tg">malloc</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> implementar la ordenación por mezcla, usando memoria dinámica para el vector auxiliar <code>TEMP</code>.</p>
-  <ul>
-    <li><code>void mergesort(int *v, int izq, int der)</code>: si <code>izq &lt; der</code>, calcula <code>cen</code>, ordena las dos mitades recursivamente y llama a <code>mezclar</code>.</li>
-    <li><code>void mezclar(int *v, int izq, int cen, int der)</code>: reserva con <code>malloc</code> un vector <code>temp</code> de <code>der-izq+1</code> enteros y comprueba <code>NULL</code>. Copia en él el menor de cada pareja comparada, y cuando un tramo se agote, copia lo que quede del otro. Después copia <code>temp</code> en <code>v[izq..der]</code> y <b>libera</b> <code>temp</code>.</li>
-    <li>Muestra cada llamada a <code>mezclar</code> con sus parámetros y el vector resultante.</li>
-  </ul>
-<pre class="out">mezclar(0,0,1)   15  18   7  75  14  13  43  40
-mezclar(2,2,3)   15  18   7  75  14  13  43  40
-mezclar(0,1,3)    7  15  18  75  14  13  43  40
-mezclar(4,4,5)    7  15  18  75  13  14  43  40
-mezclar(6,6,7)    7  15  18  75  13  14  40  43
-mezclar(4,5,7)    7  15  18  75  13  14  40  43
-mezclar(0,3,7)    7  13  14  15  18  40  43  75</pre>
-  <div class="req"><b>Para pensar:</b> la primera mezcla une las posiciones 0 y 1, dos elementos consecutivos, porque la recursión baja primero por la mitad izquierda. Es la afirmación del examen de Verdadero/Falso sobre MergeSort.</div>
-  <details class="hint"><summary>Pista</summary>Usa tres índices: <code>i1</code> (empieza en <code>izq</code>), <code>i2</code> (empieza en <code>cen+1</code>) y <code>k</code> (empieza en 0, dentro de <code>temp</code>). Al copiar de vuelta, <code>v[izq + k] = temp[k]</code>. Si no liberas <code>temp</code> en cada mezcla, el programa pierde memoria en cada llamada.</details>
-</article>
-
-
-<!-- ================= BLOQUE 3 ================= -->
-<h2 class="exblock">Proyecto final</h2>
-
-<article class="exc" data-ex="18">
-  <header><span class="num">18</span><div><h3>Gestor de alumnos</h3><div class="tags"><span class="lvl l3">Avanzado</span><span class="tg">menú</span><span class="tg">memoria dinámica</span><span class="tg">búsqueda</span><span class="tg">inserción ordenada</span><span class="tg">ordenación</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
-  <p class="obj"><b>Objetivo:</b> juntar todo lo anterior en un programa completo.</p>
-  <p>Programa con menú (ejercicio 2) que gestiona una lista de alumnos guardada en un <b>vector dinámico</b>. Pide al principio la capacidad máxima, reserva la memoria y comprueba <code>NULL</code>.</p>
-<pre class="out">1. Alta de alumno
-2. Listar alumnos
-3. Buscar por DNI (binaria)
-4. Buscar por nombre (lineal)
-5. Modificar nota
-6. Mostrar estadisticas
-7. Listar por nota
+  <header><span class="num">16</span><div><h3>Ordenar alumnos por id y buscarlos</h3><div class="tags"><span class="lvl l3">Tipo examen</span><span class="tg">struct</span><span class="tg">selección directa</span><span class="tg">menú</span></div></div><label class="done"><input type="checkbox"> Hecho</label></header>
+  <p class="obj"><b>Enunciado:</b> es la ampliación de la práctica de ordenación: juntar la ordenación de structs con la búsqueda binaria en un menú.</p>
+<pre class="code">Alumno lista[6] = {
+    {31, "Carlos", 6.7f}, {10, "Ana", 7.5f},   {47, "Pablo", 5.5f},
+    {20, "Maria", 8.2f},  {60, "Sofia", 9.5f}, {14, "Luis", 6.0f}
+};</pre>
+<pre class="out">1. Mostrar alumnos
+2. Ordenar alumnos por ID (seleccion directa)
+3. Buscar alumno por ID (busqueda binaria)
 0. Salir</pre>
   <ul>
-    <li><b>Alta:</b> no puede haber dos alumnos con el mismo DNI. Compruébalo con la búsqueda. El alumno se inserta en su sitio para que el vector siga <b>ordenado por DNI</b>: desplaza a la derecha los que sean mayores, igual que en el paso 2 de la inserción directa. Si el vector está lleno, avisa.</li>
-    <li><b>Buscar por DNI:</b> búsqueda binaria (ejercicio 9), que es posible porque el vector siempre está ordenado.</li>
-    <li><b>Modificar nota:</b> busca al alumno y modifícalo con una función que reciba un <code>Alumno *</code> (ejercicio 6).</li>
-    <li><b>Estadísticas:</b> media, mejor y peor nota, y número de aprobados.</li>
-    <li><b>Listar por nota:</b> copia el vector en otro vector dinámico y ordena la copia por nota, de mayor a menor, con el método que prefieras de los ejercicios 10–17. No ordenes el original: dejaría de estar ordenado por DNI y la búsqueda binaria ya no funcionaría.</li>
-    <li>Al salir, libera toda la memoria.</li>
+    <li><code>void seleccion_directa(Alumno lista[], int n)</code>: ordena por <code>id</code> moviendo el <b>struct completo</b>. <code>aux</code> es de tipo <code>Alumno</code>.</li>
+    <li><code>int buscar_alumno(const Alumno lista[], int n, int id)</code>: la del ejercicio de búsqueda en structs.</li>
+    <li>Guarda en <code>main</code> una variable <code>ordenado</code> (0/1). Si eligen la opción 3 sin haber ordenado antes, avisa en lugar de buscar.</li>
   </ul>
-  <details class="hint"><summary>Pista</summary>Guarda en <code>main</code> tres variables: <code>Alumno *v</code>, <code>int capacidad</code> y <code>int n</code> (alumnos guardados). Las funciones que añaden alumnos deben recibir <code>&amp;n</code> para poder modificarlo. Para insertar ordenado, aplica a un <code>Alumno</code> la misma idea que el bucle de la inserción directa con <code>AUX</code>.</details>
+<pre class="out">Opcion: 3
+Primero hay que ordenar la lista por ID
+Opcion: 2
+ID   Nombre    Nota
+10   Ana       7.5
+14   Luis      6.0
+20   Maria     8.2
+31   Carlos    6.7
+47   Pablo     5.5
+60   Sofia     9.5
+Opcion: 3
+ID a buscar: 20
+Encontrado: Maria (8.2)</pre>
+  <div class="req"><b>Reto:</b> añade la opción "Ordenar por nota". Después de usarla, ¿puede seguir funcionando la búsqueda por id? No: hay que volver a poner <code>ordenado = 0</code>, porque la lista ya no está ordenada por la clave que se busca.</div>
+  <details class="hint"><summary>Pista</summary>La comparación cambia de <code>v[j] &lt; aux</code> a <code>lista[j].id &lt; aux.id</code>, y el intercambio final es <code>lista[k] = lista[i]; lista[i] = aux;</code>: se copian structs enteros. Buscando 33 debe decir que no existe.</details>
+
+  <details class="hint sol"><summary>Solución</summary><p class="solnote">Inténtalo antes de abrirla. Hay muchas formas correctas: esta sigue el pseudocódigo de los apuntes y compila con <code>gcc -Wall -Wextra</code> sin avisos.</p><pre class="csol">#include &lt;stdio.h&gt;
+
+typedef struct {
+    int id;
+    char nombre[30];
+    float nota;
+} Alumno;
+
+void mostrar_alumnos(const Alumno lista[], int n)
+{
+    printf(&quot;ID   Nombre    Nota\n&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%-4d %-9s %.1f\n&quot;, lista[i].id, lista[i].nombre, lista[i].nota);
+    }
+}
+
+/* selección directa por id: se mueve el struct completo */
+void seleccion_directa(Alumno lista[], int n)
+{
+    for (int i = 0; i &lt; n - 1; i++) {
+        int k = i;
+        Alumno aux = lista[i];
+        for (int j = i + 1; j &lt; n; j++) {
+            if (lista[j].id &lt; aux.id) {
+                k = j;
+                aux = lista[j];
+            }
+        }
+        lista[k] = lista[i];
+        lista[i] = aux;
+    }
+}
+
+int buscar_alumno(const Alumno lista[], int n, int id)
+{
+    int izq = 0;
+    int der = n - 1;
+    int cen = (izq + der) / 2;
+
+    while (lista[cen].id != id &amp;&amp; izq &lt; der) {
+        if (lista[cen].id &gt; id) {
+            der = cen - 1;
+        } else {
+            izq = cen + 1;
+        }
+        cen = (izq + der) / 2;
+    }
+    if (lista[cen].id == id) {
+        return cen;
+    }
+    return -1;
+}
+
+int main(void)
+{
+    Alumno lista[6] = {
+        {31, &quot;Carlos&quot;, 6.7f}, {10, &quot;Ana&quot;, 7.5f},   {47, &quot;Pablo&quot;, 5.5f},
+        {20, &quot;Maria&quot;, 8.2f},  {60, &quot;Sofia&quot;, 9.5f}, {14, &quot;Luis&quot;, 6.0f}
+    };
+    int n = 6;
+    int ordenado = 0;      /* 1 cuando la lista está ordenada por id */
+    int opcion, id;
+
+    do {
+        printf(&quot;\n1. Mostrar alumnos\n&quot;);
+        printf(&quot;2. Ordenar alumnos por ID (seleccion directa)\n&quot;);
+        printf(&quot;3. Buscar alumno por ID (busqueda binaria)\n&quot;);
+        printf(&quot;0. Salir\n&quot;);
+        printf(&quot;Opcion: &quot;);
+        scanf(&quot;%d&quot;, &amp;opcion);
+
+        switch (opcion) {
+        case 1:
+            mostrar_alumnos(lista, n);
+            break;
+        case 2:
+            seleccion_directa(lista, n);
+            ordenado = 1;
+            mostrar_alumnos(lista, n);
+            break;
+        case 3:
+            if (!ordenado) {
+                printf(&quot;Primero hay que ordenar la lista por ID\n&quot;);
+                break;
+            }
+            printf(&quot;ID a buscar: &quot;);
+            scanf(&quot;%d&quot;, &amp;id);
+            int pos = buscar_alumno(lista, n, id);
+            if (pos != -1) {
+                printf(&quot;Encontrado: %s (%.1f)\n&quot;, lista[pos].nombre, lista[pos].nota);
+            } else {
+                printf(&quot;No existe un alumno con ID %d\n&quot;, id);
+            }
+            break;
+        case 0:
+            printf(&quot;Adios\n&quot;);
+            break;
+        default:
+            printf(&quot;Opcion no valida\n&quot;);
+        }
+    } while (opcion != 0);
+
+    return 0;
+}</pre></details>
 </article>
 
 </div></section>
