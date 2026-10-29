@@ -1,0 +1,11 @@
+# Compilados (se generan en build/ junto a cada .c)
+build/
+*.exe
+*.o
+*.obj
+*.out
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

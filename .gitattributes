@@ -1,0 +1,10 @@
+# Guarda los saltos de línea como LF en el repo y deja que cada SO use los suyos
+* text=auto
+# Los scripts de bash tienen que tener LF siempre, también en Windows
+*.sh text eol=lf
+Makefile text eol=lf
+# Binarios
+*.pdf binary
+*.jpg binary
+*.jpeg binary
+*.png binary
