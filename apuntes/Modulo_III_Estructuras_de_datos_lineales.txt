@@ -1,0 +1,5185 @@
+﻿MÓDULO III: ESTRUCTURAS DE DATOS LINEALES
+(Listas, Pilas y Colas)
+
+Este módulo describe las principales estructuras de datos lineales.
+
+
+==================================================
+LISTAS
+==================================================
+
+
+----- LISTAS > Definición -----
+
+Definición
+
+Una lista es una secuencia de elementos que pueden ser accedidos, insertados o suprimidos en cualquier posición de la estructura, no existiendo restricción en cuanto al número de elementos de ésta.
+
+Matemáticamente, una lista es una secuencia de cero o más elementos de algún tipo. Se puede representar como a(1), a(2), a(3), ... , a(m), siendo m (m ≥ 0) la longitud de la lista. Si m es cero, se dice que la lista está vacía; si es mayor que 0, se dice que a(1) es el primer elemento de la lista y que a(m) es el último elemento.
+
+Los elementos de una lista pueden estar ordenados en forma lineal de acuerdo con sus posiciones en la lista. Se dice que a(i) precede a a(i+1), para i= 1,2, ..., m-1 y que, por la misma razón, a(i) sucede a a(i-1) para i= 2, 3, ..., m. También se dice que el elemento a(i) está en la posición i-ésima de la lista.
+
+Las listas se podrán representar de forma estática (mediante vectores) o de forma dinámica (listas enlazadas).
+
+
+----- LISTAS > Operaciones básicas -----
+
+Operaciones
+
+Las operaciones fundamentales que consideraremos al trabajar con listas son:
+
+- Crear la lista: debe ser la primera operación que se realiza sobre la estructura. Una lista se crea vacía.
+
+- Insertar un elemento: permite añadir un nuevo elemento a la lista en cualquier posición.
+
+- Eliminar un elemento: permite eliminar de la lista cualquier elemento existente.
+
+- Acceder a un elemento: se podrá acceder a cualquier elemento de la lista para obtener su valor o modificarlo.
+
+- Comprobar si la lista está vacía: permite comprobar si la estructura no contiene ningún elemento. Esta comprobación es necesaria antes de realizar operaciones como la eliminación de un elemento o el recorrido de la estructura, para evitar así errores en el programa al intentar acceder a un elemento inexistente.
+
+- Buscar: permite localizar en la lista un elemento que cumpla cierta condición.
+
+- Ordenar: permite reorganizar los elementos de una lista, de modo que queden ordenados según el criterio que se elija.
+
+- Recorrer la lista: permite visitar todos y cada uno de los elementos de la estructura, para poder aplicarles algún procesamiento (modificar su contenido, visualizarlos,…).
+
+
+----- LISTAS > Tipos Represent. -----
+
+Representación de Listas
+
+Básicamente podemos distinguir dos tipos de representaciones para las listas: la que usa una estructura estática (un vector), y la que usa memoria dinámica.
+
+En la representación estática los elementos de la lista ocupan posiciones consecutivas de memoria, mientras que en la dinámica los elementos se pueden situar en cualquier posición de memoria.
+
+
+----- LISTAS > Vectorial -----
+
+Representación Vectorial de Listas
+
+Se puede representar una lista mediante un array unidimensional, lo que permite un acceso eficiente a cada uno de los elementos de la estructura.
+
+Se definirá un vector de tamaño N y del tipo de los elementos de la lista, que reserva espacio global para toda la estructura. Cada posición del vector almacenará un elemento de la lista, hasta un máximo de N. En todo momento los elementos estarán almacenados en las posiciones iniciales del vector.
+
+Para determinar la longitud de la lista en cada momento se utiliza una variable entera, NUM_ELEMENTOS, que tomará valores entre 0 y N. Cuando la lista está vacía la variable será 0; al añadir un elemento se incrementará su valor en 1, reduciéndose en 1 al eliminar un elemento. Esta variable también determina cuál es la última posición ocupada dentro del vector.
+
+a(1) 	 a(2) 	 … 	 a(m)
+
+1 	 2 	 … 	 m 	 … 	 N
+
+Esquema de una lista implementada usando un vector
+
+Aunque una lista es una estructura dinámica que puede crecer sin límite, al utilizar una representación estática su tamaño estará condicionado por la capacidad del vector que la aloja. Esta limitación obliga a incluir entre las operaciones básicas sobre la lista la de comprobación de lista llena.
+
+
+----- LISTAS > Mem.Dinámica -----
+
+Representación mediante el uso de Memoria Dinámica
+
+En este caso la lista estará formada por un conjunto de nodos, que almacenarán tanto el dato que forma parte de la lista como información adicional para organizar los nodos dentro de la estructura.
+
+En primer lugar se definirá la estructura de los nodos de la lista y, a continuación, un puntero que dará acceso a la lista. Dicho puntero apuntará a un nodo de la lista, que a su vez apuntará a otro. Cada nodo apuntará a algún otro nodo (en general), definiendo así la estructura enlazada o lista enlazada.
+
+Todo nodo de una lista enlazada contendrá como mínimo un campo de tipo puntero y otro para almacenar la información de la lista propiamente dicha. Para hacer una representación más general, consideraremos un solo campo para representar el resto de los datos del nodo, de algún tipo T, que puede ser simple o compuesto.
+
+Los nodos con los que vamos a trabajar podrán incluir uno o dos campos de enlace. Cuando una lista enlazada está formada por nodos que incluyen un único campo de enlace, hablaremos de listas dinámicas simplemente enlazadas o con enlace simple; si los nodos contienen 2 enlaces, hablaremos de listas dinámicas doblemente enlazadas o con enlace doble.
+
+La estructura propuesta para un nodo con enlace simple es la siguiente:
+
+NODO_LISTA es registro compuesto por
+
+ DATO de tipo T
+
+ SIGUIENTE puntero a NODO_LISTA
+
+fin-registro
+
+siendo DATO el campo donde se almacena la información de un elemento de la lista y SIGUIENTE un puntero que permite conectar un nodo de la lista con otro:
+
+[Imagen]
+
+Esquema de un nodo con un solo enlace
+
+La estructura propuesta para un nodo con enlace doble es la siguiente:
+
+NODO_LISTA es registro compuesto por
+
+ DATO de tipo T
+
+ SIGUIENTE puntero a NODO_LISTA
+
+ ANTERIOR puntero a NODO_LISTA
+
+fin-registro
+
+que añade al caso anterior un puntero al predecesor del nodo:
+
+[Imagen]
+
+Esquema de un nodo con dos enlaces
+
+Podremos trabajar con listas dinámicas tanto lineales como circulares.
+
+En una lista lineal el elemento situado en alguno de los extremos de la estructura no estará enlazado con ningún otro nodo. En el caso de una lista lineal con enlace simple (Figura a), el nodo situado en uno de los extremos tendrá el campo SIGUIENTE igual a NULO; en una lista lineal con enlace doble (Figura b), el nodo del extremo izquierdo de la representación gráfica tendrá a NULO el enlace ANTERIOR, mientras que el nodo del extremo opuesto tendrá a NULO el enlace SIGUIENTE.
+
+[Imagen]
+
+Figura a: Representación gráfica de una lista lineal con enlace simple
+
+[Imagen]
+
+Figura b: Representación gráfica de una lista lineal con enlace doble
+
+Las listas en las que cada elemento está enlazado con algún otro se denominan listas circulares (Figuras c y d). En este caso ninguno de los campos de enlace toma valor nulo. La conexión entre los elementos es tal que se puede recorrer la lista completa pasando desde un nodo cualquiera a otro conectado a él.
+
+[Imagen]
+
+Figura c: Representación gráfica de una lista circular con enlace simple
+
+[Imagen]
+
+Figura d: Representación gráfica de una lista circular con enlace doble
+
+Una vez definida la estructura de los nodos, se debe declarar una variable puntero que permita acceder a la lista. Tras la declaración del puntero, se le asocia el valor NULO, indicando que inicialmente la lista está vacía:
+
+INICIO puntero a NODO_LISTA
+
+INICIO ← NULO
+
+Cuando la lista no está vacía, INICIO apuntará a un nodo de la misma a partir del cual se pueda acceder a todos los demás. En una lista lineal, apuntará al elemento situado en uno de los extremos de la estructura. En una lista con enlace simple, el extremo elegido será el que permita acceder a los nodos de la lista mediante el campo de enlace (Figura a). En una lista con enlace doble, se puede elegir cualquiera de los dos extremos (Figura b). En una lista circular, podrá apuntar a cualquiera de los nodos de la misma (Figuras c y d).
+
+En las listas lineales se suele decir que el nodo apuntado por el puntero INICIO es el primero de la estructura, mientras que el situado en el extremo opuesto será el último. En una lista circular no existe primer ni último nodo, aunque a veces se utilizan estos conceptos para dar claridad a las explicaciones. Nosotros entenderemos por primer nodo de una lista circular el referenciado por el puntero que da acceso a la estructura, considerando como último nodo aquel cuyo enlace SIGUIENTE apunta al primer nodo. Hay que tener en cuenta que el hecho de considerar un nodo como primero o último de la lista es independiente del orden temporal en que se han introducido los elementos correspondientes en la estructura.
+
+
+----- LISTAS > Rep. Vectorial -----
+
+Operaciones en la representación vectorial
+
+- Creación de la lista 	 - Inserción de un elemento
+
+- Comprobación de lista vacía 	 - Eliminación de un elemento
+
+- Comprobación de lista llena 	 - Según su posición
+
+- Recorrido de la lista 	 - Según su contenido
+
+- Acceso a un elemento 	 - Ordenación
+
+- Búsqueda
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la lista mediante representación vectorial
+
+Para crear la lista se declara un vector de cierto tamaño, N, de elementos del tipo que deseemos almacenar en la lista. Además, se declarará un contador, que indicará en cada momento la longitud de la lista y que tomará valores entre 0 (lista vacía) y N (lista llena). Al crear la lista se iniciará dicho contador a 0, lo que representa lista vacía:
+
+LISTA(N) de tipo T
+
+NUM_ELEMENTOS entera
+
+NUM_ELEMENTOS ← 0
+
+LISTA
+
+ 	 1 	 2 	 3 	 ... 	 N
+
+NUM_ELEMENTOS 	 0
+
+Esquema de una lista vacía implementada usando un vector
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Inserción de un nuevo elemento en la lista
+
+Para insertar un elemento en cierta posición de la lista, se indica el valor del elemento y la posición que debe ocupar dentro de la lista.
+
+Antes de añadir un nuevo elemento, se debe comprobar que la lista no está llena. En caso de estarlo, la operación de inserción se aborta.
+
+ Para mantener los valores de la lista entre las posiciones 1 y NUM_ELEMENTOS del vector, las posiciones de inserción válidas son todas las ocupadas y la primera libre que sigue a éstas (siempre que la lista no esté llena). Por ello, antes de realizar la inserción se comprobará si la posición indicada es válida. Si el nuevo elemento se debe colocar en una de las posiciones ya ocupadas, se deben desplazar una posición hacia el final del vector los elementos almacenados entre la posición de inserción y la última ocupada, dejando así un hueco para el nuevo elemento.
+
+Para completar el proceso de inserción, se incrementa en 1 la longitud de la lista.
+
+MÓDULO Insertar
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ELEMENTO de tipo T ** valor a insertar
+
+ Recibe POSICION entera ** posición de inserción
+
+ Transforma LISTA() de tipo T ** vector lista
+
+ Recibe N entera ** tamaño del vector
+
+ Transforma NUM_ELEM entera ** longitud de la lista
+
+ VARIABLES
+
+ I entera
+
+INICIO
+
+ Si (Lista_llena ( NUM_ELEM, N ) = Verdadero) entonces
+
+ ESCRIBIR "Lista llena."
+
+ sino
+
+ Si ((POSICION > NUM_ELEM+1) O (POSICION < 1)) entonces
+
+ ESCRIBIR "Posición de inserción no válida"
+
+ sino
+
+ Si (POSICION ≤ NUM_ELEM) entonces
+
+ Para I desde NUM_ELEM hasta POSICION con incremento -1
+
+ LISTA(I+1) ← LISTA (I)
+
+ fin-para
+
+ fin-si
+
+ LISTA(POSICION) ← ELEMENTO
+
+ NUM_ELEM ← NUM_ELEM +1
+
+ fin-si
+
+ fin-si
+
+FIN
+
+Ejemplo de inserción de un nuevo elemento en una lista
+
+Supongamos una lista de enteros que se almacenará en un vector denominado LISTA_1, con capacidad para 3 elementos (N=3) y que inicialmente está vacía:
+
+LISTA_1
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 0
+
+Se inserta el primer elemento, con valor 5. Dicho elemento debe ocupar obligatoriamente la posición 1:
+
+Insertar(5, 1, LISTA_1, N, NUM_ELEMENTOS)
+
+Como resultado de la operación se almacena el valor indicado en la primera posición de la lista, cuya longitud pasa a ser 1:
+
+LISTA_1 	 5
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 1
+
+Si en este momento intentamos insertar un nuevo valor, las únicas posiciones válidas serán la 1 ó la 2. Por ejemplo, al intentar añadir el valor 8 en la posición 3, la inserción no se completará, pues la posición indicada no es válida:
+
+Insertar(8, 3, LISTA_1, N, NUM_ELEMENTOS)
+
+En este caso se presentará el siguiente mensaje:
+
+ Posición de inserción no válida
+
+Se obtendrá el mismo resultado si se solicita la inserción en una posición no perteneciente al vector, por ejemplo, la posición 6.
+
+Solicitamos que se inserte el valor 15 en la posición 2:
+
+Insertar(15, 2, LISTA_1, N, NUM_ELEMENTOS)
+
+LISTA_1 	 5 	 15
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 2
+
+Solicitamos que se inserte el valor 25 en la posición 1:
+
+Insertar(25, 1, LISTA_1, N, NUM_ELEMENTOS)
+
+Para completar la inserción, en primer lugar se deben desplazar los elementos de las posiciones 1 y 2 un lugar hacia el final del vector:
+
+ 	 	 	 ⇓ 	 ⇒
+
+LISTA_1 	 5 	 15 	 15
+
+ 	 1 	 2 	 3
+
+ 	 ⇓ 	 ⇒
+
+LISTA_1 	 5 	 5 	 15
+
+ 	 1 	 2 	 3
+
+Por último, se almacena en la primera posición el nuevo valor y se incrementa en 1 la longitud de la lista:
+
+LISTA_1 	 25 	 5 	 15
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 3
+
+En este momento no se podrán realizar más inserciones, dado que la lista está llena. Si, por ejemplo, se solicita añadir el valor 4 en la posición 1:
+
+Insertar(4, 1, LISTA_1, N, NUM_ELEMENTOS)
+
+Se presentará el mensaje:
+
+Lista llena.
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de lista vacía
+
+La lista está vacía si no contiene elementos.
+
+MÓDULO Lista_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe NUM_ELEMENTOS entera
+
+INICIO
+
+ Si (NUM_ELEMENTOS = 0) entonces
+
+ DEVOLVER Verdadero
+
+ sino
+
+ DEVOLVER Falso
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Eliminación de un elemento de la lista
+
+Es posible eliminar cualquier elemento de una lista. Describiremos cómo eliminar un elemento en función de la posición que ocupa dentro de la lista, así como en función de su valor
+
+- Eliminación según su posición 	 - Eliminación según su contenido
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Eliminación de un elemento de la lista por su posición
+
+Se puede eliminar el elemento de la lista que ocupa la posición indicada.
+
+Antes de intentar eliminar un elemento, se comprueba que la lista no esté vacía, pues en caso de estarlo la operación de eliminación es imposible. A continuación se comprueba que la posición del elemento a eliminar sea válida, es decir, que corresponda a una de las posiciones del vector que contienen elementos de la lista. Si la posición de eliminación es válida, se copian una posición hacia el comienzo del vector cada uno de los elementos comprendidos entre la posición siguiente a la de eliminación y la última ocupada. Si la posición del elemento a eliminar es la última ocupada, no será necesario desplazar ningún valor dentro del vector. En ambos casos, la última operación a realizar consiste en reducir en uno la longitud de la lista.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe POSICION entera ** posición de eliminación
+
+ Transforma NUM_ELEM entera ** longitud de la lista
+
+ Transforma LISTA() de tipo T ** vector lista
+
+ VARIABLES
+
+ I entera
+
+INICIO
+
+ Si (Lista_vacia ( NUM_ELEM ) = Verdadero) entonces
+
+ ESCRIBIR "Lista vacía"
+
+ sino
+
+ Si ((POSICION>NUM_ELEM) O (POSICION<1)) entonces
+
+ ESCRIBIR "Posición de eliminación no válida"
+
+ sino
+
+ I ← POSICION
+
+ Mientras (I < NUM_ELEM) hacer
+
+ LISTA(I) ← LISTA(I+1)
+
+ I ← I+1
+
+ fin-mientras
+
+ NUM_ELEM ← NUM_ELEM - 1
+
+ fin-si
+
+ fin-si
+
+FIN
+
+Ejemplo de borrado de un elemento en una lista por su posición
+
+Consideremos una lista de enteros que puede almacenar 3 valores como máximo (N=3) y que actualmente está llena:
+
+LISTA_1 	 5 	 15 	 8
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 3
+
+Se solicita eliminar el elemento de la posición 2:
+
+Eliminar(2, NUM_ELEMENTOS, LISTA_1)
+
+Como resultado, el valor de la tercera posición pasa a ocupar la segunda y se reduce la longitud de la lista:
+
+ 	 	 	 ⇓ 	 ⇐
+
+LISTA_1 	 5 	 8
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 2
+
+Si se indica una posición de eliminación no válida:
+
+Eliminar(3, NUM_ELEMENTOS, LISTA_1)
+
+se presentará un mensaje indicando que no se puede realizar la operación:
+
+Posición de eliminación no válida
+
+Se solicita eliminar el elemento de la primera posición:
+
+Eliminar(1, NUM_ELEMENTOS, LISTA_1)
+
+Como resultado, el valor de la segunda posición se desplaza sobre la primera, quedando la lista con un único elemento:
+
+ 	 ⇓ 	 ⇐
+
+LISTA_1 	 8
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 1
+
+En este momento sólo es posible eliminar el elemento de la primera posición:
+
+Eliminar(1, NUM_ELEMENTOS, LISTA_1)
+
+con lo que la lista queda vacía:
+
+LISTA_1
+
+ 	 1 	 2 	 3
+
+NUM_ELEMENTOS 	 0
+
+Si se solicita una nueva eliminación (sobre cualquier posición):
+
+Eliminar(1, NUM_ELEMENTOS, LISTA_1)
+
+se mostrará un mensaje indicando que la lista está vacía:
+
+Lista vacía
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Eliminación de un elemento de la lista por su contenido
+
+Para eliminar de la lista el elemento cuyo valor coincida con uno especificado, en primer lugar habrá que comprobar si dicho valor aparece en la lista. En caso de aparecer, se procederá a su eliminación.
+
+Por tanto, esta eliminación se puede realizar combinando las operaciones de búsqueda y eliminación por posición definidas para la lista. Se realizará una búsqueda lineal sobre el vector que contiene la lista. Si la búsqueda tiene éxito, se obtendrá un entero que representa la posición en la que se encontró el valor; en caso contrario, se obtendrá un valor menor que 1. En el primer caso el índice obtenido se pasa al módulo Eliminar, que eliminará el elemento de dicha posición.
+
+Con las operaciones propuestas, si el valor aparece varias veces en la lista, se eliminará el que primero se encuentre de todos ellos. Si la búsqueda se realiza de izquierda a derecha, se eliminará el más próximo al inicio de la lista.
+
+MÓDULO Eliminar_valor
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe VALOR de tipo T ** valor a eliminar
+
+ Transforma NUM_ELEM entera ** longitud de la lista
+
+ Transforma LISTA() de tipo T ** vector lista
+
+ Recibe N de tipo T ** tamaño del vector
+
+VARIABLES
+
+ POSICION entera
+
+INICIO
+
+ POSICION ← Busqueda_lineal(LISTA, NUM_ELEM, VALOR)
+
+ Si (POSICION < 1) entonces
+
+ Escribir "El valor no forma parte de la lista"
+
+ sino
+
+ Eliminar (POSICION, NUM_ELEM, LISTA)
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de lista llena
+
+La implementación mediante vectores obliga a comprobar si la lista está llena antes de intentar introducir un nuevo elemento. La lista está llena si contiene N elementos.
+
+MÓDULO Lista_llena devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe NUM_ELEMENTOS entera
+
+ Recibe N entera
+
+INICIO
+
+ Si (NUM_ELEMENTOS = N) entonces
+
+ DEVOLVER Verdadero
+
+ sino
+
+ DEVOLVER Falso
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Recorrido de la lista
+
+Para recorrer todos los elementos de una lista, se utiliza un bucle que recorre todas las posiciones ocupadas del vector que le da soporte.
+
+Si la lista está vacía, se mostrará un mensaje de aviso. En caso contrario, se aplicará algún procesamiento (representado por la operación TRATAR()) a cada uno de los elementos de la misma. El tratamiento aplicado puede modificar la lista, por lo que se permite transformar el parámetro LISTA.
+
+MÓDULO Recorrer_lista
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma LISTA() de tipo T
+
+ Recibe NUM_ELEMENTOS entera
+
+ VARIABLES
+
+ I entera
+
+INICIO
+
+ Si (Lista_vacia(NUM_ELEMENTOS) = Verdadero) entonces
+
+ ESCRIBIR "La lista está vacía"
+
+ sino
+
+ Para I desde 1 hasta NUM_ELEMENTOS
+
+ TRATAR (LISTA(I))
+
+ fin-para
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Acceso a un elemento de la lista
+
+ Para acceder a un elemento cualquiera de la lista, I, se consulta la posición correspondiente dentro del vector, LISTA(I).
+
+Podremos modificar el valor del elemento I de la lista mediante una asignación:
+
+LISTA(I) ← NUEVO_VALOR
+
+o mediante una lectura:
+
+LEER LISTA(I)
+
+También se puede visualizar el valor del elemento:
+
+ESCRIBIR LISTA(I)
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Ordenación de los elementos de la lista
+
+Para ordenar una lista representada mediante un vector se pueden aplicar los algoritmos de ordenación tratados en el tema referente a arrays.
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Búsqueda de un elemento en la lista
+
+ Para buscar un valor en una lista representada mediante un vector se pueden aplicar los algoritmos de búsqueda tratados en el tema referente a arrays. Recordemos que si los datos no están ordenados, sólo se puede aplicar una búsqueda secuencial. Si los datos están ordenados, se puede aplicar además una búsqueda binaria.
+
+
+----- LISTAS > Rep. Mem.Dinámica -----
+
+Operaciones en la representación con Memoria Dinámica
+
+- Lista Lineal Simplemente Enlazada 	 - Lista Circular Simplemente Enlazada
+
+- Lista Lineal Doblemente Enlazada 	 - Lista Circular Doblemente Enlazada
+
+Lista Lineal Simplemente Enlazada
+
+- Creación de la lista 	 - Inserción de un elemento
+
+- Comprobación de lista vacía 	 - Eliminación de un elemento
+
+- Recorrido de la lista 	 - Según su posición
+
+- Acceso a un elemento 	 - Según su contenido
+
+- Búsqueda 	 - Vaciado de la lista
+
+Lista Lineal Doblemente Enlazada
+
+- Creación de la lista 	 - Eliminación de un elemento
+
+- Inserción de un elemento 	 - Según su posición
+
+ 	 - Según su contenido
+
+Lista Circular Simplemente Enlazada
+
+- Creación de la lista 	 - Inserción de un elemento
+
+- Comprobación de lista vacía 	 - Eliminación de un elemento
+
+- Recorrido de la lista 	 - Según su posición
+
+- Acceso a un elemento 	 - Según su contenido
+
+- Búsqueda 	 - Vaciado de la lista
+
+Lista Circular Doblemente Enlazada
+
+- Creación de la lista 	 - Eliminación de un elemento
+
+- Inserción de un elemento 	 - Según su posición
+
+ 	 - Según su contenido
+
+--- Pagina nueva 2 ---
+
+Lista Lineal Simplemente Enlazada
+
+Una lista lineal con enlace simple está formada por un conjunto de nodos conectados mediante punteros. Cada nodo de la estructura conecta con otro nodo de la misma, salvo el nodo situado en uno de los extremos, cuyo campo de enlace será nulo. Existe un puntero externo que da acceso a la estructura, apuntando al nodo situado en el extremo opuesto al que tiene su campo de enlace nulo.
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la Lista Lineal Simplemente Enlazada
+
+Para crear la lista, en primer lugar se define la estructura de sus nodos:
+
+NODO_LISTA es registro compuesto por
+
+ DATO de tipo T
+
+ SIGUIENTE puntero a NODO_LISTA
+
+fin-registro
+
+A continuación, se define un puntero a nodos de la lista, que dará acceso a la estructura:
+
+INICIO puntero a NODO_LISTA
+
+Por último, se establece la condición de lista vacía, haciendo que el puntero a la lista sea nulo:
+
+INICIO <- NULO
+
+[Imagen]
+
+Representación gráfica de lista lineal con enlace simple vacía
+
+--- Operaciones en lista lineal simplemente enlazada - Inserción ---
+
+Inserción de un elemento en una Lista Lineal Simplemente Enlazada
+
+Para realizar la inserción, además del valor del elemento a insertar, indicaremos la posición que debe ocupar en la lista.
+
+La inserción se podrá realizar en cualquier posición de la estructura: al principio de la lista, al final, o en cualquier posición intermedia. Para hacer una descripción más general, la posición de inserción vendrá determinada por un puntero que apuntará a un nodo ya existente en la lista. Dado un puntero P a un nodo de la lista, podemos realizar la inserción del nuevo nodo en dos posiciones: después del nodo apuntado por P o antes. Nosotros trataremos el caso de inserción después de un nodo dado.
+
+[Imagen]
+
+Posibles casos en la inserción de un nuevo nodo
+
+[Imagen]
+
+Inserción de un nuevo nodo después del apuntado por P
+
+[Imagen]
+
+Inserción de un nuevo nodo antes del apuntado por P
+
+El parámetro P debe ser una referencia válida a uno de los nodos de la lista, salvo en el caso en que la lista esté vacía, en el que no lo utilizamos, lo que posibilita la primera inserción. En este caso P puede hacerse NULO.
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el valor del nuevo elemento en el campo de datos de dicho nodo. A continuación, se enlaza el nuevo nodo con el resto de la estructura de datos. Si la lista estaba vacía, el nuevo nodo será el único de la misma. Por tanto, su campo de enlace se hará nulo y, además, el puntero a la lista apuntará al nuevo elemento. Si la lista no estaba vacía, el nuevo nodo se debe colocar entre el referenciado por P y el referenciado por P↑.SIGUIENTE. Si el nuevo nodo se va a convertir en el último de la lista no tendrá nodo siguiente, por lo que su campo de enlace se hará nulo.
+
+MÓDULO Insertar_despues
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T ** nuevo elemento
+
+ VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ INICIO ← NUEVO
+
+ NUEVO↑.SIGUIENTE ← NULO
+
+ sino
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ P↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: INSERCIÓN EN LISTA VACÍA
+
+Supongamos una lista de enteros vacía:
+
+[Imagen]
+
+a la que intentamos añadir un primer elemento, de valor 0:
+
+Insertar_despues(INICIO, INICIO, 0)
+
+Se solicita memoria para el nuevo nodo y se almacena el dato:
+
+[Imagen]
+
+Como la lista está vacía, se hace que el puntero a la misma apunte al nuevo nodo:
+
+[Imagen]
+
+y que el campo de enlace de dicho nodo se haga nulo:
+
+[Imagen]
+
+La lista quedará como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN AL FINAL DE LA LISTA
+
+Consideremos la lista de enteros que se muestra en la siguiente figura:
+
+[Imagen]
+
+en la que deseamos insertar el dato 5 a continuación del último nodo de la lista. Por tanto, el puntero que identifica el punto de inserción debe apuntar al último nodo de la lista:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Se reserva memoria para el nuevo nodo y se almacena el dato:
+
+[Imagen]
+
+El campo de enlace del nuevo nodo tomará el mismo valor que el campo de enlace del nodo apuntado por P, es decir, NULO:
+
+[Imagen]
+
+El campo de enlace del nodo apuntado por P pasará a apuntar al nuevo nodo:
+
+[Imagen]
+
+Tras la inserción del nuevo elemento, la lista quedará como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN INTERMEDIA
+
+Supongamos ahora que, partiendo de la misma lista que en el ejemplo anterior, deseamos añadir el mismo valor, pero en este caso a continuación del segundo nodo:
+
+Insertar_despues(INICIO, P, 5)
+
+[Imagen]
+
+Se reserva memoria para el nuevo nodo y se almacena el dato, igual que en el ejemplo anterior. El campo de enlace del nuevo nodo apuntará al mismo nodo que el campo de enlace del nodo apuntado por P:
+
+[Imagen]
+
+El campo de enlace del nodo apuntado por P pasará a apuntar al nuevo nodo:
+
+[Imagen]
+
+La lista quedará como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN AL PRINCIPIO
+
+Supongamos que en la lista inicial se desea insertar el valor 5 a continuación del primer nodo (el apuntado por el puntero INICIO):
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Si la solicitud de memoria para un nuevo nodo tiene éxito, se almacena el dato en el nuevo nodo. A continuación se hace que su campo de enlace apunte al mismo nodo que el campo de enlace del nodo de la lista que contiene el valor 5:
+
+[Imagen]
+
+El nodo de la lista que contiene el valor 5 se enlaza con el nuevo:
+
+[Imagen]
+
+La lista obtenida tras la inserción queda como sigue:
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de Lista Lineal Simplemente Enlazada vacía
+
+La lista estará vacía si el puntero a la misma es nulo:
+
+MÓDULO Lista_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+INICIO
+
+ Si (INICIO = NULO) entonces
+
+ DEVOLVER Verdadero ** lista vacía
+
+ sino
+
+ DEVOLVER Falso ** lista no vacía
+
+ fin-si
+
+FIN
+
+--- Pagina nueva 2 ---
+
+Recorrido de una Lista Lineal Simplemente Enlazada
+
+ Se puede aplicar un mismo tratamiento a todos los elementos de la lista (que representaremos mediante la operación TRATAR( )), utilizando un bucle que recorra la estructura, partiendo del nodo referenciado por el puntero a la misma. Si la lista está vacía, no se realizará ningún procesamiento.
+
+MÓDULO Recorrer_lista
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ P <- INICIO
+
+ Mientras (P ≠ NULO) hacer
+
+ TRATAR (P↑.DATO)
+
+ P <- P↑.SIGUIENTE
+
+ fin-mientras
+
+FIN
+
+Ejemplo de operación de recorrido
+
+Se procede a recorrer la siguiente lista:
+
+[Imagen]
+
+ Recorrer_lista(INICIO)
+
+Inicialmente P apunta al nodo con valor 5:
+
+[Imagen]
+
+Se aplica el tratamiento a ese nodo y después el puntero avanza hasta el siguiente:
+
+[Imagen]
+
+Se aplica el tratamiento al nodo con valor 2 y el puntero avanza:
+
+[Imagen]
+
+Se trata el nodo con valor 9 y el puntero avanza, haciéndose nulo, con lo que concluyen las iteraciones:
+
+[Imagen]
+
+--- Operaciones en lista lineal simplemente enlazada - Eliminación por posición ---
+
+Eliminación de un elemento en una Lista Lineal Simplemente Enlazada (por su posición)
+
+Supongamos que se desea eliminar un nodo de una lista enlazada, identificado mediante un puntero P. La operación de eliminación implica, además de liberar la memoria asociada al nodo elegido, reconectar adecuadamente los nodos que permanecen en la estructura, de forma que se garantice el correcto acceso a los mismos.
+
+Si se debe eliminar el primer nodo de la lista, el puntero a la estructura debe pasar a apuntar al siguiente nodo, haciéndose nulo si la lista sólo contenía un nodo. Si el nodo a eliminar no es el primero, antes de eliminarlo se debe conectar su nodo previo con su nodo posterior, si existe éste, o hacer nulo el enlace del nodo previo en caso contrario. Para reconectar ambos nodos se debe recorrer la lista desde el nodo referenciado por el puntero a la estructura y hasta que se encuentre el nodo previo al referenciado por P.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ VARIABLES
+
+ PREVIO puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_Vacia(INICIO) = Verdadero) entonces
+
+ ESCRIBIR "Error: lista vacía"
+
+ sino
+
+ Si (P = INICIO) entonces
+
+ INICIO ← INICIO↑.SIGUIENTE
+
+ sino
+
+ PREVIO ← INICIO
+
+ Mientras (PREVIO↑.SIGUIENTE ≠ P) hacer
+
+ PREVIO ← PREVIO↑.SIGUIENTE
+
+ fin-mientras
+
+ PREVIO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ fin-si
+
+ LIBERAR(P)
+
+ fin-si
+
+FIN
+
+CASO: ELIMINAR EL PRIMER NODO EN UNA LISTA QUE NO QUEDARÁ VACÍA
+
+Supongamos que en la lista de la figura, que almacena 3 enteros, se desea eliminar el nodo apuntado por P, es decir, el apuntado por el puntero que da acceso a la estructura:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+ Para proceder a eliminar el nodo, en primer lugar se redefine el valor del puntero INICIO, haciendo que pase a apuntar al segundo nodo:
+
+[Imagen]
+
+Por último, se libera la memoria asociada al primer nodo:
+
+[Imagen]
+
+La lista quedará con 2 nodos:
+
+[Imagen]
+
+CASO: ELIMINAR EL PRIMER NODO EN UNA LISTA QUE SI QUEDARÁ VACÍA
+
+Supongamos que se desea eliminar el único nodo de una lista:
+
+[Imagen]
+
+Eliminar (INICIO, P)
+
+El puntero a la estructura tomará el valor del campo de enlace del nodo que se desea eliminar, es decir, NULO:
+
+[Imagen]
+
+A continuación, se libera la memoria asociada al nodo apuntado por P:
+
+[Imagen]
+
+Tras la eliminación, la lista ha quedado vacía:
+
+[Imagen]
+
+CASO: ELIMINAR EL ÚLTIMO NODO DE UNA LISTA QUE NO QUEDARÁ VACÍA
+
+Supongamos que se desea eliminar el último nodo de la siguiente lista:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+ En primer lugar, se recorrerá la lista hasta encontrar el nodo que apunta al que se desea eliminar. El puntero PREVIO identificará dicho nodo:
+
+[Imagen]
+
+Se hace que el nodo previo al que se va a eliminar apunte al mismo sitio que este último, con lo que su enlace se hará nulo:
+
+[Imagen]
+
+Se libera la memoria asociada al nodo que se va a eliminar:
+
+[Imagen]
+
+La lista quedará con dos nodos:
+
+[Imagen]
+
+CASO: ELIMINAR UN NODO INTERMEDIO DE UNA LISTA
+
+En el siguiente ejemplo se intenta eliminar un nodo intermedio de una lista:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+Como sólo hay un nodo antes del que se desea eliminar, la búsqueda concluye antes de entrar en el bucle Mientras:
+
+[Imagen]
+
+ En enlace del nodo apuntado por PREVIO pasa a tomar el valor del enlace del nodo que se va a eliminar:
+
+[Imagen]
+
+Se libera la memoria asociada al nodo que se va a eliminar:
+
+[Imagen]
+
+La lista pasará a contener sólo 2 elementos:
+
+[Imagen]
+
+--- Operaciones en lista lineal simplemente enlazada - Acceso ---
+
+Acceso a un elemento de una Lista Lineal Simplemente Enlazada
+
+Para acceder al I-ésimo elemento de la lista, con I menor o igual que la longitud de la lista, debe recorrerse ésta partiendo del primer nodo, referenciado por el puntero a la estructura, y hasta alcanzar el I-ésimo.
+
+MÓDULO Acceder_a_nodo
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ Recibe I entera
+
+ VARIABLES
+
+ J entera
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ P ← INICIO
+
+ J ← 1
+
+ Mientras (J < I) hacer
+
+ P ← P↑.SIGUIENTE
+
+ J ← J+1
+
+ fin-mientras
+
+ TRATAR (P)
+
+FIN
+
+Ejemplo de una operación de acceso a un elemento
+
+Supongamos que se desea acceder al tercer elemento de la siguiente lista:
+
+[Imagen]
+
+Acceder_a_nodo(INICIO, 3)
+
+El puntero P apunta inicialmente al primer nodo (que sería el 1):
+
+[Imagen]
+
+J se hace 1 y comienzan las iteraciones. En la primera iteración P pasa a apuntar al nodo con valor 8:
+
+[Imagen]
+
+J se hace 2 y se pasa a la segunda iteración. P avanza un nodo:
+
+[Imagen]
+
+J se hace 3, con lo que las iteraciones concluyen. En este momento P apunta al tercer nodo, por lo que se le puede aplicar el tratamiento elegido (lectura, escritura, modificación,...).
+
+--- Operaciones en lista lineal simplemente enlazada - Eliminación por valor ---
+
+Eliminación de un elemento en una Lista Lineal Simplemente Enlazada (por su contenido)
+
+Si se desea eliminar de la lista un valor dado, se pueden combinar las operaciones de búsqueda y eliminación antes definidas. En primer lugar se comprobará si el valor buscado aparece en la lista, obteniendo en caso afirmativo un puntero al nodo que contiene tal valor. A continuación, se aplicará el módulo Eliminar para eliminar dicho nodo de la estructura.
+
+Si el valor aparece varias veces en la lista, se eliminará el primero de todos ellos.
+
+MÓDULO Eliminar_valor
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe VALOR de tipo T ** valor a eliminar
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ P ← Buscar(INICIO, VALOR)
+
+ Si (P = NULO) entonces
+
+ Escribir "El valor no forma parte de la lista"
+
+ sino
+
+ Eliminar (INICIO, P)
+
+ fin-si
+
+FIN
+
+--- Operaciones en lista lineal simplemente enlazada - Búsqueda ---
+
+Búsqueda de un elemento en una Lista Lineal Simplemente Enlazada
+
+Para localizar un elemento dentro de una lista enlazada no ordenada se realizará una búsqueda secuencial. La búsqueda se suele realizar en función del valor de alguno de los campos del nodo (por ejemplo, en una lista con información sobre personas, en función del nombre o edad de una persona). En nuestro caso supondremos que se realiza en función de todos los campos de datos.
+
+Si la búsqueda tiene éxito, se retornará un puntero al nodo que contiene el valor buscado. En caso contrario, se retornará el valor NULO. Si el valor buscado aparece varias veces en la lista, se encontrará el más próximo al comienzo de la lista.
+
+MÓDULO Buscar devuelve puntero a NODO_LISTA
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ Recibe VALOR de tipo T ** valor que se busca
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ P ← INICIO
+
+ Mientras (P ≠ NULO) hacer
+
+ Si (P↑.DATO = VALOR) entonces
+
+ DEVOLVER P
+
+ fin-si
+
+ P ← P↑.SIGUIENTE
+
+ fin-mientras
+
+ DEVOLVER NULO
+
+FIN
+
+Ejemplo de operación de búsqueda con éxito
+
+Consideremos la siguiente lista de enteros:
+
+[Imagen]
+
+Supongamos que se desea buscar el valor 2:
+
+Buscar(INICIO, 2)
+
+El puntero P recorrerá los sucesivos elementos de la estructura, comenzando por el apuntado por INICIO:
+
+[Imagen]
+
+Como el primer nodo no contiene el valor buscado, se avanza el puntero P un nodo:
+
+[Imagen]
+
+Como el segundo nodo tampoco contiene el valor buscado, se avanza otra posición en la lista el puntero P:
+
+[Imagen]
+
+El bucle de búsqueda concluye cuando el puntero P apunta al nodo que contiene el valor buscado.
+
+Ejemplo de operación de búsqueda con fallo
+
+Si se intenta buscar un valor que no aparece en la lista, por ejemplo, el valor 4, el puntero P recorrerá todos los nodos de la misma, hasta hacerse NULO. Ello indicará que el valor buscado no aparece en la lista.
+
+Buscar(INICIO, 4)
+
+[Imagen]
+
+ [Imagen] Siguiente paso
+
+[Imagen]
+
+ [Imagen] Siguiente paso
+
+[Imagen]
+
+ [Imagen] Siguiente paso
+
+[Imagen]
+
+ [Imagen] Siguiente paso
+
+[Imagen]
+
+--- Operaciones en lista lineal simplemente enlazada - Vaciado ---
+
+Vaciado de una Lista Lineal Simplemente Enlazada
+
+Para eliminar la lista se debe liberar la memoria asociada a los nodos de la misma y hacer nulo el puntero a la estructura.
+
+Se recorrerán los nodos de la lista desde el referenciado por el puntero a la estructura hasta el último, liberando la memoria que ocupa cada uno de ellos.
+
+MÓDULO Vaciar_lista
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ Mientras (Lista_vacia(INICIO) = Falso) hacer
+
+ P ← INICIO↑.SIGUIENTE
+
+ LIBERAR(INICIO)
+
+ INICIO ← P
+
+ fin-mientras
+
+FIN
+
+Ejemplo de operación de vaciado de una Lista Lineal Simplemente Enlazada
+
+Se procede a vaciar la siguiente lista:
+
+[Imagen]
+
+ Vaciar_lista(INICIO)
+
+En la primera iteración, P apunta al nodo con valor 2:
+
+[Imagen]
+
+Se libera la memoria asociada al primer nodo:
+
+[Imagen]
+
+El puntero a la estructura toma el valor de P:
+
+[Imagen]
+
+Comienza la segunda iteración. El puntero P avanza hasta el siguiente nodo:
+
+[Imagen]
+
+Se libera la memoria ocupada por el nodo con valor 2:
+
+[Imagen]
+
+El puntero a la estructura toma el valor de P:
+
+[Imagen]
+
+En la tercera iteración P toma valor nulo:
+
+[Imagen]
+
+Se libera la memoria ocupada por el nodo con valor 9:
+
+[Imagen]
+
+ El puntero INICIO toma el valor de P, con lo que se establece la condición de lista vacía y las iteraciones concluyen:
+
+[Imagen]
+
+--- Pagina nueva 2 ---
+
+Lista Lineal Doblemente Enlazada
+
+Las listas lineales doblemente enlazadas están formadas por nodos con 2 enlaces. Uno de los enlaces del nodo apuntará al nodo siguiente y el otro al anterior, salvo en los nodos de los extremos, que tienen uno de sus enlaces nulo (el primer nodo de la lista no tendrá elemento anterior y el último no tendrá elemento siguiente). Existe un puntero externo que apunta a uno de los extremos de la lista. Por similitud con el estudio de las listas simplemente enlazadas, consideraremos que este puntero apunta al elemento situado en la parte izquierda de la representación gráfica de la lista.
+
+[Imagen]
+
+Algunas de las operaciones descritas para listas lineales con simple enlace son directamente aplicables a las listas lineales con doble enlace, por lo que no se volverán a comentar. Dichas operaciones son las siguientes:
+
+- Comprobación de lista vacía
+
+- Recorrido de la lista
+
+- Acceso a un elemento
+
+- Búsqueda
+
+- Vaciado de la lista
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la Lista Lineal Doblemente Enlazada
+
+Para crear la lista, en primer lugar se define el tipo de sus nodos:
+
+NODO_LISTA es registro compuesto por
+
+ DATO de tipo T
+
+ SIGUIENTE puntero a NODO_LISTA
+
+ ANTERIOR puntero a NODO_LISTA
+
+fin-registro
+
+A continuación se define el puntero a la lista y se le da valor inicial nulo, para indicar que la lista está vacía:
+
+INICIO puntero a NODO_LISTA
+
+INICIO ← NULO
+
+[Imagen]
+
+Representación gráfica de lista lineal con enlace doble vacía
+
+--- Pagina nueva 2 ---
+
+Inserción de un elemento en una Lista Lineal Doblemente Enlazada
+
+Para añadir un nuevo elemento a la lista, se especificará el valor de dicho elemento (ELEMENTO) y un puntero a uno de los nodos de la lista (P), respecto al cuál se realizará la inserción. Como se indicó en el caso de las listas con enlace simple, el nuevo elemento se puede colocar antes o después del nodo identificado por dicho puntero, aunque nosotros analizaremos el segundo caso.
+
+En primer lugar, se solicita memoria para el nuevo nodo de la lista. Si la solicitud no tiene éxito, se presenta un mensaje al usuario y la operación concluye; en caso contrario, se almacena el valor del nuevo elemento en el campo de datos del nodo.
+
+Si la lista está vacía, los dos campos de enlace del nuevo nodo se harán nulos y el puntero a la lista apuntará a dicho nodo. Cuando la lista está vacía, la inserción se realiza independientemente del valor pasado en el segundo parámetro, lo que permite realizar la primera inserción de datos.
+
+Si la lista no está vacía, el nuevo nodo debe colocarse entre el apuntado por P y el siguiente (apuntado por P↑.SIGUIENTE). Si P↑.SIGUIENTE es NULO, el nuevo nodo queda colocado al final de la lista. Para ello hay que definir los dos campos de enlace del nuevo nodo. Además, se debe redefinir el enlace SIGUIENTE del nodo que quedará antes del nuevo y, si el nuevo nodo no va a quedar al final de la lista, el enlace ANTERIOR del nodo que va a quedar a continuación de él.
+
+MÓDULO Insertar_despues
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T ** valor a insertar
+
+ VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ INICIO ← NUEVO
+
+ NUEVO↑.ANTERIOR ← NULO
+
+ NUEVO↑.SIGUIENTE ← NULO
+
+ sino
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ NUEVO↑.ANTERIOR ← P
+
+ Si (P↑.SIGUIENTE ≠ NULO) entonces
+
+ P↑.SIGUIENTE↑.ANTERIOR ← NUEVO
+
+ fin-si
+
+ P↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: INSERCIÓN EN LISTA VACÍA
+
+Supongamos una lista de enteros vacía:
+
+[Imagen]
+
+en la que deseamos insertar el valor 0:
+
+Insertar_despues(INICIO, P, 0)
+
+Tras reservar memoria para el nuevo nodo, se almacena el dato en el campo de datos:
+
+[Imagen]
+
+A continuación se definen los enlaces, siendo ambos nulos dado que la lista estaba vacía. Además, se hace que el puntero a la lista pase a apuntar al nuevo nodo:
+
+[Imagen]
+
+La lista quedará como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN DESPUÉS DEL ÚLTIMO NODO DE LA LISTA
+
+Consideremos la lista de enteros que se muestra en la siguiente figura:
+
+[Imagen]
+
+en la que deseamos insertar el dato 5 a continuación del nodo de la lista que almacena el 9. Por tanto, el puntero que identifica el punto de inserción debe apuntar al último nodo de la lista:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Tras obtener memoria para el nuevo nodo, se almacena el dato en el campo de datos:
+
+[Imagen]
+
+A continuación se definen los enlaces del nuevo nodo:
+
+[Imagen]
+
+Se redefine el enlace SIGUIENTE del nodo apuntado por P, de forma que pase a apuntar al nuevo nodo:
+
+[Imagen]
+
+La lista quedaría como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN EN UNA POSICIÓN INTERMEDIA DE LA LISTA
+
+Consideremos la lista de enteros que se muestra en la siguiente figura:
+
+[Imagen]
+
+Insertamos el valor 5 a continuación del 2, estando éste identificado por el puntero que apunta al punto de inserción:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Igual que en los casos anteriores, tras reservar memoria para el nuevo nodo, se almacena el dato en el campo de datos. A continuación se definen los enlaces del nuevo nodo:
+
+[Imagen]
+
+Como el nuevo nodo no va a ser el último de la estructura, en primer lugar se redefine el enlace ANTERIOR del nodo que quedará a continuación del nuevo y, a continuación, el enlace SIGUIENTE del nodo apuntado por P:
+
+[Imagen]
+
+La lista resultante será:
+
+[Imagen]
+
+CASO: INSERCIÓN DESPUÉS DEL PRIMERO DE LA LISTA
+
+Consideremos la lista de enteros que se muestra en la siguiente figura:
+
+[Imagen]
+
+Se inserta ahora un valor respecto al primero de la estructura. Como en los casos anteriores el puntero P apunta al punto de inserción:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Tras obtener la memoria para el nuevo nodo, se da valor a todos sus campos:
+
+[Imagen]
+
+Se conectan después con el nuevo nodo el nodo apuntado por P y el que le sigue (apuntado por P↑.SIGUIENTE ):
+
+[Imagen]
+
+La lista resultante es:
+
+[Imagen]
+
+--- Eliminar nodo -- Lista lineal doblemente enlazada ---
+
+Eliminación de un elemento en una Lista Lineal Doblemente Enlazada (por su posición)
+
+Para eliminar de la lista el nodo referenciado por el puntero P, en primer lugar se comprueba que la lista no esté vacía. En caso de estarlo, se anula la operación de eliminación. En caso de no estarlo, antes de liberar la memoria ocupada por el nodo a eliminar, se redefinen los enlaces de los nodos que vayan a permanecer en la estructura.
+
+Si se va a eliminar el primer nodo de la lista, el puntero a la misma debe pasar a apuntar al que era el segundo nodo de la lista en este momento. Si la lista sólo contenía un nodo, el puntero a la lista debe hacerse NULO.
+
+Si el nodo que se elimina no es el primero de la lista, tiene predecesor; si no es el último de la lista, tiene sucesor. Si el nodo que se elimina tiene predecesor, se hace que dicho predecesor se enlace con el nodo que sigue al que se va a eliminar (se redefine el valor de su campo SIGUIENTE). Si el nodo que se elimina tiene sucesor, se hace que dicho sucesor se enlace con el nodo que precede al que se va a eliminar (se redefine el valor de su campo ANTERIOR).
+
+Una vez redefinidos los enlaces necesarios, se libera la memoria asociada al nodo que se debe eliminar.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_Vacia(INICIO) = Verdadero) entonces
+
+ ESCRIBIR "Error: Lista vacía"
+
+ sino
+
+ Si (P = INICIO) entonces
+
+ INICIO ← INICIO↑.SIGUIENTE
+
+ fin-si
+
+ Si (P↑.ANTERIOR ≠ NULO) entonces
+
+ P↑.ANTERIOR↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ fin-si
+
+ Si (P↑.SIGUIENTE ≠ NULO) entonces
+
+ P↑.SIGUIENTE↑.ANTERIOR ← P↑.ANTERIOR
+
+ fin-si
+
+ LIBERAR(P)
+
+ fin-si
+
+FIN
+
+CASO: SE ELIMINA EL ÚNICO NODO DE UNA LISTA
+
+Procedemos a eliminar el único nodo de la siguiente lista de enteros:
+
+[Imagen]
+
+Eliminar (INICIO, P)
+
+En primer lugar el puntero que da acceso a la estructura se hace NULO:
+
+[Imagen]
+
+A continuación, se libera la memoria asociada al nodo:
+
+[Imagen]
+
+Tras esta eliminación la lista ha quedado vacía.
+
+ [Imagen]
+
+CASO: SE ELIMINA EL ÚLTIMO NODO DE LA LISTA
+
+Se elimina el último nodo (el apuntado por P) de la siguiente lista:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+En primer lugar se redefine el enlace SIGUIENTE del nodo previo al que se va a eliminar:
+
+[Imagen]
+
+A continuación, se libera la memoria asociada al nodo que se va a eliminar:
+
+[Imagen]
+
+La lista habrá quedado con dos nodos:
+
+[Imagen]
+
+CASO: SE ELIMINA EL PRIMER NODO DE LA LISTA
+
+Eliminamos ahora el nodo referenciado por el puntero que da acceso a la estructura:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+En primer lugar se hace que el puntero a la lista pase a apuntar al segundo elemento:
+
+[Imagen]
+
+A continuación se redefine el enlace ANTERIOR del segundo nodo de la estructura:
+
+[Imagen]
+
+Por último, se libera la memoria asociada al primer nodo de la lista:
+
+[Imagen]
+
+Se obtiene una lista con dos elementos:
+
+[Imagen]
+
+CASO: SE ELIMINA UN NODO INTERMEDIO DE LA LISTA
+
+Por último, eliminamos un nodo intermedio de la estructura, estando éste referenciado por el puntero P:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+Como el elemento que se elimina no es el primero, se redefine el enlace SIGUIENTE del nodo previo al identificado por P:
+
+[Imagen]
+
+Como el elemento que se elimina no es el último, se redefine el enlace ANTERIOR del nodo siguiente al identificado por P:
+
+[Imagen]
+
+A continuación se libera la memoria asociada al nodo que se desea eliminar de la lista:
+
+[Imagen]
+
+La lista quedará con dos nodos:
+
+[Imagen]
+
+--- Pagina nueva 2 ---
+
+Eliminación de un elemento en una Lista Lineal Doblemente Enlazada (por su contenido)
+
+Esta operación se puede realizar en función de los módulos de búsqueda y de eliminación por posición, de la misma forma que se comentó en el caso de la lista lineal con enlace simple.
+
+--- Pagina nueva 2 ---
+
+Lista Circular Simplemente Enlazada
+
+Una lista circular con enlace simple está formada por un conjunto de nodos que incluyen un campo de enlace que permite conectar a cada nodo de la lista con otro nodo de la misma. Existe un puntero a uno de los nodos de la lista que da acceso a la estructura.
+
+[Imagen]
+
+Dado que este tipo de lista comparte la estructura de los nodos con la lista lineal con enlace simple, muchas de las operaciones son similares a las ya descritas para listas lineales. La diferencia fundamental reside en que las listas que ahora nos ocupan no incluyen ningún nodo con enlace nulo.
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la Lista Circular Simplemente Enlazada
+
+La operación de creación de una lista circular con enlace simple es idéntica a la comentada para una lista lineal con enlace simple:
+
+[Imagen]
+
+Representación gráfica de lista circular vacía
+
+--- Inserción - Lista circular simplemente enlazada ---
+
+Inserción de un elemento en una Lista Circular Simplemente Enlazada
+
+Para insertar un nuevo valor en la lista, además de dicho valor, se proporcionará un puntero P que determina la posición de la lista en la que se realizará la inserción. Si la lista está vacía, no se tiene en cuenta el valor de P. En caso contrario, P apuntará a un nodo de la lista y la inserción del nuevo elemento se realizará a continuación del nodo referenciado por P.
+
+Una vez que se dispone de la memoria para el nuevo nodo de la lista, se almacena en dicho nodo el dato que debe contener. Para enlazar el nuevo nodo con el resto de elementos de la lista, se tiene en cuenta si la lista estaba vacía o no.
+
+Si la lista estaba vacía, el nuevo nodo apuntará a sí mismo, al igual que el puntero que da acceso a la lista.
+
+ Si la lista no estaba vacía, el puntero a la misma no se verá afectado por la operación de inserción. El nuevo nodo debe colocarse entre el referencia por P y el siguiente, referenciado por P↑.SIGUIENTE. Si la lista contiene un único nodo, las referencias P y P↑.SIGUIENTE coinciden, por lo que el único nodo de la lista será tanto el predecesor como el sucesor del nuevo.
+
+MÓDULO Insertar_despues
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T *valor a insertar
+
+ VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ NUEVO↑.SIGUIENTE ← NUEVO
+
+ INICIO ← NUEVO
+
+ sino
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ P↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: INSERCIÓN EN UNA LISTA VACÍA
+
+Consideremos una lista de enteros vacía, a la que se hará referencia mediante el puntero INICIO:
+
+[Imagen]
+
+en la que se desea insertar el valor 25:
+
+Insertar_despues(INICIO, INICIO, 25)
+
+En primer lugar se solicita memoria para el nuevo nodo:
+
+[Imagen]
+
+Se copia el valor 25 en el campo de datos:
+
+[Imagen]
+
+Como la lista está vacía, tanto el campo de enlace del nuevo nodo como el puntero que da acceso a la estructura apuntarán al nuevo nodo.
+
+[Imagen]
+
+La lista resultante es:
+
+[Imagen]
+
+CASO: INSERCIÓN DESPUÉS DEL NODO APUNTADO POR INICIO
+
+En la siguiente lista añadimos el valor 7 a continuación del 32:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 7)
+
+Una vez obtenida la memoria para el nuevo nodo, se copia en éste el valor 7:
+
+[Imagen]
+
+Como la lista no está vacía, se define en primer lugar el campo de enlace del nuevo nodo, de forma que apunte al nodo con valor 25:
+
+[Imagen]
+
+Por último, se hace que el nodo apuntado por P pase a apuntar al nuevo:
+
+[Imagen]
+
+La lista queda como sigue:
+
+[Imagen]
+
+CASO: INSERCIÓN EN UNA LISTA QUE CONTIENE UN ÚNICO NODO
+
+Añadimos ahora el valor 32 a continuación del 25, en una lista que contiene un único nodo al que apuntan el puntero a la estructura y P:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 32)
+
+Observar que el valor de P será igual al de INICIO.
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el valor 32 en el campo de datos:
+
+[Imagen]
+
+Como la lista no está vacía, se hace que el campo de enlace del nuevo nodo apunte al mismo nodo que el campo de enlace del nodo identificado por el puntero P:
+
+[Imagen]
+
+Por último, se redefine el campo de enlace del nodo apuntado por P, de forma que pase a apuntar al nuevo nodo:
+
+[Imagen]
+
+La lista queda como sigue:
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de Lista Circular Simplemente Enlazada vacía
+
+La lista estará vacía si el puntero que da acceso a la estructura tiene como valor NULO (operación idéntica a la comentada para una lista lineal con enlace simple).
+
+--- Recorrido - Lista circular simplemente enlazada ---
+
+Recorrido de una Lista Circular Simplemente Enlazada
+
+La operación de recorrido consiste en visitar todos y cada uno de los nodos de la lista, para poder realizar algún procesamiento sobre los mismos. Si la lista está vacía, no será necesario recorrerla. En caso contrario, se utiliza un puntero auxiliar, P, que inicialmente apunta al mismo nodo que INICIO; se aplica el tratamiento a ese primer nodo y se pasa al siguiente. El bucle de tratamiento concluye cuando el puntero P vuelva a ser igual a INICIO, lo que significa que ya se han tratado todos los nodos.
+
+MÓDULO Recorrer_lista
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Falso) entonces
+
+ P ← INICIO
+
+ Repetir
+
+ Tratar (P↑.DATO)
+
+ P ← P↑.SIGUIENTE
+
+ Mientras (P ≠ INICIO)
+
+ fin-si
+
+FIN
+
+Ejemplo de operación de recorrido
+
+Supongamos la siguiente lista:
+
+[Imagen]
+
+El recorrido comienza por el nodo con valor 32:
+
+[Imagen]
+
+Se aplica el tratamiento elegido a dicho nodo y se avanza el puntero P:
+
+[Imagen]
+
+Se aplica el tratamiento al nodo con valor 7 y se avanza el puntero:
+
+[Imagen]
+
+Se aplica el tratamiento al nodo con valor 25 y se avanza el puntero:
+
+[Imagen]
+
+En este momento concluyen las iteraciones, pues el puntero P vuelve a apuntar al primer nodo procesado.
+
+--- Eliminación por posición - Lista circular simplemente enlazada ---
+
+Eliminación de un elemento en una Lista Circular Simplemente Enlazada (por su posición)
+
+Para eliminar un nodo de una lista no vacía, identificado mediante un puntero P, se deben tener en cuenta dos posibilidades: que la lista contenga un solo elemento o que contenga varios.
+
+En el primer caso, tras liberar la memoria asociada al único nodo de la lista, ésta quedará vacía.
+
+En el segundo caso, se debe conectar el nodo previo al que se va a eliminar con el posterior. Para ello se recorre la lista hasta encontrar el nodo previo al referenciado por P. Una vez encontrado, se redefine su enlace y, por último, se libera la memoria que ocupa el nodo elegido. Además, si se va a eliminar el nodo referenciado por el puntero a la estructura, antes de eliminarlo se hace que dicho puntero apunte al siguiente nodo.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ VARIABLES
+
+ PREVIO puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ ESCRIBIR "Lista vacía"
+
+ sino
+
+ Si (P = P↑.SIGUIENTE) entonces
+
+ LIBERAR(P)
+
+ INICIO ← NULO
+
+ sino
+
+ Si (INICIO = P) entonces
+
+ INICIO ← INICIO↑SIGUIENTE
+
+ fin-si
+
+ PREVIO ← INICIO
+
+ Mientras (PREVIO↑.SIGUIENTE ≠ P) hacer
+
+ PREVIO ← PREVIO↑.SIGUIENTE
+
+ fin-mientras
+
+ PREVIO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ LIBERAR(P)
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: LISTA CON UN ÚNICO NODO
+
+Supongamos que se desea eliminar el único elemento de la siguiente lista:
+
+[Imagen]
+
+Eliminar(INICIO, INICIO)
+
+Como sólo hay un elemento en la lista, se libera la memoria asociada a éste:
+
+[Imagen]
+
+y a continuación se hace nulo el puntero a la lista:
+
+[Imagen]
+
+CASO: ELIMINACIÓN DE UN NODO INTERMEDIO
+
+Se desea eliminar el nodo con valor 25 de la siguiente lista:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+Se realiza una búsqueda para determinar el nodo que precede al que se desea eliminar. El puntero PREVIO apuntará a dicho nodo:
+
+[Imagen]
+
+Se conecta el nodo previo con el que está a continuación del que se va a eliminar:
+
+[Imagen]
+
+Se libera la memoria asociada al nodo que se debe eliminar de la lista:
+
+[Imagen]
+
+La lista resultante contendrá 2 elementos:
+
+[Imagen]
+
+CASO: ELIMINAR EL NODO REFERENCIADO POR EL PUNTERO A LA ESTRUCTURA
+
+En la siguiente lista se desea eliminar el nodo apuntado por el puntero que da acceso a la estructura:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+El puntero a la estructura pasa a apuntar al nodo siguiente al que se va a eliminar:
+
+[Imagen]
+
+Se busca el nodo previo al que se va a eliminar, que queda apuntado por el puntero PREVIO:
+
+[Imagen]
+
+Se redefine el enlace del nodo apuntado por PREVIO:
+
+[Imagen]
+
+Por último, se libera la memoria asociada al nodo apuntado por P:
+
+[Imagen]
+
+La lista quedará con 2 nodos:
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Acceso a un elemento de una Lista Circular Simplemente Enlazada
+
+La operación de acceso a un elemento es similar a la descrita en el caso de listas lineales con enlace simple.
+
+--- Pagina nueva 2 ---
+
+Eliminación de un elemento en una Lista Circular Simplemente Enlazada (por su contenido)
+
+La eliminación por valor se puede realizar usando el mismo esquema que se propuso para la lista lineal con enlace simple, con llamadas a los módulos Buscar y Eliminar, o se puede escribir un nuevo módulo que combine las operaciones de búsqueda y eliminación.
+
+--- Búsqueda - Lista circular simplemente enlazada ---
+
+Búsqueda de un elemento en una Lista Circular Simplemente Enlazada
+
+Para buscar un elemento en la lista circular, se recorre ésta hasta encontrar el valor buscado o hasta que se hayan tratado todos los elementos de la misma, lo que primero ocurra. Comenzaremos el análisis de la lista por el nodo apuntado por el puntero que da acceso a la estructura y avanzando por los enlaces SIGUIENTE de los sucesivos nodos. Sabremos que se han procesado todos los nodos de la lista cuando el puntero auxiliar que se utiliza para hacer el recorrido sea nuevamente igual al puntero INICIO.
+
+Como resultado de la búsqueda se obtiene el puntero NULO si la lista está vacía o si no se ha encontrado el valor. Si se ha encontrado, se obtiene un puntero al nodo que lo contiene. Si el valor buscado aparece varias veces en la lista, se encontrará el situado en el nodo más cercano al que da acceso a la estructura, en el sentido de recorrido fijado por el campo de enlace SIGUIENTE de los nodos.
+
+MÓDULO Buscar devuelve puntero a NODO_LISTA
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ Recibe VALOR de tipo T ** valor a buscar
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Falso) entonces
+
+ P ← INICIO
+
+ Repetir
+
+ Si (P↑.DATO = VALOR) entonces
+
+ DEVOLVER P ** dato encontrado
+
+ fin-si
+
+ P ← P↑.SIGUIENTE
+
+ Mientras (P ≠ INICIO)
+
+ fin-si
+
+ DEVOLVER NULO ** dato no encontrado
+
+FIN
+
+Ejemplo de operación de búsqueda con fallo
+
+En la siguiente lista se busca el valor 33. La búsqueda comienza por el nodo con valor 32:
+
+[Imagen]
+
+Como dicho nodo no contiene el valor buscado, se avanza el puntero P:
+
+[Imagen]
+
+Como dicho nodo no contiene el valor buscado, se avanza el puntero P:
+
+[Imagen]
+
+Como dicho nodo no contiene el valor buscado, se avanza el puntero P:
+
+[Imagen]
+
+En este momento concluyen las iteraciones, pues el puntero P vuelve a apuntar al primer nodo procesado.
+
+El módulo devolverá el valor NULO (fracaso en la búsqueda).
+
+Ejemplo de operación de búsqueda con éxito
+
+Se busca ahora el valor 7.
+
+El primer nodo procesado es el de valor 32:
+
+[Imagen]
+
+Como dicho nodo no contiene el valor buscado, se avanza el puntero P:
+
+[Imagen]
+
+Como el nodo referenciado contiene el valor buscado, el módulo concluye, retornando el valor actual del puntero P.
+
+--- Vaciado - Lista circular simplemente enlazada ---
+
+Vaciado de una Lista Circular Simplemente Enlazada
+
+Para eliminar todos los nodos de la lista circular se utiliza un bucle que se repetirá mientras la lista no esté vacía. Dentro del bucle se distinguen dos situaciones: que en la lista quede un único nodo o que quede más de uno.
+
+Si sólo queda un nodo, se libera la memoria que ocupa y el puntero a la estructura se hace nulo.
+
+Si queda más de un nodo, se elimina el que está apuntado por el nodo referenciado por el puntero INICIO. Antes de liberar la memoria asociada a ese nodo, se conecta el nodo que le precede con el nodo que está a continuación de él. Cuando sólo queden dos nodos, el nodo predecesor y el sucesor del que se va a eliminar serán un mismo nodo.
+
+MÓDULO Vaciar_lista
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ Mientras (Lista_vacia(INICIO) ≠ Verdadero) hacer
+
+ Si (INICIO = INICIO↑.SIGUIENTE) entonces
+
+ LIBERAR(INICIO)
+
+ INICIO ← NULO
+
+ sino
+
+ P ← INICIO↑.SIGUIENTE
+
+ INICIO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ LIBERAR(P)
+
+ fin-si
+
+ fin-mientras
+
+FIN
+
+--- Pagina nueva 2 ---
+
+Lista Circular Doblemente Enlazada
+
+Una lista circular con enlace doble incluye un conjunto de nodos cada uno de los cuales está conectado a otros dos nodos de la estructura. Existe un puntero externo que da acceso a la estructura.
+
+[Imagen]
+
+Esta lista comparte características con la lista lineal con enlace doble (debido a la estructura de los nodos) y con la lista circular con enlace simple (debido a la estructura de la lista), por lo que algunas operaciones son similares a las comentadas para dichos tipos de lista. Las operaciones descritas para listas circulares con enlace simple que son aplicables a las listas circulares con doble enlace no se volverán a comentar:
+
+- Comprobación de lista vacía
+
+- Recorrido de la lista
+
+- Acceso a un elemento
+
+- Búsqueda
+
+- Vaciado de la lista
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la Lista Circular Doblemente Enlazada
+
+La creación de este tipo de lista es idéntica a la comentada para una lista lineal con enlace doble, dado que ambos tipos de lista comparten la misma estructura de nodo.
+
+[Imagen]
+
+Representación gráfica de lista circular con enlace doble vacía
+
+--- Inserción - Lista circular doblemente enlazada ---
+
+Inserción de un elemento en una Lista Circular Doblemente Enlazada
+
+Para insertar un nuevo elemento en la lista, indicaremos el valor de dicho elemento, además de un puntero al nodo después del cual debe colocarse el nuevo elemento (P). Si la lista está vacía, el valor de P no se tendrá en cuenta al realizar la inserción.
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el nuevo valor de la lista en el campo de datos de dicho nodo.
+
+Si la lista está vacía, los campos de enlace del nuevo nodo apuntarán al propio nodo, al igual que el puntero a la estructura.
+
+Si la lista no está vacía, el nuevo nodo debe colocarse entre el apuntado por P y el que va a continuación. Por tanto, los campos ANTERIOR y SIGUIENTE del nuevo nodo apuntarán a esos dos nodos respectivamente. Además, dichos nodos deben pasar a apuntar al nuevo.
+
+MÓDULO Insertar_despues
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T ** valor a insertar
+
+ VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria" ** o devolver cierto valor
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ NUEVO↑.SIGUIENTE ← NUEVO
+
+ NUEVO↑ANTERIOR ← NUEVO
+
+ INICIO ← NUEVO
+
+ sino
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ NUEVO↑.ANTERIOR ← P
+
+ P↑.SIGUIENTE↑.ANTERIOR ← NUEVO
+
+ P↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: INSERCIÓN DEL PRIMER NODO
+
+Supongamos una lista de enteros vacía:
+
+[Imagen]
+
+ en la que deseamos insertar el valor 0:
+
+Insertar_despues(INICIO, NULO, 0)
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el valor 0 en el campo de datos:
+
+[Imagen]
+
+Como la lista está vacía, los enlaces SIGUIENTE y ANTERIOR del nuevo nodo apuntan a dicho nodo:
+
+[Imagen]
+
+Por último, el puntero a la lista pasa a apuntar al nuevo nodo:
+
+[Imagen]
+
+CASO: INSERCIÓN EN UN PUNTO INTERMEDIO
+
+En la siguiente lista de enteros se intenta insertar el valor 5 a continuación del 2:
+
+[Imagen]
+
+Insertar_despues(INICIO, P, 5)
+
+Tras reservar memoria para el nuevo nodo, se almacena el dato en el campo de datos:
+
+[Imagen]
+
+A continuación se definen los enlaces del nuevo nodo: en primer lugar se enlaza con el que debe quedar después de él:
+
+[Imagen]
+
+y a continuación se enlaza con el que debe quedar antes que él:
+
+[Imagen]
+
+Se enlaza el nodo que debe quedar detrás del nuevo con éste:
+
+[Imagen]
+
+Se enlaza con el nuevo nodo el que debe quedar antes que él:
+
+[Imagen]
+
+La lista queda con 4 nodos:
+
+[Imagen]
+
+--- Eliminación por posición - Lista circular doblemente enlazada ---
+
+Eliminación de un elemento en una Lista Circular Doblemente Enlazada (por su posición)
+
+Para eliminar de una lista no vacía el nodo identificado por un puntero P, se deben tener en cuenta dos posibles casos: que la lista contenga un único nodo o que contenga dos o más nodos.
+
+En el primer caso, tras liberar la memoria que ocupa el nodo la lista quedará vacía.
+
+En el segundo caso se deben tratar por separado dos situaciones: que se vaya a eliminar el nodo referenciado por el puntero a la estructura o que no se vaya a eliminar dicho nodo. En la primera situación se hará que el puntero que da acceso a la estructura pase a apuntar al siguiente elemento de la misma; en la segunda situación no será necesario modificar el puntero INICIO. A continuación, en ambas situaciones, se enlaza el nodo previo al que se debe eliminar con el siguiente al que se desea eliminar y, por último, se libera la memoria asociada al nodo que debe desaparecer de la lista.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe P puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ ESCRIBIR "Lista vacía"
+
+ sino
+
+ Si (P = P↑.SIGUIENTE) entonces
+
+ LIBERAR(P)
+
+ INICIO ← NULO
+
+ sino
+
+ Si (INICIO = P) entonces
+
+ INICIO ← INICIO↑.SIGUIENTE
+
+ fin-si
+
+ P↑.SIGUIENTE↑.ANTERIOR ← P↑.ANTERIOR
+
+ P↑.ANTERIOR↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ LIBERAR(P)
+
+ fin-si
+
+ fin-si
+
+FIN
+
+CASO: ELIMINAR EL ÚNICO NODO DE UNA LISTA
+
+Eliminamos el único nodo de la siguiente lista:
+
+[Imagen]
+
+Eliminar(INICIO, P)
+
+Como P = P↑.SIGUIENTE, se libera directamente la memoria del nodo y se hace nulo el puntero a la estructura, quedando la lista vacía:
+
+[Imagen]
+
+CASO: ELIMINAR EL NODO REFERENCIADO POR EL PUNTERO A LA ESTRUCTURA
+
+Eliminamos el nodo apuntado por el puntero que da acceso a la siguiente lista:
+
+[Imagen]
+
+En primer lugar se hace que el puntero INICIO pase a apuntar al nodo con valor 2:
+
+[Imagen]
+
+Se enlazan los nodos previo y posterior al que se debe eliminar:
+
+[Imagen]
+
+Por último, se libera la memoria ocupada por el nodo con valor 5:
+
+[Imagen]
+
+La lista queda con 2 nodos:
+
+[Imagen]
+
+CASO: ELIMINACIÓN DE UN NODO INTERMEDIO
+
+Se eliminará de la siguiente lista el nodo que contiene el valor 2:
+
+[Imagen]
+
+En primer lugar se enlazan los nodos previo y posterior al que se va a eliminar:
+
+[Imagen]
+
+A continuación se libera la memoria asociada al nodo con valor 2:
+
+[Imagen]
+
+La lista queda con 2 nodos:
+
+[Imagen]
+
+--- Pagina nueva 2 ---
+
+Eliminación de un elemento en una Lista Circular Doblemente Enlazada (por su contenido)
+
+Como se describió en el caso de la lista circular con enlace simple, se puede eliminar un valor de la lista utilizando las operaciones de búsqueda y eliminación. Se llama al módulo de búsqueda y, si se ha localizado el valor, se llama posteriormente al módulo de eliminación por posición descrito en el apartado anterior.
+
+
+----- LISTAS > Listas ordenadas -----
+
+Listas Ordenadas
+
+Se puede trabajar con listas ordenadas, que bien se crean de forma que se mantenga el orden en todo momento, o bien se ordenan cuando ya contienen cierta información.
+
+Una lista se podrá ordenar de forma creciente o decreciente por un campo o una combinación de campos de datos.
+
+Para utilizar la misma estructura de nodos descrita en los apartados anteriores, supondremos un campo de datos de tipo T, que incluye como mínimo un subcampo, denominado CLAVE, por cuyo valor se ordenan los elementos de la lista.
+
+T es registro compuesto por
+
+ CLAVE de tipo T1
+
+ ** otros campos
+
+fin-registro
+
+En el caso más sencillo la estructura anterior se reducirá a un único campo.
+
+INSERCIÓN ORDENADA
+
+La inserción ordenada implica 2 operaciones:
+
+1- determinar la posición que debe ocupar en la lista el nuevo elemento, de modo que se mantenga el orden en los datos. Para ello se realizará una búsqueda que tendrá en cuenta el hecho de que la lista está ordenada.
+
+2- colocar el elemento en dicha posición.
+
+En los siguientes apartados se describirá la inserción ordenada para las diferentes representaciones de listas tratadas en este tema.
+
+Representación vectorial
+
+MÓDULO Insertar_en_orden
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ELEMENTO de tipo T
+
+ Recibe N entera
+
+ Transforma NUM_ELEM entera
+
+ Transforma LISTA() de tipo T
+
+ VARIABLES
+
+ I entera
+
+INICIO
+
+ Si ( Lista_llena ( NUM_ELEM, N ) = Verdadero ) entonces
+
+ ESCRIBIR "Lista llena."
+
+ sino
+
+ I ← NUM_ELEM+1
+
+ Mientras ( (LISTA(I-1).DATO.CLAVE > ELEMENTO.CLAVE)
+
+ Y (I > 1) ) hacer
+
+ LISTA(I) ← LISTA(I-1)
+
+ I ← I-1
+
+ fin-mientras
+
+ LISTA(I) ← ELEMENTO
+
+ NUM_ELEM ← NUM_ELEM +1
+
+ fin-si
+
+FIN
+
+Lista lineal con enlace simple
+
+MÓDULO Insertar_en_orden
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T
+
+ VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+ P_ANTERIOR, P_SIGUIENTE punteros a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria" ** o devolver cierto valor
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ P_ANTERIOR ← NULO
+
+ P_SIGUIENTE ← INICIO
+
+ Mientras (P_SIGUIENTE ≠ NULO) Y
+
+ (P_SIGUIENTE↑.DATO.CLAVE < ELEMENTO.CLAVE) hacer
+
+ P_ANTERIOR ← P_SIGUIENTE
+
+ P_SIGUIENTE ← P_SIGUIENTE↑.SIGUIENTE
+
+ fin-mientras
+
+ NUEVO↑.SIGUIENTE ← P_SIGUIENTE
+
+ Si (P_SIGUIENTE = INICIO) entonces
+
+ INICIO ← NUEVO
+
+ sino
+
+ P_ANTERIOR↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+Lista lineal con enlace doble
+
+MÓDULO Insertar_en_orden
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T
+
+VARIABLES
+
+ NUEVO puntero a NODO_LISTA
+
+ P_ANTERIOR, P_SIGUIENTE punteros a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ P_ANTERIOR ← NULO
+
+ P_SIGUIENTE ← INICIO
+
+ Mientras ( (P_SIGUIENTE ≠ NULO) Y
+
+ (P_SIGUIENTE↑.DATO.CLAVE < ELEMENTO.CLAVE) ) hacer
+
+ P_ANTERIOR ← P_SIGUIENTE
+
+ P_SIGUIENTE ← P_SIGUIENTE↑.SIGUIENTE
+
+ fin-mientras
+
+ NUEVO↑.SIGUIENTE ← P_SIGUIENTE
+
+ NUEVO↑.ANTERIOR ← P_ANTERIOR
+
+ Si (P_SIGUIENTE ≠ NULO) entonces
+
+ P_SIGUIENTE↑.ANTERIOR ← NUEVO
+
+ fin-si
+
+ Si (P_ANTERIOR ≠ NULO) entonces
+
+ P_ANTERIOR↑SIGUIENTE ← NUEVO
+
+ fin-si
+
+ Si (P_SIGUIENTE = INICIO) entonces
+
+ INICIO ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+Lista circular con enlace simple
+
+MÓDULO Insertar_en_orden
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T
+
+ VARIABLES
+
+ NUEVO, P punteros a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ NUEVO↑.SIGUIENTE ← NUEVO
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ INICIO ← NUEVO
+
+ sino
+
+ P ← INICIO
+
+ Mientras (P↑.SIGUIENTE ≠ INICIO)
+
+ Y (P↑.DATO.CLAVE < ELEMENTO.CLAVE) hacer
+
+ P ← P↑.SIGUIENTE
+
+ fin-mientras
+
+ Si (P↑.DATO.CLAVE < ELEMENTO.CLAVE) entonces
+
+ ** insertar después
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ P↑.SIGUIENTE ← NUEVO
+
+ sino
+
+ ** insertar antes
+
+ NUEVO↑.DATO ← P↑.DATO
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ P↑.DATO ← ELEMENTO
+
+ P↑.SIGUIENTE ← NUEVO
+
+ fin-si
+
+ fin-si
+
+ fin-si
+
+FIN
+
+Lista circular con enlace doble
+
+MÓDULO Insertar_en_orden
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ Recibe ELEMENTO de tipo T
+
+ VARIABLES
+
+ NUEVO, P punteros a NODO_LISTA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_LISTA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ NUEVO↑.SIGUIENTE ← NUEVO
+
+ NUEVO↑.ANTERIOR ← NUEVO
+
+ INICIO ← NUEVO
+
+ sino
+
+ P ← INICIO
+
+ Mientras ( (P↑.SIGUIENTE ≠ INICIO)
+
+ Y (P↑.DATO.CLAVE < ELEMENTO.CLAVE) ) hacer
+
+ P ← P↑.SIGUIENTE
+
+ fin-mientras
+
+ Si (P↑.DATO.CLAVE < ELEMENTO.CLAVE) entonces
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ sino
+
+ NUEVO↑.DATO ← P↑.DATO
+
+ P↑.DATO ← ELEMENTO
+
+ fin-si
+
+ NUEVO↑.SIGUIENTE ← P↑.SIGUIENTE
+
+ NUEVO↑.ANTERIOR ← P
+
+ NUEVO↑.ANTERIOR↑.SIGUIENTE ← NUEVO
+
+ NUEVO↑.SIGUIENTE↑.ANTERIOR ← NUEVO
+
+ fin-si
+
+ fin-si
+
+FIN
+
+BÚSQUEDA EN UNA LISTA ORDENADA
+
+Cuando se trabaja con listas ordenadas, el proceso de búsqueda se puede detener sin necesidad de evaluar todos los elementos de la estructura, siempre que se realice la búsqueda por el campo por el que está ordenada la lista.
+
+Para buscar en una lista ordenada de forma creciente el elemento cuyo campo clave contiene cierto valor, se recorrerá la lista desde el elemento inicial hasta el que contiene el valor buscado (si existe en la lista) o hasta el primer elemento que supera el valor buscado (lo que significa que el valor buscado no existe).
+
+En los siguientes apartados presentaremos algoritmos de búsqueda para los diferentes tipos de listas que hemos estudiado.
+
+Representación vectorial
+
+Se pueden aplicar las técnicas de búsqueda en vectores descritas en el tema 2.
+
+Lista dinámica lineal
+
+MÓDULO Buscar_elemento devuelve puntero a NODO_LISTA
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ Recibe VALOR de tipo T
+
+ VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ P ← INICIO
+
+ Mientras ( P ≠ NULO ) hacer
+
+ Si (P↑.DATO.CLAVE = VALOR.CLAVE) entonces
+
+ DEVOLVER P
+
+ sino
+
+ Si (P↑.DATO.CLAVE > VALOR.CLAVE) entonces
+
+ DEVOLVER NULO
+
+ sino
+
+ P ← P↑.SIGUIENTE
+
+ fin-si
+
+ fin-si
+
+ fin-mientras
+
+ DEVOLVER NULO
+
+FIN
+
+Lista dinámica circular
+
+MÓDULO Buscar_elemento devuelve puntero a NODO_LISTA
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INICIO puntero a NODO_LISTA
+
+ Recibe VALOR de tipo T
+
+VARIABLES
+
+ P puntero a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Falso) entonces
+
+ P ← INICIO
+
+ Repetir
+
+ Si (P↑.DATO.CLAVE = VALOR.CLAVE) entonces
+
+ DEVOLVER P
+
+ fin-si
+
+ P ← P↑.SIGUIENTE
+
+ Mientras ((P ≠ INICIO) Y (P↑.DATO.CLAVE ≤ VALOR.CLAVE))
+
+ fin-si
+
+ DEVOLVER NULO
+
+FIN
+
+ORDENACIÓN DE LISTAS
+
+Es posible ordenar en cualquier momento una lista que se haya creado sin orden, u ordenar por otro campo una lista ya ordenada. Para ello se pueden aplicar las técnicas de ordenación interna descritas en el primer tema. Tales técnicas resultan directamente aplicables a las listas representadas de forma estática, pudiéndose adaptar para su aplicación a listas representadas de forma dinámica.
+
+Representación vectorial
+
+Se pueden aplicar las técnicas de ordenación de vectores descritas en el tema 2.
+
+Representación enlazada
+
+Se podrán aplicar las técnicas de ordenación vistas para vectores, pero teniendo en cuenta que en este caso se accede a los elementos de la lista mediante punteros y no mediante índices.
+
+A continuación se muestra el algoritmo de ordenación por selección directa aplicable a una lista lineal con enlace simple. Recordemos que este método toma el menor de los elementos que quedan por ordenar y lo coloca a continuación de los elementos ya ordenados.
+
+Para realizar la ordenación, consideraremos dos listas auxiliares: una formada por los elementos ya ordenados y la otra formada por los elementos que quedan por ordenar. Inicialmente la primera lista estará vacía, mientras que la segunda será igual a la que se pretende ordenar. Para ordenar la lista original se tomará el menor elemento de la lista no ordenada y se colocará al final de la lista ordenada. Una vez procesados todos los elementos de la lista no ordenada la operación habrá concluido. Dado que en la lista no ordenada se realizarán búsquedas que operan sobre todos los nodos, resulta necesario un puntero al comienzo de dicha lista. Sin embargo, para la lista ordenada resulta útil mantener un segundo puntero al final de la lista, ya que las inserciones de nuevos nodos se realizan siempre al final de la estructura. Aunque se podría mantener la referencia a los nodos no ordenados con el puntero a la lista que se pretende ordenar (INICIO), usaremos un puntero auxiliar (no_orden_i) para hacer más sencilla la explicación.
+
+MÓDULO Metodo_seleccion_lista_lineal_simple
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma INICIO puntero a NODO_LISTA
+
+ VARIABLES
+
+ ** punteros a los extremos inicial y final de la lista ordenada
+
+ orden_i, orden_f punteros a NODO_LISTA
+
+ no_orden_i punteros a NODO_LISTA
+
+ p_min, p_min_prev, q, q_prev punteros a NODO_LISTA
+
+INICIO
+
+ Si (Lista_vacia(INICIO) = Verdadero) entonces
+
+ ACABAR
+
+ fin-si
+
+ orden_i ← NULO
+
+ orden_f ← NULO
+
+ no_orden_i ← INICIO
+
+ Mientras (no_orden_i↑.SIGUIENTE ≠ NULO) hacer
+
+ ** -A- Se busca el menor elemento de la lista no ordenada
+
+ p_min_prev ← NULO
+
+ p_min ← no_orden_i
+
+ q_prev ← no_orden_i
+
+ q ← no_orden_i↑.SIGUIENTE
+
+ Mientras (q ≠ NULO) hacer
+
+ Si( q↑.DATO < p_min↑.DATO ) entonces
+
+ p_min_prev ← q_prev
+
+ p_min ← q
+
+ fin-si
+
+ ** se avanza un nodo en la lista no ordenada
+
+ q_prev ← q
+
+ q ← q↑.SIGUIENTE
+
+ fin-mientras
+
+ ** -B- Se desconecta de la lista no ordenada
+
+ Si (p_min_prev ≠ NULO) entonces
+
+ p_min_prev↑.SIGUIENTE ← p_min↑.SIGUIENTE
+
+ fin-si
+
+ Si (p_min = no_orden_i) entonces
+
+ no_orden_i ← no_orden_i↑.SIGUIENTE
+
+ fin-si
+
+ ** -C- Se conecta a la lista ordenada
+
+ Si (orden_i = NULO) entonces
+
+ orden_i ← p_min
+
+ sino
+
+ orden_f↑.SIGUIENTE ← p_min
+
+ fin-si
+
+ orden_f ← p_min
+
+ p_min↑.SIGUIENTE ← NULO
+
+ fin-mientras
+
+ ** se enlaza a la lista ordenada el último nodo
+
+ orden_f↑.SIGUIENTE ← no_orden_i
+
+ INICIO ← orden_i
+
+FIN
+
+
+==================================================
+PILAS
+==================================================
+
+
+----- PILAS > Definición -----
+
+Definición
+
+Una pila es un conjunto ordenado de datos, caracterizado porque las operaciones de inserción y eliminación de elementos se realizan solamente en un extremo de la estructura, que suele denominarse cima o tope de la pila.
+
+[Imagen]
+
+Esquema de pila
+
+Por tanto, una pila es una estructura de tipo LIFO (Last In First Out), en la que el último elemento introducido es el primero que sale de la estructura.
+
+Dada una pila como la representada en la figura anterior, que contiene un conjunto de elementos (a, b, c, d, e), se dice que el elemento más inaccesible de la pila está en el fondo de la pila y que el elemento más accesible está en la cima.
+
+
+----- PILAS > Operaciones básicas -----
+
+Operaciones Básicas con Pilas
+
+Las operaciones relacionadas con el trabajo sobre la estructura de datos pila son:
+
+- Creación de la pila: debe ser la primera operación que se realiza sobre la pila. La pila se crea vacía.
+
+- Apilado: permite añadir un nuevo elemento a la pila, que se colocará en la cima.
+
+- Desapilado: permite eliminar el elemento situado en la cima de la pila.
+
+- Acceso al elemento situado en la cima: permite obtener el elemento situado en la cima de la pila. A diferencia de la operación de desapilado, en este caso el valor consultado permanece en la pila.
+
+- Comprobación de pila vacía: permite comprobar si la pila contiene algún elemento. Es necesario realizar esta operación antes de un desapilado o un acceso al valor de la cima, para evitar un error al intentar acceder a un elemento inexistente.
+
+Para describir cada una de las operaciones, tendremos en cuenta la forma de representación considerada para la pila.
+
+Si se utiliza una representación estática de la estructura, será necesaria una operación de comprobación de pila llena antes de realizar un apilado.
+
+
+----- PILAS > Vectorial -----
+
+Representación Vectorial de Pilas
+
+Se puede utilizar un vector para almacenar una pila, que en este caso estará limitada en su capacidad por el tamaño del vector.
+
+Para definir el vector de datos de algún tipo, T, indicaremos el nombre del vector, el tamaño, N, y el tipo. En pseudocódigo:
+
+PILA(N) de tipo T
+
+El tamaño del vector condicionará la capacidad de almacenamiento de la pila.
+
+El primer elemento introducido en la pila se almacenará en PILA(1). Los sucesivos elementos se irán colocando en las siguientes posiciones del vector.
+
+Para determinar cuántos elementos contiene la pila en cada momento, se utiliza una variable auxiliar entera, que indicará la posición del último elemento de la pila en cada momento:
+
+CIMA entera
+
+Cuando la pila no contenga ningún elemento, tendrá asociado el valor 0. Al añadir un nuevo elemento, se incrementará su valor en 1, llegando como máximo al valor N. Al eliminar un elemento de la pila, se reducirá el valor de la variable en 1.
+
+ 	 N
+
+...
+
+dato k 	 i 	 CIMA = i
+
+...
+
+dato c 	 3
+
+dato b 	 2
+
+dato a 	 1
+
+Esquema de pila
+implementada mediante un vector
+
+
+----- PILAS > Mem. Dinámica -----
+
+Representación mediante el uso de Memoria Dinámica
+
+ Una segunda posibilidad para representar pilas consiste en utilizar una lista enlazada. En este caso cada uno de los elementos de la pila estará almacenado en un nodo de la lista.
+
+ Para trabajar con esta representación, en primer lugar hay que definir el tipo de los nodos de la lista enlazada. Cada nodo contendrá un campo de tipo puntero, que permite enlazar unos nodos con otros, y uno o más campos que almacenen la información de la pila propiamente dicha (en este caso consideraremos un solo campo de algún tipo T)
+
+NODO_PILA es registro compuesto por
+DATO de tipo T
+ENLACE puntero a NODO_PILA
+fin-registro
+
+[Imagen]
+
+Representación gráfica de un nodo
+
+Una vez definido el tipo de cada nodo, se declara un puntero a elementos de dicho tipo, que dará acceso a la pila, apuntando permanentemente a la cima. Inicialmente se le asocia el valor NULO, indicando que la pila se crea vacía:
+
+CIMA puntero a NODO_PILA
+
+CIMA ← NULO
+
+ Dado que en las pilas todas las operaciones se realizan sobre uno de sus extremos, sólo es necesario un puntero para gestionar la estructura de datos.
+
+[Imagen]
+
+Esquema de pila
+implementada usando memoria dinámica
+
+Una ventaja de esta representación frente a la anterior reside en que el tamaño máximo de la pila no está limitado de antemano.
+
+
+----- PILAS > Rep. Vectorial -----
+
+Operaciones en la representación vectorial
+
+- Creación de la pila
+
+- Comprobación de pila vacía
+
+- Comprobación de pila llena
+
+- Apilado
+
+- Desapilado
+
+- Comprobación del valor de la cima
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la pila en la representación vectorial
+
+La creación de la pila implica declarar el vector que almacenará la información, declarar la variable que indicará la posición de la cima e inicializar dicha variable al valor 0, indicando que la creación implica que la pila está vacía.
+
+PILA(N) de tipo T
+CIMA entera
+CIMA ← 0
+
+Creación de una pila - implementación vectorial
+
+PILA
+
+ 	 1 	 2 	 3 	 ... 	 N
+
+CIMA 	 0
+
+Representación estática de una pila
+y de la variable cima asociada
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de pila vacía
+
+Para comprobar si la pila está vacía, hay que determinar si la variable CIMA es 0.
+
+MÓDULO Pila_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe CIMA entera
+
+INICIO
+
+ Si (CIMA = 0) entonces
+
+ DEVOLVER Verdadero ** pila vacía
+
+ sino
+
+ DEVOLVER Falso ** pila no vacía
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de pila llena
+
+Al trabajar con una pila implementada mediante un vector de tamaño fijo, N, se debe comprobar que no se exceda la capacidad del vector antes de intentar añadir nuevos elementos.
+
+La pila estará llena si la CIMA es igual al tamaño del vector que la representa.
+
+MÓDULO Pila_llena devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe CIMA entera ** posición de la cima
+
+ Recibe N entera ** tamaño del vector
+
+INICIO
+
+ Si (CIMA = N) entonces
+
+ DEVOLVER Verdadero ** pila llena
+
+ sino
+
+ DEVOLVER Falso ** pila no llena
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de Apilado
+
+Al implementar la pila mediante un vector, sólo se podrá realizar un apilado si la pila no está llena.
+
+La operación de apilado consiste en añadir un nuevo elemento a la pila, que pasará a colocarse en la posición que sigue a la identificada por CIMA. El valor de la variable CIMA se incrementará en 1, para hacer referencia a la posición del nuevo valor introducido.
+
+ 	 N 	 	 	 	 N
+
+ 	 	 	 [Imagen]
+
+Apilar X
+
+ 	 4 	 	 	 X 	 4 	 ◄cima
+
+dato c 	 3 	 ◄cima 	 	 dato c 	 3
+
+dato b 	 2 	 	 	 dato b 	 2
+
+dato a 	 1 	 	 	 dato a 	 1
+
+Apilado del dato X
+
+MÓDULO Apilar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma CIMA entera ** posición de la cima
+
+ Transforma PILA() de tipo T ** vector pila
+
+ Recibe ELEMENTO de tipo T ** dato a apilar
+
+ Recibe N entera ** tamaño del vector
+
+INICIO
+
+ Si (Pila_llena(CIMA, N) = Verdadero) entonces
+
+ ESCRIBIR "Pila llena. No se puede apilar"
+
+ sino
+
+ CIMA ← CIMA + 1
+
+ PILA(CIMA) ← ELEMENTO
+
+ fin-si
+
+FIN
+
+Apilado - implementación vectorial
+
+ Consideremos una pila representada mediante un vector con capacidad para 3 enteros, que actualmente está vacía:
+
+PILA_1 	 	 	 	 	 	 0
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Comprobemos el resultado obtenido al apilar sucesivos valores:
+
+Apilar(CIMA, PILA_1, 5, 3)
+
+PILA_1 	 5 	 	 	 	 	 1
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Apilar(CIMA, PILA_1, 15, 3)
+
+PILA_1 	 5 	 15 	 	 	 	 2
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Apilar(CIMA, PILA_1, 5, 3)
+
+PILA_1 	 5 	 15 	 5 	 	 	 3
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Apilar(CIMA, PILA_1, 10, 3)
+
+La última operación de apilado no se puede completar, dado que la pila está llena. Por tanto, en este caso se muestra un mensaje en la pantalla, para informar al usuario.
+
+Pila llena. No se puede apilar
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de Desapilado
+
+La operación de desapilado elimina de la estructura el elemento situado en la posición indicada por la variable CIMA, siempre que exista algún elemento en la pila. Por ello, antes de proceder a eliminar dicho valor, se debe comprobar que la pila no está vacía. La operación se completa reduciendo en 1 el valor de la variable CIMA.
+
+ 	 N 	 	 	 	 N
+
+ 	 	 	 [Imagen]
+
+ 	 4 	 	 Desapilar 	 	 4
+
+dato c 	 3 	 ◄cima 	 	 	 3
+
+dato b 	 2 	 	 	 dato b 	 2 	 ◄cima
+
+dato a 	 1 	 	 	 dato a 	 1
+
+Desapilado de un dato
+
+MÓDULO Desapilar devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T ** dato desapilado
+
+ Transforma CIMA entera ** posición de la cima
+
+ Transforma PILA() de tipo T ** vector pila
+
+INICIO
+
+ Si ( Pila_vacia(CIMA) = Falso ) entonces
+
+ ELEMENTO ← PILA(CIMA)
+
+ CIMA ← CIMA - 1
+
+ DEVOLVER Verdadero ** operación realizada
+
+ sino
+
+ Escribir "Pila vacía. No se puede desapilar"
+
+ DEVOLVER Falso ** operación no realizada
+
+ fin-si
+
+FIN
+
+Como normalmente el módulo llamante realizará algún tipo de procesamiento sobre el dato desapilado, se devolverá un valor que indique el resultado de la operación. En este caso si la operación de desapilado concluye con éxito, se devuelve un valor Verdadero, devolviendo Falso en caso contrario. Si el módulo llamante obtiene Falso como retorno de la llamada, no deberá intentar acceder al primer argumento (ELEMENTO), pues no contendrá un valor válido.
+
+Desapilado - implementación vectorial
+
+ Consideremos una pila representada mediante un vector con capacidad para 3 enteros, que actualmente contiene dos valores:
+
+PILA_1 	 5 	 15 	 	 	 	 2
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Comprobemos el resultado obtenido al desapilar sucesivos valores:
+
+Desapilar(un_valor, CIMA, PILA_1)
+
+PILA_1 	 5 	 	 	 	 	 1
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+ 	 un_valor 	 15
+
+Desapilar(un_valor, CIMA, PILA_1)
+
+PILA_1 	 	 	 	 	 	 0
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+ 	 un_valor 	 5
+
+Desapilar(un_valor, CIMA, PILA_1)
+
+La última operación de desapilado no se puede completar, dado que la pila está vacía. Por tanto, en este caso se muestra un mensaje en la pantalla, para informar al usuario.
+
+Pila vacía. No se puede desapilar
+
+Aunque en la representación gráfica anterior se eliminan del vector que representa la pila los valores que se van desapilando, recordemos que la operación de eliminación de un valor de un vector realmente no suprime dicho valor. La modificación de la variable CIMA permite descartar el valor de la posición que se acaba de desapilar, aunque el valor siga físicamente almacenado hasta que se haga un nuevo apilado, que reemplazará dicho valor por otro.
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación del valor de la cima de la pila
+
+Esta operación es parecida a la de desapilado, salvo porque el valor no se saca de la pila, sólo se consulta. Por tanto, el módulo propuesto es muy parecido al anterior, aunque los parámetros CIMA y PILA no se modifican:
+
+MÓDULO Valor_cima devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T ** valor consultado
+
+ Recibe CIMA entera ** posición de la cima
+
+ Recibe PILA() de tipo T ** vector pila
+
+INICIO
+
+ Si ( Pila_vacia(CIMA) = Falso ) entonces
+
+ ELEMENTO ← PILA(CIMA)
+
+ DEVOLVER Verdadero ** operación realizada
+
+ sino
+
+ Escribir "Pila vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ fin-si
+
+FIN
+
+Por los mismos motivos que en la operación de desapilado, se informará al módulo llamante del resultado de las operaciones.
+
+Comprobación del valor de la cima - implementación vectorial
+
+Consideremos la misma pila del ejemplo anterior:
+
+PILA_1 	 5 	 15 	 	 	 	 2
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+Si deseamos comprobar el valor de la cima, observamos que la pila no se modifica:
+
+Valor_cima(un_valor, CIMA, PILA_1)
+
+PILA_1 	 5 	 15 	 	 	 	 2
+
+ 	 1 	 2 	 3 	 	 	 CIMA
+
+ 	 un_valor 	 15
+
+
+----- PILAS > Rep. Mem. Dinámica -----
+
+Operaciones en la representación que utiliza memoria dinámica
+
+- Creación de la pila
+
+- Comprobación de pila vacía
+
+- Apilado
+
+- Desapilado
+
+- Comprobación del valor de la cima
+
+- Eliminación
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Creación de la pila mediante representación con Memoria Dinámica
+
+La creación de la pila implica definir el tipo de los nodos que formarán la pila, definir la variable puntero que dará acceso a la pila e inicializar dicha variable al valor NULO, indicando que la creación implica que la pila está vacía.
+
+NODO_PILA es registro compuesto por
+
+ DATO de tipo T
+
+ ENLACE puntero a NODO_PILA
+
+fin_registro
+
+CIMA puntero a NODO_PILA
+
+CIMA ← NULO
+
+Con estas operaciones habremos reservado en memoria el espacio necesario para el puntero a la pila. Inmediatamente después de crear la pila ésta permanece vacía:
+
+[Imagen]
+
+Representación gráfica de pila vacía
+
+Cuando se añada el primer elemento a la pila, el puntero CIMA apuntará a dicho elemento:
+
+[Imagen]
+
+Pila con un nodo
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de pila vacía
+
+Para comprobar si la pila está vacía, comprobaremos si el puntero CIMA es nulo.
+
+MÓDULO Pila_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe CIMA puntero a NODO_PILA
+
+INICIO
+
+ Si (CIMA = NULO) entonces
+
+ DEVOLVER Verdadero ** pila vacía
+
+ sino
+
+ DEVOLVER Falso ** pila no vacía
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de Apilado
+
+El apilado de un nuevo elemento supone añadir un nuevo nodo a la estructura, que se colocará en la cima.
+
+[Imagen]
+
+ Apilar(X)
+
+[Imagen]
+
+El módulo que realiza el apilado recibe como argumentos el elemento que se desea incluir en la pila (ELEMENTO) y el puntero que da acceso a la misma:
+
+MÓDULO Apilar
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ELEMENTO de tipo T
+
+ Transforma CIMA puntero a NODO_PILA
+
+ VARIABLES
+
+ NUEVO puntero a NODO_PILA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_PILA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ NUEVO↑.ENLACE ← CIMA
+
+ CIMA ← NUEVO
+
+ fin-si
+
+FIN
+
+En primer lugar se solicita memoria para un nuevo nodo. Si la solicitud de memoria no tuvo éxito, se presenta un mensaje al usuario y el módulo concluye. Si la solicitud tuvo éxito, se almacena en el campo de datos del nuevo nodo el valor que se desea introducir en la pila. A continuación se hace que el nuevo nodo apunte al que hasta ahora era el último, es decir, al que estaba apuntado por CIMA. Por último, se actualiza el puntero CIMA, haciendo que apunte al nuevo nodo, es decir, dándole el valor del puntero NUEVO.
+
+ Consideremos una pila que almacena enteros a la que se accede mediante el puntero CIMA.
+
+ Supongamos que en este momento la pila contiene 2 enteros: el primero que se apiló fue el 3 y el segundo el 8:
+
+[Imagen]
+
+y se desea apilar el valor 25:
+
+Apilar(25,CIMA)
+
+Para completar el apilado, en primer lugar se solicita un bloque de memoria dinámicamente. Suponiendo que no ha habido problemas con la solicitud, el puntero NUEVO apuntará a dicho bloque de memoria
+
+[Imagen]
+
+A continuación, se almacena el valor 25 en el campo de datos del nodo que se acaba de crear:
+
+[Imagen]
+
+Se hace que el campo de enlace apunte al último elemento que se había introducido en la pila:
+
+[Imagen]
+
+Por último, se hace que el puntero CIMA apunte a la nueva cima:
+
+[Imagen]
+
+ La pila quedará como sigue:
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de Desapilado
+
+La operación de desapilado implica eliminar de la estructura el nodo situado en la cima:
+
+ [Imagen]
+
+Desapilar(...)
+
+ [Imagen]
+
+MÓDULO Desapilar devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T ** dato desapilado
+
+ Transforma CIMA puntero a NODO_PILA
+
+ VARIABLES
+
+ NODO puntero a NODO_PILA
+
+INICIO
+
+ Si ( Pila_vacia(CIMA) = Verdadero ) entonces
+
+ ESCRIBIR "Pila vacía. No se puede desapilar"
+
+ DEVOLVER Falso ** operación no completada
+
+ sino
+
+ ELEMENTO ← CIMA↑.DATO
+
+ NODO ← CIMA↑.ENLACE
+
+ LIBERAR(CIMA)
+
+ CIMA ← NODO
+
+ DEVOLVER Verdadero ** operación completada
+
+ fin-si
+
+FIN
+
+Antes de proceder a desapilar un elemento, se debe comprobar que la pila no está vacía. En caso de estarlo, será imposible realizar un desapilado.
+
+ Si la pila no está vacía, se recuperará el campo de datos del nodo situado en la cima de la misma y, a continuación, se eliminará el nodo que contenía dicho dato. Por último, se hace que el puntero CIMA apunte a la nueva cima. Si al realizar una operación de desapilado la pila queda vacía, el puntero CIMA se hará NULO; en caso contrario, apuntará al elemento que hasta ahora estaba apuntado por el nodo que se ha eliminado de la pila.
+
+Consideremos la pila obtenida en el ejemplo de apilado:
+
+[Imagen]
+
+Observemos los pasos realizados al solicitar un desapilado:
+
+Desapilar(un_valor, CIMA)
+
+ En primer lugar se copia en la variable un_valor el dato almacenado en el nodo que se va a eliminar:
+
+[Imagen]
+
+ A continuación, se hace que el puntero NODO apunte al nodo siguiente al que va a ser eliminado:
+
+[Imagen]
+
+ Se libera la memoria asociada al nodo apuntado por el puntero CIMA:
+
+[Imagen]
+
+ Por último, el puntero CIMA pasa a apuntar al mismo nodo que el puntero NODO:
+
+[Imagen]
+
+La lista quedará con dos nodos:
+
+[Imagen]
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación del valor de la cima de la pila
+
+La operación de comprobación del valor de la cima permite obtener el contenido del campo de datos del nodo situado en la cima de la pila, si ésta contiene algún elemento:
+
+MÓDULO Valor_cima devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T
+
+ Recibe CIMA puntero a NODO_PILA
+
+INICIO
+
+ Si ( Pila_vacia(CIMA) = Verdadero ) entonces
+
+ ESCRIBIR "La pila está vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← CIMA↑.DATO
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de eliminación de la pila
+
+Cuando se implementa una pila utilizando memoria dinámica, es conveniente eliminarla en el momento en que deje de ser necesaria.
+
+ El módulo que realiza la eliminación debe liberar cada uno de los nodos que queden en la pila. Para ello, puede utilizar un bucle que, mientras quede algún elemento en la pila, libere el que está en la cima. Con ello, el módulo se puede implementar realizando llamadas a los módulos Pila_vacia y Desapilar.
+
+MÓDULO Eliminar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma CIMA puntero a NODO_PILA
+
+ VARIABLES
+
+ ELEMENTO de tipo T
+
+INICIO
+
+ Mientras (Pila_vacia(CIMA) = Falso ) hacer
+
+ Desapilar (ELEMENTO,CIMA)
+
+ fin-mientras
+
+FIN
+
+ También se puede construir un módulo que realice la eliminación sin realizar llamadas al módulo Desapilar:
+
+MÓDULO Eliminar_2
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma CIMA puntero a NODO_PILA
+
+ VARIABLES
+
+ NODO puntero a NODO_PILA
+
+INICIO
+
+ Mientras (Pila_vacia(CIMA) = Falso ) hacer
+
+ NODO ← CIMA↑.ENLACE
+
+ LIBERAR(CIMA)
+
+ CIMA ← NODO
+
+ fin-mientras
+
+FIN
+
+ En ambos casos, al concluir la llamada al módulo de eliminación, el puntero CIMA será NULO.
+
+Supongamos que queremos vaciar la siguiente pila:
+
+[Imagen]
+
+Al hacer una llamada al módulo Eliminar:
+
+Eliminar(CIMA)
+
+El resultado final será:
+
+[Imagen]
+
+ Es decir, se libera la memoria asociada a todos los nodos de la pila y el puntero CIMA se hace NULO, para indicar que la pila ha quedado vacía.
+
+
+==================================================
+COLAS
+==================================================
+
+
+----- COLAS > Definición -----
+
+Definición
+
+Una cola es un conjunto ordenado de datos, caracterizado porque las operaciones de inserción y eliminación de elementos se realizan sobre extremos opuestos de la estructura.
+
+Las colas son estructuras de tipo FIFO (First In First Out), es decir, el primer elemento introducido en la estructura es el primero que sale de ella.
+
+En la cola representada en la figura, se han introducido varias letras en orden alfabético (a, b, c, d, e). El primer elemento que abandonará la cola es la letra 'a', pues es la que lleva más tiempo en la estructura. El último elemento que ha entrado en la cola es la letra 'e'.
+
+Al igual que ocurre con las pilas, una cola puede almacenar infinitos valores. Sin embargo, al representarla en un ordenador, su tamaño estará condicionado bien por la memoria de la máquina o bien por el tipo de representación que elijamos.
+
+[Imagen]
+
+Esquema de una cola
+
+
+----- COLAS > Operaciones básicas -----
+
+Operaciones Básicas con Colas
+
+Las operaciones básicas sobre una cola son las siguientes:
+
+- Crear la cola: debe ser la primera operación que se realiza sobre la cola. La cola se crea vacía.
+
+- Añadir un elemento a la cola: permite colocar un elemento en el extremo de entrada a la estructura. Esta operación se suele denominar encolado.
+
+- Eliminar un elemento de la cola: permite eliminar de la estructura el elemento situado en el extremo de salida. Esta operación se suele denominar desencolado. Requiere realizar una comprobación previa de cola no vacía, para evitar errores de operación.
+
+- Acceder al elemento situado en la salida de la cola: consiste en comprobar el valor del elemento de la cola situado en la posición de salida, sin eliminar éste de la estructura. Esta operación también requiere una comprobación previa de cola no vacía.
+
+- Comprobar si la cola está vacía: permite determinar si la cola no contiene ningún elemento.
+
+Para describir las operaciones anteriores, tendremos en cuenta la forma de representación considerada para la cola.
+
+Si se utiliza una representación estática de la estructura, será necesaria una operación de comprobación de cola llena antes de realizar un encolado.
+
+
+----- COLAS > Vectorial -----
+
+Representación Vectorial de Colas
+
+Existen varias formas de utilizar un vector para representar una cola, pero una de las más eficientes es representar el vector cola como si fuese circular. Es decir, dado un vector de tamaño N, consideramos que la posición 1 es la que sigue a la N. En la siguiente figura se representa un vector de 8 elementos como si fuera circular:
+
+[Imagen]
+
+Para representar la cola mediante un vector circular se considerará un vector de N elementos y dos variables enteras, que llamaremos ENTRADA y SALIDA, que harán referencia a posiciones del vector: ENTRADA hará referencia a la posición del vector en la que se realizó la última entrada de datos; SALIDA hará referencia a la posición del vector que contiene el dato que saldrá de la cola en la siguiente operación de desencolado. Se utiliza una variable entera, que denominaremos NUM_ELEM, para determinar el número de elementos que contiene la cola en cada momento.
+
+Cola(N) de tipo T
+
+ENTRADA, SALIDA, NUM_ELEM enteras
+
+Cola
+
+ 	 1 	 2 	 ... 	 N
+
+ 	 	 	 ENTRADA
+
+ 	 	 	 SALIDA
+
+ 	 	 	 NUM_ELEM
+
+Cuando la cola está vacía NUM_ELEM será 0; cuando está llena será igual a N. Cuando la cola está vacía, tanto ENTRADA como SALIDA serán 0 (índice no válido dentro del vector).
+
+Al encolar un valor, se avanza el índice ENTRADA una posición y se almacena el dato en dicha posición. Si la cola estaba vacía, el índice SALIDA toma el valor de ENTRADA. Al desencolar un valor, se toma el elemento de la posición referenciada por SALIDA y, a continuación, se avanza el índice SALIDA una posición. Antes de desencolar, se debe comprobar que la cola no está vacía. Dada la limitación de almacenamiento impuesta por la representación vectorial, antes de encolar un nuevo elemento se debe comprobar que la cola no está llena. Cuando al realizar un desencolado la cola quede vacía, se volverán a poner a 0 las variables ENTRADA y SALIDA (además del contador de elementos de la cola).
+
+Al trabajar con un vector considerado como circular, se utilizará la operación módulo para determinar la siguiente posición en el vector. Dado un vector de N elementos, la posición siguiente a la I-ésima se determina aplicando la expresión: (I MOD N) + 1, donde MOD representa la operación módulo.
+
+
+----- COLAS > Mem. Dinámica -----
+
+Representación mediante el uso de memoria dinámica
+
+Se puede representar una cola utilizando una lista enlazada. Para trabajar con esta representación en primer lugar hay que definir el tipo de los nodos de la lista enlazada. Cada nodo contendrá un campo de tipo puntero, que permite enlazar unos nodos con otros, y uno o más campos que almacenen la información de la cola propiamente dicha (en este caso consideraremos un solo campo de algún tipo T):
+
+NODO_COLA es registro compuesto por
+DATO de tipo T
+ENLACE puntero a NODO_COLA
+fin-registro
+
+Se puede representar una cola mediante una lista lineal enlazada cuyos extremos estén apuntados por dos punteros, que identificarán el punto de entrada y el de salida de la cola.
+
+[Imagen]
+
+El puntero ENTRADA apuntará al último nodo introducido en la cola, mientras que SALIDA apuntará al primer nodo que abandonará la cola. Si la cola está vacía, ambos punteros serán nulos; si no lo está, apuntarán a algún nodo de la cola.
+
+ Aunque podríamos utilizar un único puntero para gestionar la cola (el puntero SALIDA según el esquema propuesto), de forma similar a como estudiamos en el caso de las pilas, las operaciones en tal caso serían más costosas.
+
+También se puede implementar una cola circular utilizando memoria dinámica. La cola circular estará formada por nodos similares a los de la cola dinámica lineal, y tendrá un puntero que permite acceder a la misma:
+
+[Imagen]
+
+ El puntero a la cola será inicialmente nulo. A medida que se añadan elementos a la cola, dicho puntero apuntará siempre al último elemento que haya entrado en la cola (por ello lo hemos denominado ENTRADA). El último nodo introducido apuntará siempre al primer nodo candidato a abandonar la cola (el que estaba apuntado por el puntero SALIDA en la representación lineal).
+
+Igual que en la representación lineal, se podría trabajar con dos punteros a la estructura, aunque no resulta imprescindible.
+
+Cuando representamos una cola utilizando memoria dinámica, debemos liberar la memoria que ocupa una vez que deje de ser necesaria.
+
+
+----- COLAS > Rep. Vectorial -----
+
+Operaciones en la representación vectorial
+
+- Creación de la cola
+
+- Siguiente elemento de un vector circular
+
+- Comprobación de cola vacía
+
+- Comprobación de cola llena
+
+- Encolado
+
+- Desencolado
+
+- Acceso al elemento situado en la salida de la cola
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Creación de la cola en la representación vectorial
+
+La creación de la cola consiste en definir la variable de tipo vector que almacenará los valores de la cola, así como las variables que identificarán los extremos de la estructura y el contador de elementos de la cola:
+
+COLA(N) de tipo T
+ENTRADA, SALIDA, NUM_ELEM enteras
+
+A continuación, se indicará que la cola está vacía, haciendo cero el contador de elementos de la cola. Además, se hacen cero las variables que indican la posición de entrada y de salida a la cola.
+
+NUM_ELEM ← 0
+
+ENTRADA ← 0
+
+SALIDA ← 0
+
+Cola
+
+ 	 1 	 2 	 ... 	 N
+
+ 	 	 	 ENTRADA 	 0
+
+ 	 	 	 SALIDA 	 0
+
+ 	 	 	 NUM_ELEM 	 0
+
+Cola vacía
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Siguiente elemento de un vector circular
+
+Antes de comenzar a describir las operaciones sobre colas, propondremos un módulo que permite determinar el elemento siguiente a uno dado en un vector de N elementos considerado como circular.
+
+MÓDULO Siguiente devuelve entero
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe INDICE entera ** una posición del vector
+
+ Recibe N entera ** tamaño del vector
+
+INICIO
+
+ DEVOLVER (INDICE MOD N ) +1
+
+FIN
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Comprobación de Cola vacía
+
+La cola está vacía si el contador de elementos ésta a 0.
+
+MÓDULO Cola_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe NUM_ELEMENTOS entera
+
+INICIO
+
+ Si (NUM_ELEMENTOS = 0) entonces
+
+ DEVOLVER Verdadero ** cola vacía
+
+ sino
+
+ DEVOLVER Falso ** cola no vacía
+
+ fin-si
+
+FIN
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Comprobación de Cola llena
+
+Al utilizar una representación estática para la cola, ésta puede llenarse en algún momento, lo que impedirá añadir nuevos elementos a la estructura. Por ello, antes de intentar encolar un nuevo elemento se debe comprobar si la cola aún no está llena.
+
+La cola estará llena si contiene tantos elementos como permite la capacidad del vector que la almacena.
+
+MÓDULO Cola_llena devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe NUM_ELEM entera ** elementos de la cola
+
+ Recibe N entera ** tamaño del vector
+
+INICIO
+
+ Si (NUM_ELEM = N) entonces
+
+ DEVOLVER Verdadero ** cola llena
+
+ sino
+
+ DEVOLVER Falso ** cola no llena
+
+ fin-si
+
+FIN
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Operación de Encolado
+
+La operación de encolado permite añadir un elemento a la estructura.
+
+Al utilizar una implementación estática de la estructura cola, antes de intentar encolar se debe determinar si existe espacio en la cola. Una vez comprobado que la cola no está llena, se determina la posición que debe ocupar el nuevo elemento de la misma (la siguiente a la ocupada en el último encolado). Si antes de realizar este encolado la cola estaba vacía, el indicador de posición de salida de la cola debe pasar a hacer referencia a la posición que ocupará el dato que se va a encolar, que se convierte en el único de la cola. Por último, se almacena el nuevo dato en la posición identificada y se incrementa en uno el contador de elementos de la cola.
+
+MÓDULO Encolar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma COLA() de tipo T ** vector cola
+
+ Transforma ENTRADA entera ** posición de entrada
+
+ Transforma SALIDA entera ** posición de salida
+
+ Transforma NUM_ELEM entera ** num. de elementos
+
+ Recibe N entera ** tamaño del vector COLA
+
+ Recibe ELEMENTO de tipo T ** dato a encolar
+
+INICIO
+
+ Si (Cola_llena(NUM_ELEM, N) = Verdadero) entonces
+
+ ESCRIBIR "Cola llena. No se puede encolar"
+
+ sino
+
+ ENTRADA ← Siguiente(ENTRADA, N)
+
+ Si (Cola_vacia(NUM_ELEM) = Verdadero) entonces
+
+ SALIDA ← ENTRADA
+
+ fin-si
+
+ COLA(ENTRADA) ← ELEMENTO
+
+ NUM_ELEM ← NUM_ELEM + 1
+
+ fin-si
+
+FIN
+
+Ejemplo de operación de encolado
+
+Supongamos una cola de enteros representada mediante un vector de 3 elementos, que inicialmente está vacía:
+
+Cola_1 	 	 	 	 	 	 ENTRADA 	 0
+
+ 	 1 	 2 	 3
+
+ 	 	 	 	 	 	 SALIDA 	 0
+
+ 	 	 	 	 	 	 NUM_ELEM 	 0
+
+Mostraremos las modificaciones producidas en la cola al intentar encolar varios elementos:
+
+Encolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, 25)
+
+Cola_1 	 25 	 	 	 	 	 ENTRADA 	 1
+
+ 	 1 	 2 	 3
+
+ 	 ▲ 	 	 	 	 	 SALIDA 	 1
+
+ 	 ▼
+
+ 	 	 	 	 	 	 NUM_ELEM 	 1
+
+Encolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, 48)
+
+Cola_1 	 25 	 48 	 	 	 	 ENTRADA 	 2
+
+ 	 1 	 2 	 3
+
+ 	 	 ▲ 	 	 	 	 SALIDA 	 1
+
+ 	 ▼
+
+ 	 	 	 	 	 	 NUM_ELEM 	 2
+
+Encolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, 66)
+
+Cola_1 	 25 	 48 	 66 	 	 	 ENTRADA 	 3
+
+ 	 1 	 2 	 3
+
+ 	 	 	 ▲ 	 	 	 SALIDA 	 1
+
+ 	 ▼
+
+ 	 	 	 	 	 	 NUM_ELEM 	 3
+
+Encolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, 100)
+
+En este último caso no se puede completar la operación de encolado, dado que el vector que representa la cola está lleno. Por tanto, se mostrará un mensaje informativo:
+
+"Cola llena. No se puede encolar"
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Operación de Desencolado
+
+La operación de desencolado recupera el dato almacenado en la posición de salida de la cola y actualiza el valor del indicador de salida, de forma que pase a hacer referencia al siguiente candidato a abandonar la cola.
+
+MÓDULO Desencolar devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe COLA() de tipo T ** vector cola
+
+ Transforma ENTRADA entera ** posición de entrada
+
+ Transforma SALIDA entera ** posición de salida
+
+ Transforma NUM_ELEM entera ** num. de elementos
+
+ Recibe N entera ** tamaño del vector COLA
+
+ Transforma ELEMENTO de tipo T ** dato a desencolar
+
+INICIO
+
+ Si (Cola_vacia(NUM_ELEM) = Verdadero) entonces
+
+ ESCRIBIR "Cola vacía. No se puede desencolar"
+
+ DEVOLVER Falso ** operación cancelada
+
+ sino
+
+ ELEMENTO ← COLA(SALIDA)
+
+ SALIDA ← Siguiente(SALIDA, N)
+
+ NUM_ELEM ← NUM_ELEM -1
+
+ Si (Cola_vacia(NUM_ELEM) = Verdadero) entonces
+
+ ENTRADA ← 0
+
+ SALIDA ← 0
+
+ fin-si
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+En primer lugar se comprueba que la cola no está vacía, pues en caso de estarlo no se podrá realizar ningún desencolado. Si la cola no está vacía, se extrae el elemento situado en la posición de salida. A continuación se avanza el indicador de posición de salida hasta el elemento que abandonará la cola en la siguiente operación de desencolado, y se reduce en 1 el número de elementos que contiene la cola.
+
+Tras esta operación de desencolado la estructura ha podido quedar vacía. En ese caso se vuelven a poner a 0 los indicadores de posición de entrada y salida.
+
+Ejemplo de operación de desencolado
+
+Consideremos la cola creada en el apartado de encolado:
+
+Cola_1 	 25 	 48 	 66 	 	 	 ENTRADA 	 3
+
+ 	 1 	 2 	 3
+
+ 	 	 	 ▲ 	 	 	 SALIDA 	 1
+
+ 	 ▼ 	 	 	 	 	 NUM_ELEM 	 3
+
+Mostraremos la evolución de la cola al realizar sucesivos desencolados:
+
+Desencolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, valor)
+
+Cola_1 	 	 48 	 66 	 	 	 ENTRADA 	 3
+
+ 	 1 	 2 	 3
+
+ 	 	 	 ▲ 	 	 	 SALIDA 	 2
+
+ 	 	 valor 	 25
+
+ 	 	 ▼ 	 	 	 	 NUM_ELEM 	 2
+
+Desencolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, valor)
+
+Cola_1 	 	 	 66 	 	 	 ENTRADA 	 3
+
+ 	 1 	 2 	 3
+
+ 	 	 	 ▲ 	 	 	 SALIDA 	 3
+
+ 	 	 valor 	 48
+
+ 	 	 	 ▼ 	 	 	 NUM_ELEM 	 1
+
+Desencolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, valor)
+
+Cola_1 	 	 	 	 	 	 ENTRADA 	 0
+
+ 	 1 	 2 	 3
+
+ 	 	 	 	 	 	 SALIDA 	 0
+
+ 	 	 valor 	 66
+
+ 	 	 	 	 	 	 NUM_ELEM 	 0
+
+Desencolar(Cola_1, ENTRADA, SALIDA, NUM_ELEM, 3, valor)
+
+En este último caso no se puede completar la operación de desencolado, dado que la cola está vacía. Por tanto, se mostrará un mensaje informativo:
+
+"Cola vacía. No se puede desencolar"
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Acceso al elemento situado en la salida de la cola
+
+Esta operación permite obtener una copia del valor del elemento situado en la posición de salida de la cola. Antes de intentar acceder al elemento se debe comprobar que la cola no está vacía.
+
+MÓDULO Acceder devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe COLA() de tipo T ** vector cola
+
+ Recibe SALIDA entera ** posición de salida
+
+ Recibe NUM_ELEM entera ** elementos de la cola
+
+ Transforma ELEMENTO de tipo T ** dato consultado
+
+INICIO
+
+ Si (Cola_vacia(NUM_ELEM) = Verdadero) entonces
+
+ ESCRIBIR "La cola está vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← COLA( SALIDA )
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+
+----- COLAS > Rep. Mem. Dinámica -----
+
+Operaciones en la representación que utiliza memoria dinámica
+
+Implementación con cola Lineal
+
+Implementación con cola Circular
+
+Operaciones
+
+Implementación con Cola Lineal
+
+Esta cola se representa mediante una lista enlazada lineal con enlace simple, apuntada por dos punteros que identifican el punto de entrada y de salida de la estructura.
+
+[Imagen] [Imagen]
+
+Implementación con Cola Circular
+
+La cola circular estará formada por un conjunto de nodos cada uno de los cuales apunta a otro nodo de la estructura. Existirá un puntero externo, que denominamos ENTRADA, que da acceso a la estructura:
+
+[Imagen]
+
+El último elemento encolado estará apuntado por ENTRADA. El primer elemento que se desencolará está identificado por ENTRADA↑.ENLACE.
+
+ [Imagen]
+
+Operaciones 	 Cola
+Lineal 	 Cola
+Circular
+
+Creación de la cola 	 X 	 X
+
+Comprobación de cola vacía 	 X 	 X
+
+Encolado 	 X 	 X
+
+Desencolado 	 X 	 X
+
+Acceso al elemento situado en la salida de la cola 	 X 	 X
+
+Vaciado de la cola 	 X 	 X
+
+ [Imagen]
+
+--- Creación de la cola - Cola dinámica lineal ---
+
+Creación de la Cola Lineal en la representación que utiliza memoria dinámica
+
+Para crear la cola en primer lugar definiremos el tipo de los nodos que formarán la cola:
+
+NODO_COLA es registro compuesto por
+
+ DATO de tipo T
+
+ ENLACE puntero a NODO_COLA
+
+fin-registro
+
+[Imagen]
+
+Esquema de un nodo de la cola
+
+A continuación se definirán los dos punteros que dan acceso a la cola y, por último, se indicará que la cola inicialmente está vacía, haciendo nulos ambos punteros.
+
+ENTRADA, SALIDA punteros a NODO_COLA
+
+ENTRADA ← NULO
+
+SALIDA ← NULO
+
+El puntero ENTRADA identificará el extremo de la cola por el que entran nuevos elementos, mientras que el puntero SALIDA identificará el extremo opuesto, por el que salen los elementos de la cola.
+
+Con estas operaciones habremos reservado en memoria el espacio necesario para los dos punteros. Inmediatamente después de crear la cola ésta permanece vacía:
+
+[Imagen]
+
+Representación gráfica de cola vacía
+
+--- Creación de la cola - cola dinámica circular ---
+
+Creación de la Cola Circular en la representación que utiliza memoria dinámica
+
+Para crear la cola circular se define el tipo de nodos que almacenará la cola:
+
+NODO_COLA es registro compuesto por
+
+ DATO de tipo T
+
+ ENLACE puntero a NODO_COLA
+
+fin-registro
+
+[Imagen]
+
+Esquema de un nodo de la cola
+
+A continuación se declara un puntero a elementos de la cola, que se iniciará al valor NULO para indicar que la cola se crea vacía:
+
+ENTRADA puntero a NODO_COLA
+
+ENTRADA ← NULO
+
+[Imagen]
+
+Cola circular vacía
+
+--- Creación de la pila mediante representación Vectorial ---
+
+Comprobación de Cola Lineal vacía
+
+La cola estará vacía si los dos punteros a la misma son nulos. La comprobación se realizará sobre cualquiera de los dos punteros
+
+MÓDULO Cola_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe PTRO_COLA puntero a NODO_COLA
+
+INICIO
+
+ Si (PTRO_COLA = NULO) entonces
+
+ DEVOLVER Verdadero ** cola vacía
+
+ sino
+
+ DEVOLVER Falso ** cola no vacía
+
+ fin-si
+
+FIN
+
+--- Creación de la cola mediante representación Vectorial ---
+
+Comprobación de Cola Circular vacía
+
+La cola está vacía si el puntero a la estructura es nulo. La comprobación es idéntica a la realizada para la cola dinámica lineal.
+
+MÓDULO Cola_vacia devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe PTRO_COLA puntero a NODO_COLA
+
+INICIO
+
+ Si (PTRO_COLA = NULO) entonces
+
+ DEVOLVER Verdadero ** cola vacía
+
+ sino
+
+ DEVOLVER Falso ** cola no vacía
+
+ fin-si
+
+FIN
+
+--- Encolado - Cola dinámica lineal ---
+
+Operación de Encolado sobre Cola Lineal
+
+La operación de encolado permite añadir un nuevo nodo a la estructura, que se colocará en el extremo de entrada:
+
+[Imagen]
+
+Encolar X
+
+[Imagen]
+
+ Para añadir un nuevo elemento a la cola, la primera operación a realizar consiste en solicitar memoria para el nuevo nodo. Si la reserva tiene éxito, se copia en el campo de datos del nodo el valor del nuevo elemento. El campo ENLACE del nuevo nodo se hará nulo siempre, pues el nuevo nodo pasa a colocarse al final de la lista enlazada que representa la cola (al extremo derecho en la representación gráfica de la cola).
+
+ Si la cola estaba vacía, el nuevo elemento pasa a ser el único de la cola. Por ello, tanto el puntero ENTRADA como el puntero SALIDA pasarán a apuntar a este nuevo elemento.
+
+ Si la cola ya contenía algún valor, el nodo que contiene el último de los valores encolados pasará a apuntar al nuevo. Además, el puntero ENTRADA también pasará a apuntar al nuevo elemento. En este caso el puntero SALIDA no se modifica.
+
+MÓDULO Encolar
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ELEMENTO de tipo T ** dato a encolar
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ Transforma SALIDA puntero a NODO_COLA
+
+ VARIABLES
+
+ NUEVO puntero a NODO_COLA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_COLA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ NUEVO↑.ENLACE ← NULO
+
+ Si (Cola_vacia(SALIDA) = Verdadero) entonces
+
+ SALIDA ← NUEVO
+
+ sino
+
+ ENTRADA↑.ENLACE ← NUEVO
+
+ fin-si
+
+ ENTRADA ← NUEVO
+
+ fin-si
+
+FIN
+
+Ejemplo de operación de encolado
+
+ Consideremos una cola que almacena enteros a la que se accede mediante los punteros ENTRADA y SALIDA. Supondremos que la cola está vacía y se intentan encolar dos valores: el 25 y el 30.
+
+[Imagen]
+
+ Encolar(25, ENTRADA, SALIDA)
+
+En primer lugar se solicita memoria para el nuevo nodo:
+
+[Imagen]
+
+Si la solicitud tuvo éxito, se almacena el valor 25 en el campo de datos del nuevo nodo y se hace nulo el campo de enlace:
+
+[Imagen]
+
+Como la cola estaba vacía, el puntero SALIDA pasa a apuntar al nuevo nodo:
+
+[Imagen]
+
+Por último, el puntero ENTRADA pasa a apuntar al nuevo nodo:
+
+[Imagen]
+
+La cola quedará con un nodo:
+
+[Imagen]
+
+Se encola un nuevo elemento:
+
+ Encolar(30, ENTRADA, SALIDA)
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el valor 30 en su campo de datos y el valor NULO en su campo de enlace:
+
+[Imagen]
+
+A continuación se hace que el último nodo que entró en la estructura pase a apuntar al nuevo:
+
+[Imagen]
+
+Por último, el puntero ENTRADA pasará a apuntar al nuevo nodo, que es el último que ha entrado en la estructura:
+
+[Imagen]
+
+La cola almacena ahora 2 elementos:
+
+[Imagen]
+
+--- Encolado - Cola dinámica circular ---
+
+Operación de Encolado sobre Cola Circular
+
+Encolar un elemento supone colocarlo entre el último nodo que se encoló y el primero que se desencolará.
+
+En la siguiente figura se muestra la modificación producida en la cola al añadir un nuevo nodo (el que aparece sombreado con un degradado). Este se coloca entre el último nodo candidato a salir de la cola (con relleno punteado) y el primer candidato a abandonarla (con rayado oblicuo).
+[Imagen]
+Encolado en una cola dinámica circular
+
+MÓDULO Encolar
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ELEMENTO de tipo T ** dato a encolar
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ VARIABLES
+
+ NUEVO puntero a NODO_COLA
+
+INICIO
+
+ NUEVO ← RESERVAR_MEMORIA(tamaño(NODO_COLA))
+
+ Si (NUEVO = NULO) entonces
+
+ ESCRIBIR "No hay memoria"
+
+ sino
+
+ NUEVO↑.DATO ← ELEMENTO
+
+ Si (Cola_vacia(ENTRADA) = Verdadero ) entonces
+
+ NUEVO↑.ENLACE ← NUEVO
+
+ sino
+
+ NUEVO↑.ENLACE ← ENTRADA↑.ENLACE
+
+ ENTRADA↑.ENLACE ← NUEVO
+
+ fin-si
+
+ ENTRADA ← NUEVO
+
+ fin-si
+
+FIN
+
+En primer lugar se solicita memoria para un nuevo nodo. Si la solicitud no tiene éxito, se muestra un mensaje y la operación concluye. En caso contrario, se procede a copiar en el campo de datos del nodo el valor que se desea encolar.
+
+Para conectar el nuevo nodo a la estructura hay que distinguir dos situaciones:
+
+- Si la cola estaba vacía, el nuevo nodo pasará a ser el único de la cola. Por ello, estará apuntado por el puntero a la cola (ENTRADA) y además su campo ENLACE apuntará al propio nodo.
+
+- Si la cola no estaba vacía, el nuevo nodo se coloca entre el que era último candidato a abandonar la cola (identificado por ENTRADA) y el primero (identificado por ENTRADA↑.ENLACE ).
+
+En ambos casos el puntero a la estructura pasará a apuntar al nuevo nodo, identificando así la última entrada producida en la cola.
+
+Ejemplo de operación de encolado
+
+Consideremos una cola circular que almacena números enteros y que inicialmente está vacía:
+
+[Imagen]
+
+Se intenta encolar el valor 25:
+
+Encolar(25, ENTRADA)
+
+Una vez obtenida la memoria solicitada para el nuevo nodo, se almacena el valor 25 en el campo de datos:
+
+[Imagen]
+
+Como la cola estaba vacía, el campo de enlace del nuevo nodo apunta a dicho nodo, definiendo así una estructura circular:
+
+[Imagen]
+
+Por último, se debe hacer que el puntero a la estructura pase a apuntar al nuevo nodo:
+
+[Imagen]
+
+La cola ha quedado formada por un único nodo:
+
+[Imagen]
+
+Se intenta encolar el valor 32:
+
+Encolar(32, ENTRADA)
+
+Una vez obtenida la memoria para el nuevo nodo, se almacena el valor 32 en el campo de datos:
+
+[Imagen]
+
+Como la cola no estaba vacía, el campo de enlace del nuevo nodo apunta al nodo que lleva más tiempo en la estructura (referenciado por ENTRADA↑.ENLACE ):
+
+[Imagen]
+
+A continuación se hace que ENTRADA↑.ENLACE apunte al nuevo nodo:
+
+[Imagen]
+
+Por último, se hace que el puntero a la cola pase a apuntar al nuevo nodo, ya que representa la última entrada en la estructura. La cola ha quedado formada por dos nodos:
+
+[Imagen]
+
+Se intenta encolar el valor 55:
+
+Encolar(55, ENTRADA)
+
+El valor 55 se copia en el campo de datos del nuevo nodo:
+
+[Imagen]
+
+El campo de enlace del nuevo nodo apunta al primer nodo candidato a salir de la estructura, es decir, el que contiene el valor 25 (referenciado por ENTRADA↑.ENLACE):
+
+[Imagen]
+
+A continuación el último nodo que entró en la estructura pasará a apuntar al nuevo:
+
+[Imagen]
+
+El puntero a la cola pasará a apuntar al nuevo nodo:
+
+[Imagen]
+
+--- Desencolado - Cola dinámica lineal ---
+
+Operación de Desencolado sobre Cola Lineal
+
+ La operación de desencolado elimina de la estructura el nodo identificado por el puntero SALIDA:
+
+[Imagen]
+
+Desencolar
+
+[Imagen]
+
+ Para eliminar un elemento de la cola, en primer lugar se comprueba que ésta contenga elementos. Si no está vacía, se recupera la parte de datos del nodo candidato a abandonar la cola (identificado por el puntero SALIDA) y se elimina el nodo correspondiente.
+
+ Si la cola sólo contenía un elemento, quedará vacía tras el desencolado, con lo que los punteros ENTRADA y SALIDA serán nulos.
+
+ Si contenía más de un elemento, el que era segundo candidato a abandonar la cola pasa a ser el primero, con lo que el puntero SALIDA debe apuntar a dicho elemento. En este caso el puntero ENTRADA no se verá afectado.
+
+MÓDULO Desencolar devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T ** dato desencolado
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ Transforma SALIDA puntero a NODO_COLA
+
+ VARIABLES
+
+ P puntero a NODO_COLA
+
+INICIO
+
+ Si (Cola_vacia(ENTRADA) = Verdadero) entonces
+
+ ESCRIBIR "La cola está vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← SALIDA↑.DATO
+
+ P ← SALIDA
+
+ SALIDA ← SALIDA↑.ENLACE
+
+ Si (SALIDA = NULO) entonces
+
+ ENTRADA ← NULO
+
+ fin-si
+
+ LIBERAR(P)
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+Ejemplo de operación de desencolado
+
+Consideremos una cola de enteros que contiene 3 elementos:
+
+[Imagen]
+
+Sacamos el primer elemento:
+
+ Desencolar(un_valor, ENTRADA, SALIDA)
+
+Dado que la cola no está vacía, se copia en el primer parámetro el dato almacenado en el nodo que saldrá de la cola:
+
+un_valor 	 5
+
+Se hace que el puntero P apunte al nodo que se va a desencolar:
+
+[Imagen]
+
+Se hace que el puntero SALIDA avance hasta el siguiente nodo:
+
+[Imagen]
+
+Se libera la memoria que ocupa el nodo que se va a desencolar:
+
+[Imagen]
+
+La cola queda con 2 elementos:
+
+[Imagen]
+
+Supongamos ahora una cola con un único elemento, en la que se realiza un desencolado:
+
+[Imagen]
+
+ Desencolar(un_valor, ENTRADA, SALIDA)
+
+Se copia el valor del nodo en el parámetro:
+
+un_valor 	 25
+
+A continuación el puntero auxiliar pasa a apuntar al nodo:
+
+[Imagen]
+
+Se avanza el puntero a la salida de la cola, con lo que tomará el valor nulo:
+
+[Imagen]
+
+Dado que la cola va a quedar vacía, se actualiza el puntero a la entrada de la misma:
+
+[Imagen]
+
+y, a continuación, se libera la memoria ocupada por el nodo:
+
+[Imagen]
+
+La cola ha quedado vacía:
+
+[Imagen]
+
+--- Operaciones en cola dinámica circular - Desencolado ---
+
+Operación de Desencolado sobre Cola Circular
+
+Al realizar un desencolado saldrá de la estructura el nodo apuntado por el que está referenciado por el puntero a la estructura.
+
+En la figura se muestra la modificación producida en la cola al realizar un desencolado. El nodo que abandona la estructura es el referenciado por ENTRADA↑.ENLACE (con un degradado de color):
+[Imagen]
+Desencolado en una cola dinámica circular
+
+MÓDULO Desencolar devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ELEMENTO de tipo T ** dato desencolado
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ VARIABLES
+
+ P puntero a NODO_COLA
+
+INICIO
+
+ Si (Cola_vacia(ENTRADA) = Verdadero) entonces
+
+ ESCRIBIR "Cola vacía. No se puede desencolar"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← ENTRADA↑.ENLACE↑.DATO
+
+ Si (ENTRADA = ENTRADA↑.ENLACE) entonces
+
+ LIBERAR(ENTRADA)
+
+ ENTRADA ← NULO
+
+ sino
+
+ P ← ENTRADA↑.ENLACE
+
+ ENTRADA↑.ENLACE ← P↑.ENLACE
+
+ LIBERAR(P)
+
+ fin-si
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+Antes de proceder a desencolar un elemento, se comprueba que la cola no esté vacía. En caso de estarlo la operación se anula.
+
+Si la cola no está vacía, se hace una copia del dato almacenado en el nodo que va a abandonar la cola y, a continuación, se libera la memoria que ocupa.
+
+Si la cola contiene más de un elemento, antes de liberar la memoria asociada al nodo situado en la salida se debe hacer que el nodo que lo precede apunte al nodo que lo sucede.
+
+Si la cola contiene un solo elemento, quedará vacía tras la eliminación. En este caso se libera la memoria asociada al único nodo de la cola y se da después la condición de cola vacía.
+
+Ejemplo de operación de desencolado
+
+Se realiza un desencolado en la siguiente estructura:
+
+[Imagen]
+
+Desencolar (un_valor, ENTRADA)
+
+Como la cola no está vacía, en primer lugar se copia en el parámetro un_valor el campo de datos del nodo que abandonará la cola
+
+un_valor 	 32
+
+Dado que la cola incluye más de un nodo, se hace que el puntero P apunte al nodo que se debe eliminar:
+
+[Imagen]
+
+Se hace que el último nodo que entró en la cola pase a apuntar al primer nodo que la abandonará cuando se produzca un nuevo desencolado:
+
+[Imagen]
+
+Se libera la memoria ocupada por el nodo que va a abandonar la estructura:
+
+[Imagen]
+
+La cola queda con 2 nodos:
+
+[Imagen]
+
+Supongamos ahora que se solicita un desencolado sobre una cola que contiene un solo nodo:
+
+[Imagen]
+
+En primer lugar se copia sobre el parámetro el valor almacenado en la zona de datos del nodo:
+
+un_valor 	 25
+
+A continuación se libera la memoria que ocupa el nodo:
+
+[Imagen]
+
+Por último, se hace nulo el puntero a la estructura, indicando que la cola ha quedado vacía:
+
+[Imagen]
+
+--- Acceso al elemento situado en la posición de salida - Cola dinámica lineal ---
+
+Acceso al elemento situado en la salida de la Cola Lineal
+
+ Para obtener el valor situado en la posición de salida de la cola, se accede al dato almacenado en el nodo apuntado por el puntero SALIDA, siempre que la cola no esté vacía.
+
+MÓDULO Acceder devuelve logico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe SALIDA puntero a NODO_COLA
+
+ Transforma ELEMENTO de tipo T ** dato consultado
+
+INICIO
+
+ Si (Cola_vacia(SALIDA) = Verdadero) entonces
+
+ ESCRIBIR "La cola está vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← SALIDA↑.DATO
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+--- Operaciones en cola dinámica circular - Acceso a elemento ---
+
+Acceso al elemento situado en la salida de la Cola Circular
+
+Para obtener el valor situado en la posición de salida de la cola, se accede al dato almacenado en el nodo apuntado por el puntero ENTRADA↑.ENLACE, siempre que la cola no esté vacía.
+
+MÓDULO Acceder devuelve lógico
+
+DATOS
+
+ PARÁMETROS
+
+ Recibe ENTRADA puntero a NODO_COLA
+
+ Transforma ELEMENTO de tipo T ** dato consultado
+
+INICIO
+
+ Si (Cola_vacia(ENTRADA) = Verdadero) entonces
+
+ ESCRIBIR "La cola está vacía"
+
+ DEVOLVER Falso ** operación no realizada
+
+ sino
+
+ ELEMENTO ← ENTRADA↑.ENLACE↑.DATO
+
+ DEVOLVER Verdadero ** operación realizada
+
+ fin-si
+
+FIN
+
+--- Vaciado de cola - - Cola dinámica lineal ---
+
+Operación de vaciado de la Cola Lineal
+
+Cuando representamos una cola utilizando memoria dinámica, debemos liberar la memoria que ocupa una vez que deje de ser necesaria.
+
+Se puede vaciar la cola realizando llamadas al módulo de desencolado:
+
+MÓDULO Vaciar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ Transforma SALIDA puntero a NODO_COLA
+
+ VARIABLES
+
+ ELEMENTO del tipo T
+
+INICIO
+
+ Mientras (Cola_vacia(ENTRADA) = Falso) hacer
+
+ Desencolar (ELEMENTO, ENTRADA, SALIDA)
+
+ fin-mientras
+
+FIN
+
+Observar que en este módulo, dado que utilizamos una llamada al módulo Desencolar, que opera sobre 3 argumentos, tenemos que pasar el argumento ELEMENTO, aunque realmente el valor que toma no se utilice.
+
+También podemos escribir un módulo que vacíe la cola incluyendo directamente las operaciones realizadas por el módulo de desencolado:
+
+MÓDULO Vaciar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ Transforma SALIDA puntero a NODO_COLA
+
+ VARIABLES
+
+ P_NODO es puntero a NODO_COLA
+
+INICIO
+
+ Mientras (Cola_vacia(SALIDA) = Falso) hacer
+
+ P_NODO ← SALIDA
+
+ SALIDA ← SALIDA↑.ENLACE
+
+ LIBERAR(P_NODO)
+
+ fin-mientras
+
+ ENTRADA ← NULO
+
+FIN
+
+Las operaciones se repiten hasta que se hayan sacado todos los nodos de la cola. En cada iteración se saca el nodo situado en la posición de salida de la cola.
+
+Al concluir el proceso de vaciado de la cola, los punteros ENTRADA y SALIDA serán nulos, habiéndose restablecido la condición de cola vacía.
+
+--- Operaciones en cola dinámica circular - Vaciado ---
+
+Operación de vaciado de la Cola Circular
+
+Cuando representamos una cola utilizando memoria dinámica, debemos liberar la memoria que ocupa una vez que deje de ser necesaria.
+
+Podemos definir la operación de vaciado de la cola en términos de la operación de desencolado, realizando desencolados hasta que la cola quede vacía:
+
+MÓDULO Vaciar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ VARIABLES
+
+ ELEMENTO de tipo T
+
+INICIO
+
+ Mientras (Cola_vacia(ENTRADA) = Falso) hacer
+
+ Desencolar (ELEMENTO, ENTRADA)
+
+ fin-mientras
+
+FIN
+
+También podemos escribir un módulo de vaciado:
+
+MÓDULO Vaciar
+
+DATOS
+
+ PARÁMETROS
+
+ Transforma ENTRADA puntero a NODO_COLA
+
+ VARIABLES
+
+ P puntero a NODO_COLA
+
+INICIO
+
+ Mientras (Cola_vacia(ENTRADA) = Falso) hacer
+
+ Si (ENTRADA = ENTRADA↑.ENLACE) entonces
+
+ LIBERAR(ENTRADA)
+
+ ENTRADA ← NULO
+
+ sino
+
+ P ← ENTRADA↑.ENLACE
+
+ ENTRADA↑.ENLACE ← P↑.ENLACE
+
+ LIBERAR(P)
+
+ fin-si
+
+ fin-mientras
+
+FIN
