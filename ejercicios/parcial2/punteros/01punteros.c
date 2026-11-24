@@ -18,6 +18,8 @@ int main(){
     int *p = &a;
     int *q = &b;
     printf("a=%d b=%d\n", a, b);
+    printf("a=%d b=%d p=%d q=%d\n", a, b, p, q);
+
 
     *p += *q;
     printf("a=%d b=%d\n", a, b);
